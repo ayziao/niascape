@@ -5,7 +5,7 @@ python:
 install:
   - pip install coveralls --use-mirrors
 script:
-  - coverage run --branch --source=myapp tests/all_test.py
+  - coverage run --branch --source=myapp tests/test_main.py
   - coverage report -m
 after_success:
   coveralls --verbose
