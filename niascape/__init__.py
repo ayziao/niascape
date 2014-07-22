@@ -14,3 +14,17 @@ niascape パッケージ
 		パッケージと同じファイル構成_test
 		全テスト ファイルはある 中身を書く
 """
+from datetime import datetime
+
+now = datetime.utcnow()
+
+import sys
+import os
+
+#Pythonスクリプトパス解決
+path = os.path.dirname(os.path.abspath(__file__)).rstrip('niascape')
+sys.path.append(path)
+
+from niascape import main
+
+run = main.run

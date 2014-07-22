@@ -14,7 +14,7 @@ from types import FunctionType
 import unittest
 
 path = os.path.dirname(os.path.abspath(__file__))
-sys.path.append(path.rstrip('/tests'))
+sys.path.append(path.rstrip('tests'))
 
 
 def call_recursive_directory(func: FunctionType, dir_: str) -> None:

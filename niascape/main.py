@@ -1,5 +1,5 @@
 
-def main() -> str:
+def run() -> str:
 	"""
 	# コマンドライン向け
 	@return:
@@ -9,4 +9,4 @@ def main() -> str:
 
 
 if __name__ == '__main__':
-	print(main())  # pragma: no cover
+	print(run())  # pragma: no cover
