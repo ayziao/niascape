@@ -1,7 +1,7 @@
 language: python
 python:
   - "3.4"
-  - pypy3
+#  - pypy3
 install:
   - pip install coveralls --use-mirrors
 script:
