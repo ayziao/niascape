@@ -16,24 +16,21 @@ class TestMyapp(unittest.TestCase):
 
 
 	def test_wsgiclient_root(self):
-		ret = ['']
+		ret = ''
 		env = {'PATH_INFO':'/'}
 		def wsgi(status: str, header:list):
-			ret[0] = status
+			nonlocal ret
+			ret = status
 		niascape.application(env,wsgi)
 
-		self.assertEqual(ret[0], '200 OK')
+		self.assertEqual(ret, '200 OK')
 
 	def test_wsgiclient_favicon(self):
-		ret = ['']
+		ret = ''
 		env = {'PATH_INFO':'/favicon.ico'}
 		def wsgi(status: str, header:list):
-			ret[0] = status
+			nonlocal ret
+			ret = status
 		niascape.application(env,wsgi)
 
-		self.assertEqual(ret[0], '404 Not Found')
-
-
-
-
-
+		self.assertEqual(ret, '404 Not Found')
