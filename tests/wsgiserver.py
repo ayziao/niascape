@@ -11,6 +11,7 @@ sys.path.append(path.rstrip('tests'))
 
 import niascape
 
+
 def make_server():
 	"""
 	# WSGIサーバ起動

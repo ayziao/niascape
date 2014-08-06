@@ -22,10 +22,11 @@ now = datetime.utcnow()
 import sys
 import os
 
-#Pythonスクリプトパス解決
+# Pythonスクリプトパス解決
 path = os.path.dirname(os.path.abspath(__file__)).rstrip('niascape')
 sys.path.append(path)
 
 from niascape import main
+
 run = main.run
 application = main.application

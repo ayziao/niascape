@@ -1,4 +1,6 @@
+# TODO メインモジュールの説明書く
 from types import FunctionType
+
 
 def run() -> str:
 	"""
@@ -35,7 +37,7 @@ def application(environ: dict, start_response: FunctionType):
 </html>
 """
 		body = run()
-		html = html.strip().format( body=body)
+		html = html.strip().format(body=body)
 		start_response('200 OK', [('Content-Type', 'text/html; charset=utf-8')])
 		return [html.encode('utf-8')]
 
