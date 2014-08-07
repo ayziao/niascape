@@ -1,3 +1,9 @@
+"""
+メインモジュール
+
+packageの__init__.pyで読み込んでるのでコマンドラインから直接実行する時ぐらいかな
+"""
+
 # TODO メインモジュールの説明書く
 from types import FunctionType
 
