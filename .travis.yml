@@ -3,7 +3,7 @@ python:
   - "3.4"
 #  - pypy3
 install:
-  - pip install coveralls --use-mirrors
+  - pip install coveralls 
 script:
   - coverage run --branch --source=niascape tests/all_test.py
   - coverage report -m
