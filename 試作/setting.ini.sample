@@ -1,0 +1,6 @@
+sqlite_file = sqlite3 File Path
+
+default_user = default user
+
+default_tag = '#タグ'
+
