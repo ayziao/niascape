@@ -4,7 +4,8 @@
 $ini_array = parse_ini_file("setting.ini");
 $location = $ini_array['sqlite_file'];
 $user = $ini_array['default_user'];
-$tag = $ini_array['default_tag'];
+$tag  = $_GET["tag"] ? $_GET["tag"] : $ini_array['default_tag'];
+
 
 $query = <<< EOM
 SELECT 
@@ -29,7 +30,7 @@ while ($row = $results->fetchArray()) {
 ?>
 <html>
 	<head>
-		<title>タグ投稿件数</title>
+		<title><?=$tag ?> タグ投稿件数</title>
 		<style type="text/css">
 			table {
 				font-size: 70%;
@@ -39,6 +40,8 @@ while ($row = $results->fetchArray()) {
 	
 	<body>
 		<a href='monthcount.php'>月別</a> <a href='daycount.php'>日別</a> <a href='weekcount.php'>曜日別</a> <a href='hourcount.php'>時別</a> タグ
+
+		<h4><?=$tag ?> タグ投稿件数</h4>
 		<table>
 			<?=$content ?>
 		</table>
