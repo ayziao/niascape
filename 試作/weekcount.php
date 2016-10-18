@@ -5,6 +5,8 @@
 
 $week = ['日','月','火','水','木','金','土'];
 
+$user  = $_GET["user"] ? $_GET["user"] : $ini_array['default_user'];
+
 $ini_array = parse_ini_file("setting.ini");
 $location = $ini_array['sqlite_file'];
 $query = <<< EOM
@@ -13,7 +15,7 @@ SELECT
 	COUNT(*) as 'count',
 	replace(substr(quote(zeroblob((round(count(*) / 20) + 1) / 2)), 3, (round(count(*) / 20))), '0', '|') as 'graf' 
 FROM basedata 
-WHERE user = 'rog' 
+WHERE user = '$user' 
 GROUP BY strftime('%w',`datetime`)
 EOM;
 

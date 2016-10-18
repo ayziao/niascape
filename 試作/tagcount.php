@@ -3,9 +3,8 @@
 
 $ini_array = parse_ini_file("setting.ini");
 $location = $ini_array['sqlite_file'];
-$user = $ini_array['default_user'];
+$user  = $_GET["user"] ? $_GET["user"] : $ini_array['default_user'];
 $tag  = $_GET["tag"] ? $_GET["tag"] : $ini_array['default_tag'];
-
 
 $query = <<< EOM
 SELECT 
