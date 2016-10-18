@@ -1,5 +1,5 @@
 <?php 
-#月別投稿件数
+//月別投稿件数
 
 $ini_array = parse_ini_file("setting.ini");
 $location = $ini_array['sqlite_file'];
@@ -22,6 +22,24 @@ while ($row = $results->fetchArray()) {
 	$content .= '<tr>'.'<td nowrap>'.$row['Date'].'</td>'.'<td align="right">'.$row['count'].'</td>'.'<td>'.$row['graf'].'</td>'.'</tr>';
 }
 
+
+//userリンク
+
+$query = <<< EOM
+SELECT 
+	user
+	, COUNT(*)
+FROM basedata 
+GROUP BY user
+ORDER BY COUNT(*) DESC
+EOM;
+
+$results = $handle->query($query);
+
+while ($row = $results->fetchArray()) {
+	$userlink .= '<a href="monthcount.php?user='. $row['user'].'">' . $row['user'] . '</a> ';
+}
+
 ?>
 <html>
 	<head>
@@ -34,10 +52,13 @@ while ($row = $results->fetchArray()) {
 	</head>
 	
 	<body>
-		月別 <a href='daycount.php'>日別</a> <a href='weekcount.php'>曜日別</a> <a href='hourcount.php'>時別</a> <a href='tagcount.php'>タグ</a>
+		<h4><?=$user ?> <?=$tag ?> 月別投稿件数</h4>
+			
+		<?=$userlink ?><br>
+		<a href='monthcount.php?user=<?=$user ?>'>月別</a> <a href='daycount.php?user=<?=$user ?>'>日別</a> <a href='weekcount.php?user=<?=$user ?>'>曜日別</a> <a href='hourcount.php?user=<?=$user ?>'>時別</a> <a href='tagcount.php?user=<?=$user ?>'>タグ</a><br>
 		<table>
 			<?=$content ?>
 		</table>
-		月別 <a href='daycount.php'>日別</a> <a href='weekcount.php'>曜日別</a> <a href='hourcount.php'>時別</a> <a href='tagcount.php'>タグ</a>
+		<a href='monthcount.php?user=<?=$user ?>'>月別</a> <a href='daycount.php?user=<?=$user ?>'>日別</a> <a href='weekcount.php?user=<?=$user ?>'>曜日別</a> <a href='hourcount.php?user=<?=$user ?>'>時別</a> <a href='tagcount.php?user=<?=$user ?>'>タグ</a><br>
 	</body>
 </html>

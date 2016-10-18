@@ -5,6 +5,8 @@ $ini_array = parse_ini_file("setting.ini");
 $location = $ini_array['sqlite_file'];
 $user  = $_GET["user"] ? $_GET["user"] : $ini_array['default_user'];
 $tag  = $_GET["tag"] ? $_GET["tag"] : $ini_array['default_tag'];
+$handle = new SQLite3($location); 
+
 
 $query = <<< EOM
 SELECT 
@@ -19,7 +21,6 @@ GROUP BY DATE(`datetime`)
 ORDER BY DATE(`datetime`)  DESC
 EOM;
 
-$handle = new SQLite3($location); 
 $results = $handle->query($query); 
 
 while ($row = $results->fetchArray()) {
@@ -41,7 +42,6 @@ ORDER BY COUNT(*) DESC
 EOM;
 //, replace(substr(quote(zeroblob((count(*) + 1) / 2)), 3, count(*)), '0', '|') as 'graf' 
 
-$handle = new SQLite3($location); 
 $results = $handle->query($query);
 $array = [];
 while ($row = $results->fetchArray()) {
@@ -55,8 +55,27 @@ while ($row = $results->fetchArray()) {
 }
 
 foreach ($array as $key => $value) {
-	$link .= '<a href="tagcount.php?tag='. urlencode($key) .'">' . $key . '</a> ';
+	$link .= '<a href="tagcount.php?user='. $user.'&tag='. urlencode($key) .'">' . $key . '</a> ';
 }
+
+
+//userリンク
+
+$query = <<< EOM
+SELECT 
+	user
+	, COUNT(*)
+FROM basedata 
+GROUP BY user
+ORDER BY COUNT(*) DESC
+EOM;
+
+$results = $handle->query($query);
+
+while ($row = $results->fetchArray()) {
+	$userlink .= '<a href="tagcount.php?user='. $row['user'].'">' . $row['user'] . '</a> ';
+}
+
 
 ?>
 <html>
@@ -70,13 +89,15 @@ foreach ($array as $key => $value) {
 	</head>
 	
 	<body>
-			<a href='monthcount.php'>月別</a> <a href='daycount.php'>日別</a> <a href='weekcount.php'>曜日別</a> <a href='hourcount.php'>時別</a> タグ<br>
+		<h4><?=$user ?> <?=$tag ?> タグ投稿件数</h4>
+			
+		<?=$userlink ?><br>
+		<a href='monthcount.php?user=<?=$user ?>'>月別</a> <a href='daycount.php?user=<?=$user ?>'>日別</a> <a href='weekcount.php?user=<?=$user ?>'>曜日別</a> <a href='hourcount.php?user=<?=$user ?>'>時別</a> <a href='tagcount.php?user=<?=$user ?>'>タグ</a><br>
 		<?=$link ?>
 
-		<h4><?=$tag ?> タグ投稿件数</h4>
 		<table>
 			<?=$content ?>
 		</table>
-		<a href='monthcount.php'>月別</a> <a href='daycount.php'>日別</a> <a href='weekcount.php'>曜日別</a> <a href='hourcount.php'>時別</a> タグ
+		<a href='monthcount.php?user=<?=$user ?>'>月別</a> <a href='daycount.php?user=<?=$user ?>'>日別</a> <a href='weekcount.php?user=<?=$user ?>'>曜日別</a> <a href='hourcount.php?user=<?=$user ?>'>時別</a> <a href='tagcount.php?user=<?=$user ?>'>タグ</a><br>
 	</body>
 </html>
