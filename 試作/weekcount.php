@@ -1,4 +1,6 @@
 <?php
+header('Content-Type: text/html; charset=UTF-8');
+	
 //曜日別投稿件数
 
 $week = ['日','月','火','水','木','金','土'];

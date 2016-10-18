@@ -1,4 +1,6 @@
 <?php 
+header('Content-Type: text/html; charset=UTF-8');
+
 //時別投稿件数
 
 $ini_array = parse_ini_file("setting.ini");
