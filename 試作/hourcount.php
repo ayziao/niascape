@@ -16,7 +16,7 @@ SELECT
 	replace(substr(quote(zeroblob((count(*) + 1) / 2)), 3, count(*)), '0', '|') as 'graf' 
 FROM basedata 
 WHERE user = '$user' 
-AND DATE(`datetime`) = DATE('now')
+AND DATE(`datetime`) = DATE('now', "localtime")
 GROUP BY strftime('%H',`datetime`)
 EOM;
 //var_dump($query);
@@ -36,7 +36,7 @@ SELECT
 	replace(substr(quote(zeroblob((count(*) + 1) / 2)), 3, count(*)), '0', '|') as 'graf' 
 FROM basedata 
 WHERE user = '$user' 
-AND strftime('%Y-%m',`datetime`) = strftime('%Y-%m',DATE('now'))
+AND strftime('%Y-%m',`datetime`) = strftime('%Y-%m',DATE('now', "localtime"))
 GROUP BY strftime('%H',`datetime`)
 EOM;
 //var_dump($query);
@@ -54,7 +54,7 @@ SELECT
 	replace(substr(quote(zeroblob((round(count(*) / 10) + 1) / 2)), 3, (round(count(*) / 10))), '0', '|') as 'graf' 
 FROM basedata 
 WHERE user = '$user' 
-AND strftime('%Y',`datetime`) = strftime('%Y',DATE('now'))
+AND strftime('%Y',`datetime`) = strftime('%Y',DATE('now', "localtime"))
 GROUP BY strftime('%H',`datetime`)
 EOM;
 //var_dump($query);
