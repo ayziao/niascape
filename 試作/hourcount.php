@@ -10,6 +10,11 @@ $handle = new SQLite3($location);
 
 //今日
 $query = <<< EOM
+SELECT  `times`.`Date`,ifnull( `count`, 0) as 'count',`graf`
+FROM 
+	(SELECT strftime('%H',`datetime`) as `Date`  FROM basedata GROUP BY strftime('%H',`datetime`)) times
+LEFT JOIN
+(
 SELECT 
 	strftime('%H',`datetime`) as `Date` , 
 	COUNT(*) as 'count',
@@ -18,6 +23,8 @@ FROM basedata
 WHERE user = '$user' 
 AND DATE(`datetime`) = DATE('now', "localtime")
 GROUP BY strftime('%H',`datetime`)
+) counts
+ON  `times`.`Date` = `counts`.`Date` 
 EOM;
 //var_dump($query);
 $results = $handle->query($query); 
