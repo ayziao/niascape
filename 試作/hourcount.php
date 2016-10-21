@@ -34,6 +34,36 @@ while ($row = $results->fetchArray()) {
 }
 
 //今週
+$query = <<< EOM
+
+SELECT t2.Date , count, graf
+FROM 
+(
+	SELECT strftime('%H',`datetime`) as `Date`  FROM basedata GROUP BY strftime('%H',`datetime`)
+) t2
+LEFT JOIN
+(
+SELECT 
+	strftime('%H',`datetime`) as `Date`,
+	COUNT(*) as 'count',
+	replace(substr(quote(zeroblob((count(*) + 1) / 2)), 3, count(*)), '0', '|') as 'graf' 
+FROM basedata 
+WHERE user = '$user' 
+AND strftime('%Y%W',`datetime`) = strftime('%Y%W',DATE('now', "localtime"))
+GROUP BY strftime('%H',`datetime`)
+) t1
+ON  t1.`Date` = t2.`Date` 
+EOM;
+
+// print('<pre>');
+// var_dump($query);
+// print('</pre>');
+
+$results = $handle->query($query); 
+while ($row = $results->fetchArray()) {
+	$konsyu .= '<tr>'.'<td nowrap>'.$row['Date'].'</td>'.'<td align="right">'.$row['count'].'</td>'.'<td>'.$row['graf'].'</td>'.'</tr>';
+}
+
 
 //今月
 $query = <<< EOM
@@ -127,8 +157,12 @@ while ($row = $results->fetchArray()) {
 		<table>
 			<?=$today ?>
 		</table>
-			<h5>今月</h5>
-			<table>
+		<h5>今週あ</h5>
+		<table>
+			<?=$konsyu ?>
+		</table>
+		<h5>今月</h5>
+		<table>
 			<?=$kongetu ?>
 		</table>
 		<h5>今年</h5>
