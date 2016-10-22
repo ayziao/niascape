@@ -133,7 +133,7 @@ EOM;
 $results = $handle->query($query);
 
 while ($row = $results->fetchArray()) {
-	$userlink .= '<a href="hourcount.php?user='. $row['user'].'">' . $row['user'] . '</a> ';
+	$userlink .= '<a href="hourcount?user='. $row['user'].'">' . $row['user'] . '</a> ';
 }
 
 ?>
@@ -151,13 +151,13 @@ while ($row = $results->fetchArray()) {
 		<h4><?=$user ?> <?=$tag ?> 時別投稿件数</h4>
 
 		<?=$userlink ?><br>
-		<a href='monthcount.php?user=<?=$user ?>'>月別</a> <a href='daycount.php?user=<?=$user ?>'>日別</a> <a href='weekcount.php?user=<?=$user ?>'>曜日別</a> <a href='hourcount.php?user=<?=$user ?>'>時別</a> <a href='tagcount.php?user=<?=$user ?>'>タグ</a><br>
+		<a href='monthcount?user=<?=$user ?>'>月別</a> <a href='daycount?user=<?=$user ?>'>日別</a> <a href='weekcount?user=<?=$user ?>'>曜日別</a> <a href='hourcount?user=<?=$user ?>'>時別</a> <a href='tagcount?user=<?=$user ?>'>タグ</a><br>
 		
 		<h5>今日</h5>
 		<table>
 			<?=$today ?>
 		</table>
-		<h5>今週あ</h5>
+		<h5>今週</h5>
 		<table>
 			<?=$konsyu ?>
 		</table>
@@ -173,6 +173,6 @@ while ($row = $results->fetchArray()) {
 		<table>
 		<?=$zenkikan ?>
 		</table>
-		<a href='monthcount.php?user=<?=$user ?>'>月別</a> <a href='daycount.php?user=<?=$user ?>'>日別</a> <a href='weekcount.php?user=<?=$user ?>'>曜日別</a> <a href='hourcount.php?user=<?=$user ?>'>時別</a> <a href='tagcount.php?user=<?=$user ?>'>タグ</a><br>
+		<a href='monthcount?user=<?=$user ?>'>月別</a> <a href='daycount?user=<?=$user ?>'>日別</a> <a href='weekcount?user=<?=$user ?>'>曜日別</a> <a href='hourcount?user=<?=$user ?>'>時別</a> <a href='tagcount?user=<?=$user ?>'>タグ</a><br>
 	</body>
 </html>
