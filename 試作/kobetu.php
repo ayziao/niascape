@@ -1,0 +1,34 @@
+<?php 
+header('Content-Type: text/html; charset=UTF-8');
+
+//個別ページ
+
+$ini_array = parse_ini_file("setting.ini");
+$location = $ini_array['sqlite_file'];
+$handle = new SQLite3($location); 
+
+$user  = $_GET["user"] ? $_GET["user"] : $ini_array['default_user'];
+$path = substr($_SERVER["SCRIPT_NAME"],1);
+
+$query = <<< EOM
+
+SELECT * 
+FROM basedata 
+WHERE  identifier = '$path'
+
+EOM;
+//AND user = '$user' 
+
+$results = $handle->query($query); 
+$raw = $results->fetchArray();
+
+if ($raw) {
+	print('<pre>');
+	var_dump($query);
+	var_dump($raw);
+	// print('</pre>');
+} else {
+	return false;
+}
+
+
