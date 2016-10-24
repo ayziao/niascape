@@ -1,0 +1,12 @@
+body {
+	background-color: #888;
+}
+
+
+div.lines div.line:nth-child(even){
+	background-color: #fafafa;
+}
+
+span.time {
+	color: #ff0000;
+}
