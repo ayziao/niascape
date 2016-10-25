@@ -1,15 +1,15 @@
 <?php 
 header('Content-Type: text/html; charset=UTF-8');
-
 //個別ページ
 
 $ini_array = parse_ini_file("setting.ini");
-$location = $ini_array['sqlite_file'];
-$handle = new SQLite3($location); 
+$location  = $ini_array['sqlite_file'];
+$handle    = new SQLite3($location); 
 
-$user  = $_GET["user"] ? $_GET["user"] : $ini_array['default_user'];
-$path = substr($_SERVER["SCRIPT_NAME"],1);
+$user = $_GET["user"] ? $_GET["user"] : $ini_array['default_user'];
+$path = array_pop(explode('/', substr($_SERVER["SCRIPT_NAME"],1)));	//リクエスト末尾から/の直後までを取得 ルーティングで末尾数字20文字判定済み前提
 
+//PENDING サイト判定いれるか
 $query = <<< EOM
 
 SELECT * 
@@ -31,4 +31,6 @@ if ($raw) {
 	return false;
 }
 
+
+//TODO HTML組み立て
 

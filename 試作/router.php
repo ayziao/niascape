@@ -6,7 +6,7 @@
 
 //ルーティング
 function routing(){
-	$path = substr($_SERVER["SCRIPT_NAME"],1);
+	$path = $_SERVER["SCRIPT_NAME"];
 
 	//TODO トップページ判定
 
@@ -21,14 +21,14 @@ function routing(){
 
 //個別ページ判定
 function is_kobetupage($path){
-	//TODO ユーザ指定
-	return preg_match('/^[0-9]{20}?/', $path); //数字20文字だったら個別ページ
+	//PENDING サイトチェック入れるか	
+	return preg_match('/\/[0-9]{20}$/', $path); //末尾が数字20文字だったら個別ページ
 }
 
 //サイトタイムライン判定
 function is_sitetimeline($path){
 	//TODO バーチャルホスト
-	return preg_match('/^@\w/', $path);	//1文字目が＠ならユーザページ
+	return preg_match('/^\/@\w/', $path);	//1文字目が＠ならユーザページ
 }
 
 return routing();
