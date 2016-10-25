@@ -1,28 +1,31 @@
 <?php 
 header('Content-Type: text/html; charset=UTF-8');
 
-//サイトタイムライン
+//日サマリー
 
 $ini_array = parse_ini_file("setting.ini");
 $location = $ini_array['sqlite_file'];
 $handle = new SQLite3($location); 
 
-$user = explode("/", substr($_SERVER["SCRIPT_NAME"],2))[0];
+$arr  = explode('/', substr($_SERVER["SCRIPT_NAME"],1));
+$path = array_pop($arr);	//リクエスト末尾から/の直後までを取得 ルーティングで末尾数字8文字判定済み前提
+$user = substr(array_pop($arr), 1); 
 
 $query = <<< EOM
 
 SELECT * FROM basedata
 WHERE user = '$user'
 AND tags NOT LIKE '% gyazo_posted %'
-ORDER BY identifier DESC LIMIT 200
+AND title LIKE '$path%' 
+ORDER BY identifier ASC LIMIT 1000
 
 EOM;
-
-$results = $handle->query($query); 
-//$raw = $results->fetchArray();
-
+//PENDING タイトル無しで投稿して自動で日時タイトルになったやつしかとってきてない	
 //print('<pre>');
 //var_dump($query);
+//var_dump($raw);
+$results = $handle->query($query); 
+//$raw = $results->fetchArray();
 
 $day = '';
 

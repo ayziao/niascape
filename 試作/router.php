@@ -12,10 +12,12 @@ function routing(){
 
 	if (is_kobetupage($path)) { //個別ページ判定	
 		return require('kobetu.php');
+	} elseif(is_daysummary($path)) {	//日サマリー判定	
+		return require('daysummary.php');
 	} elseif(is_sitetimeline($path)) {	//サイトタイムライン判定
 		return require('sitetimeline.php');
 	} else {
-		return @include($path . '.php');	//画面じゃなくてコンソールにエラーが吐ければ@取りたい
+		return @include(substr($path,1) . '.php');	//PENDING 画面じゃなくてコンソールにエラーが吐ければ@取りたい
 	}
 }
 
@@ -25,10 +27,17 @@ function is_kobetupage($path){
 	return preg_match('/\/[0-9]{20}$/', $path); //末尾が数字20文字だったら個別ページ
 }
 
+//日サマリー判定
+function is_daysummary($path){
+	return preg_match('/\/[0-9]{8}$/', $path);	//末尾が数字8文字だったら日サマリー
+}
+
 //サイトタイムライン判定
 function is_sitetimeline($path){
 	//TODO バーチャルホスト
 	return preg_match('/^\/@\w/', $path);	//1文字目が＠ならユーザページ
 }
+
+
 
 return routing();
