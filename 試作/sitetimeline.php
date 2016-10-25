@@ -37,7 +37,17 @@ while ($row = $results->fetchArray()) {
 		$content .= '<h5><a href="./'. str_replace('-', '', $day2).'">'.$day2.'</a></h5><div class="lines">';
 		$day = $day2;
 	}
-	$content .= '<div class="line"><span class="time"><a href="./'.$row['identifier'].'">18:28:18</a></span>&thinsp;'.$row['body'].'</div>'."\n";
+
+	$tagstr = '';
+	$tags = explode(' ',trim($row['tags']));
+	foreach ($tags as  $value) {
+		if(strpos($value , '#') === 0){
+			$tag = substr($value, 1);
+			$tagstr .= ' <a href="./?tag=' . $tag .'">' . $tag .'<a>';
+		}
+	}
+
+	$content .= '<div class="line"><span class="time"><a href="./'.$row['identifier'].'">18:28:18</a></span>&thinsp;'.$row['body'].$tagstr.'</div>'."\n";
 }
 $content .= '</div>';
 

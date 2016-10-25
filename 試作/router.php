@@ -14,6 +14,8 @@ function routing(){
 		return require('kobetu.php');
 	} elseif(is_daysummary($path)) {	//日サマリー判定	
 		return require('daysummary.php');
+	} elseif(is_tagtimeline($path)) {	//タグタイムライン判定
+		return require('tagtimeline.php');
 	} elseif(is_sitetimeline($path)) {	//サイトタイムライン判定
 		return require('sitetimeline.php');
 	} else {
@@ -30,6 +32,11 @@ function is_kobetupage($path){
 //日サマリー判定
 function is_daysummary($path){
 	return preg_match('/\/[0-9]{8}$/', $path);	//末尾が数字8文字だったら日サマリー
+}
+
+//タグタイムライン判定
+function is_tagtimeline(){
+	return array_key_exists('tag', $_GET);
 }
 
 //サイトタイムライン判定
