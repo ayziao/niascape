@@ -35,8 +35,8 @@ function is_daysummary($path){
 }
 
 //タグタイムライン判定
-function is_tagtimeline(){
-	return array_key_exists('tag', $_GET);
+function is_tagtimeline($path){
+	return (preg_match('/^\/@\w/', $path) and array_key_exists('tag', $_GET));
 }
 
 //サイトタイムライン判定
