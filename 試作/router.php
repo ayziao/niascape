@@ -16,6 +16,8 @@ function routing(){
 		return require('daysummary.php');
 	} elseif(is_tagtimeline($path)) {	//タグタイムライン判定
 		return require('tagtimeline.php');
+	} elseif(is_search($path)) {	//本文検索
+		return require('search.php');
 	} elseif(is_sitetimeline($path)) {	//サイトタイムライン判定
 		return require('sitetimeline.php');
 	} else {
@@ -37,6 +39,11 @@ function is_daysummary($path){
 //タグタイムライン判定
 function is_tagtimeline($path){
 	return (preg_match('/^\/@\w/', $path) and array_key_exists('tag', $_GET));
+}
+
+//本文検索
+function is_search($path){
+	return (preg_match('/^\/@\w/', $path) and array_key_exists('searchbody', $_GET));
 }
 
 //サイトタイムライン判定
