@@ -58,13 +58,13 @@ $content .= '</div>';
 	<head>
 		<meta charset="UTF-8">
 		<meta name="viewport" content="width=device-width">
-		<title>タイムライン <?=$user?></title>
+		<title><?=$tag?> <?=$user?></title>
 		<link rel="stylesheet" type="text/css" href="/common.css">
 		<link rel="stylesheet" type="text/css" href="/css.css">
 	</head>
 
 	<body>
-		<h1><?=$user?></h1>
+		<h1><?=$user?> <?=$tag?></h1>
 
 		<div id="etc"></div>
 		
