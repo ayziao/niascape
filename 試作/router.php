@@ -1,4 +1,6 @@
 <?php 
+date_default_timezone_set('Asia/Tokyo');
+
 //ini_set( 'display_errors', 0 ); //ビルトインサーバでのエラーログの出力先がよくわからん		
 //ini_set( 'error_log', 1 ); //ビルトインサーバでのエラーログの出力先がよくわからん		
 //error_log('hoge');
@@ -7,6 +9,10 @@
 //ルーティング
 function routing(){
 	$path = $_SERVER["SCRIPT_NAME"];
+
+	if($_SERVER["REQUEST_METHOD"] == "POST"){
+		return require('post.php');
+	}
 
 	//TODO トップページ判定
 
