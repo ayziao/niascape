@@ -10,7 +10,14 @@ $handle = new SQLite3($location);
 
 $user = $_POST['user'];
 $body = $_POST['body'];
-$tags = $_POST['tags'];
+$tags = trim($_POST['tags']);
+
+$tagstring = '';//' twitter_posted’
+if (mb_strlen($tags)){
+	$tagarr = explode(' ', preg_replace('/\s+/', ' ', $tags));
+	$tagstring .= ' #'.implode(' #', $tagarr) . ' '; 
+}
+
 $datetime = $now->format('Y-m-d H:i:s');
 $identifier = $now->format('YmdHisu');
 
@@ -19,13 +26,15 @@ $query = <<< EOM
 INSERT INTO basedata
 (user,identifier,datetime,title,tags,body)
 VALUES 
-('$user','$identifier','$datetime','$identifier','','$body')
+('$user','$identifier','$datetime','$identifier','$tagstring','$body')
 
 EOM;
 
 $results = $handle->query($query); 
 
 // print('<pre>');
+// var_dump($tags);
+// var_dump($tagarr);
 // var_dump($results);
 // var_dump($identifier);
 // var_dump($_POST);
