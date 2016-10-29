@@ -32,9 +32,9 @@ while ($row = $results->fetchArray()) {
 	$day2 = substr($row['datetime'], 0,10);
 	if($day != $day2){
 		if($day != ''){
-			$content .= '</div>';
+			$content .= "\n\t\t\t</div>";
 		}
-		$content .= '<h5><a href="./'. str_replace('-', '', $day2).'">'.$day2.'</a></h5><div class="lines">';
+		$content .= "\n\t\t\t". '<h5><a href="./'. str_replace('-', '', $day2).'">'.$day2.'</a></h5> '. "\n\t\t\t". '<div class="lines">';
 		$day = $day2;
 	}
 
@@ -43,13 +43,13 @@ while ($row = $results->fetchArray()) {
 	foreach ($tags as  $value) {
 		if(strpos($value , '#') === 0){
 			$tag = substr($value, 1);
-			$tagstr .= ' <a href="./?tag=' . $tag .'">' . $tag .'<a>';
+			$tagstr .= ' <a href="./?tag=' . $tag .'">' . $tag .'</a>';
 		}
 	}
 
-	$content .= '<div class="line"><span class="time"><a href="./'.$row['identifier'].'">18:28:18</a></span>&thinsp;'.$row['body'].$tagstr.'</div>'."\n";
+	$content .= "\n\t\t\t\t". '<div class="line"><span class="time"><a href="./'.$row['identifier'].'">'.substr($row['datetime'], -8).'</a></span>&thinsp;'.str_replace("\n", '<br>', $row['body']).$tagstr.'</div>';
 }
-$content .= '</div>';
+$content .= "\n\t\t\t</div>";
 
 ?>
 <!DOCTYPE html>
