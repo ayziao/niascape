@@ -1,4 +1,6 @@
 <?php 
+header('Content-Type: text/html; charset=UTF-8');
+
 //投稿
 
 $now = \DateTime::createFromFormat('U.u', sprintf('%6F', microtime(true)));
@@ -33,7 +35,7 @@ EOM;
 $results = $handle->query($query); 
 
 // print('<pre>');
-// var_dump($tags);
+//var_dump($tags);
 // var_dump($tagarr);
 // var_dump($results);
 // var_dump($identifier);
@@ -42,3 +44,32 @@ $results = $handle->query($query);
 // var_dump($_SERVER);
 
 header('Location: http://' . $_SERVER["HTTP_HOST"] . $_SERVER["REQUEST_URI"]);
+//header('Location: http://localhost:8124/@test/');
+//ob_end_flush();
+ob_flush();
+flush();
+
+//return;
+
+
+//TODO 投げっぱなし裏処理にする
+//Twitter投稿
+require "twitteroauth/autoload.php";
+use Abraham\TwitterOAuth\TwitterOAuth;
+
+$userini = parse_ini_file("$user.ini");
+
+$consumerKey = $userini['consumerKey'];
+$consumerSecret = $userini['consumerSecret'];
+$accessToken = $userini['accessToken'];
+$accessTokenSecret = $userini['accessTokenSecret'];
+
+$twitter = new TwitterOAuth($consumerKey, $consumerSecret, $accessToken, $accessTokenSecret);
+
+$twresult = $twitter->post("statuses/update",array("status" => $body));
+
+
+// print('<pre>');
+// var_dump($userini);
+// var_dump($twresult);
+

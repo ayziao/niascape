@@ -56,4 +56,6 @@ docs/_build/
 ＃
 .idea/
 .idea/dictionaries/
-setting.ini
+*.ini
+
+twitteroauth/
