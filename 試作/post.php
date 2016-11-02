@@ -8,6 +8,88 @@ use Abraham\TwitterOAuth\TwitterOAuth;
 header('Content-Type: text/html; charset=UTF-8');
 
 //投稿
+function post($now){
+
+	$ini_array = parse_ini_file("setting.ini");
+	$handle = new SQLite3($ini_array['sqlite_file']); 
+
+	$user = $_POST['user'];
+	$body = $_POST['body'];
+	$tags = trim($_POST['tags']);
+
+	$tagstring = '';
+
+	if (strpos($_FILES['file']['type'],'image') !== false){ //画像投稿
+		$gyazoresults = gyazopost($ini_array['gyazo'],$_FILES['file']['tmp_name']);
+
+		$datetime = $now->format('Y-m-d H:i:s');
+		$identifier = $now->format('YmdHisu');
+
+		$queryg = <<< EOM
+
+INSERT INTO basedata
+(user,identifier,datetime,title,tags,body)
+VALUES 
+('$user','$identifier','$datetime','$identifier',' gyazo_posted ','$gyazoresults')
+
+EOM;
+
+		var_dump($queryg);
+
+		$results = $handle->query($queryg); 
+
+		$tagstring .= " with_image:$identifier";
+
+		$now = \DateTime::createFromFormat('U.u', sprintf('%6F', microtime(true)));
+		$now->setTimezone( new DateTimeZone('Asia/Tokyo'));
+	}
+
+	if (mb_strlen($tags)){
+		$tagarr = explode(' ', preg_replace('/\s+/', ' ', $tags));
+		$tagstring .= ' #'.implode(' #', $tagarr); 
+	}
+
+	$datetime = $now->format('Y-m-d H:i:s');
+	$identifier = $now->format('YmdHisu');
+
+	$tagstring .= ' twitter_posted';
+
+	if(strlen($tagstring) > 0){
+		$tagstring .= ' ';
+	}
+
+	$query = <<< EOM
+
+INSERT INTO basedata
+(user,identifier,datetime,title,tags,body)
+VALUES 
+('$user','$identifier','$datetime','$identifier','$tagstring','$body')
+
+EOM;
+
+	$results = $handle->query($query); 
+
+	// print('<pre>');
+	// var_dump($_FILES);
+	// var_dump(json_decode($gyazoresults));
+	// var_dump($tags);
+	// var_dump($tagarr);
+	// var_dump($results);
+	// var_dump($identifier);
+	// var_dump($_POST);
+	// var_dump($queryg);
+	// var_dump($query);
+	// var_dump($_SERVER);
+
+	header('Location: http://' . $_SERVER["HTTP_HOST"] . $_SERVER["REQUEST_URI"]);
+
+	ob_end_flush();
+	ob_flush();
+	flush();
+
+	twitterpost($user,$body);
+
+}
 
 //Twitter投稿
 function twitterpost($user,$body){
@@ -59,84 +141,4 @@ function gyazopost($token,$file){
 }
 
 
-
-$ini_array = parse_ini_file("setting.ini");
-$handle = new SQLite3($ini_array['sqlite_file']); 
-
-$user = $_POST['user'];
-$body = $_POST['body'];
-$tags = trim($_POST['tags']);
-
-$tagstring = '';
-
-if (strpos($_FILES['file']['type'],'image') !== false){ //画像投稿
-	$gyazoresults = gyazopost($ini_array['gyazo'],$_FILES['file']['tmp_name']);
-
-	$datetime = $now->format('Y-m-d H:i:s');
-	$identifier = $now->format('YmdHisu');
-
-	$queryg = <<< EOM
-
-INSERT INTO basedata
-(user,identifier,datetime,title,tags,body)
-VALUES 
-('$user','$identifier','$datetime','$identifier',' gyazo_posted ','$gyazoresults')
-
-EOM;
-
-	var_dump($queryg);
-
-	$results = $handle->query($queryg); 
-
-	$tagstring .= " with_image:$identifier";
-
-	$now = \DateTime::createFromFormat('U.u', sprintf('%6F', microtime(true)));
-	$now->setTimezone( new DateTimeZone('Asia/Tokyo'));
-}
-
-if (mb_strlen($tags)){
-	$tagarr = explode(' ', preg_replace('/\s+/', ' ', $tags));
-	$tagstring .= ' #'.implode(' #', $tagarr); 
-}
-
-$datetime = $now->format('Y-m-d H:i:s');
-$identifier = $now->format('YmdHisu');
-
-$tagstring .= ' twitter_posted';
-
-if(strlen($tagstring) > 0){
-	$tagstring .= ' ';
-}
-
-$query = <<< EOM
-
-INSERT INTO basedata
-(user,identifier,datetime,title,tags,body)
-VALUES 
-('$user','$identifier','$datetime','$identifier','$tagstring','$body')
-
-EOM;
-
-$results = $handle->query($query); 
-
-// print('<pre>');
-// var_dump($_FILES);
-// var_dump(json_decode($gyazoresults));
-// var_dump($tags);
-// var_dump($tagarr);
-// var_dump($results);
-// var_dump($identifier);
-// var_dump($_POST);
-// var_dump($queryg);
-// var_dump($query);
-// var_dump($_SERVER);
-
-header('Location: http://' . $_SERVER["HTTP_HOST"] . $_SERVER["REQUEST_URI"]);
-
-ob_end_flush();
-ob_flush();
-flush();
-
-twitterpost($user,$body);
-
-return;
+return post($now);
