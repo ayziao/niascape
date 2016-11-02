@@ -25,18 +25,7 @@ function post($now){
 		$datetime = $now->format('Y-m-d H:i:s');
 		$identifier = $now->format('YmdHisu');
 
-		$queryg = <<< EOM
-
-INSERT INTO basedata
-(user,identifier,datetime,title,tags,body)
-VALUES 
-('$user','$identifier','$datetime','$identifier',' gyazo_posted ','$gyazoresults')
-
-EOM;
-
-		var_dump($queryg);
-
-		$results = $handle->query($queryg); 
+		$results = dbinsert($handle,$user,$identifier,$datetime,$identifier,' gyazo_posted ',$gyazoresults);
 
 		$tagstring .= " with_image:$identifier";
 
@@ -58,16 +47,8 @@ EOM;
 		$tagstring .= ' ';
 	}
 
-	$query = <<< EOM
+	$results = dbinsert($handle,$user,$identifier,$datetime,$identifier,$tagstring,$body);
 
-INSERT INTO basedata
-(user,identifier,datetime,title,tags,body)
-VALUES 
-('$user','$identifier','$datetime','$identifier','$tagstring','$body')
-
-EOM;
-
-	$results = $handle->query($query); 
 
 	// print('<pre>');
 	// var_dump($_FILES);
@@ -89,7 +70,23 @@ EOM;
 
 	twitterpost($user,$body);
 
+	return;
 }
+
+//DB insert
+function dbinsert($handle,$user,$identifier,$datetime,$title,$tags,$body){
+
+	$query = <<< EOM
+
+INSERT INTO basedata
+(user,identifier,datetime,title,tags,body)
+VALUES 
+('$user','$identifier','$datetime','$title','$tags','$body')
+
+EOM;
+
+	return $handle->query($query); 
+}	
 
 //Twitter投稿
 function twitterpost($user,$body){
