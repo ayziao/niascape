@@ -66,7 +66,7 @@ function post($now){
 	ob_flush();
 	flush();
 
-	twitterpost($user,$body);
+	twitterpost($user,$body,$_FILES['file']['tmp_name']);
 
 	return;
 }
@@ -86,9 +86,8 @@ EOM;
 }	
 
 //Twitter投稿
-function twitterpost($user,$body){
+function twitterpost($user,$body,$filename){
 	//TODO 投げっぱなし裏処理にする
-	//TODO 画像投稿
 
 	$userini = parse_ini_file("$user.ini");
 
@@ -99,11 +98,21 @@ function twitterpost($user,$body){
 
 	$twitter = new TwitterOAuth($consumerKey, $consumerSecret, $accessToken, $accessTokenSecret);
 
-	$twresult = $twitter->post("statuses/update",array("status" => $body));
+	$parameters = ['status' => $body];
+
+	if($filename){	//画像投稿
+		$media = $twitter->upload('media/upload', ['media' => $filename]);
+		$parameters['media_ids'] = $media->media_id_string;
+	}
+
+	$result = $twitter->post('statuses/update', $parameters);
 
 	// print('<pre>');
 	// var_dump($userini);
 	// var_dump($twresult);
+	// var_dump($media);
+
+	return $result;
 }
 
 //gyazo投稿
