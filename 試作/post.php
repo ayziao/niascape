@@ -20,17 +20,16 @@ function post($now){
 	$tagstring = '';
 
 	if (strpos($_FILES['file']['type'],'image') !== false){ //画像投稿
-		$gyazoresults = gyazopost($ini_array['gyazo'],$_FILES['file']['tmp_name']);
+		$gyazoresults = gyazopost($ini_array['gyazo'],$_FILES['file']['tmp_name']); //gyazo
 
 		$datetime = $now->format('Y-m-d H:i:s');
 		$identifier = $now->format('YmdHisu');
 
-		$results = dbinsert($handle,$user,$identifier,$datetime,$identifier,' gyazo_posted ',$gyazoresults);
-
-		$tagstring .= " with_image:$identifier";
+		$results = dbinsert($handle,$user,$identifier,$datetime,$identifier,' gyazo_posted ',$gyazoresults); //gyazo投稿情報
 
 		$now = \DateTime::createFromFormat('U.u', sprintf('%6F', microtime(true)));
 		$now->setTimezone( new DateTimeZone('Asia/Tokyo'));
+		$tagstring .= " with_image:$identifier";
 	}
 
 	if (mb_strlen($tags)){
@@ -48,7 +47,6 @@ function post($now){
 	}
 
 	$results = dbinsert($handle,$user,$identifier,$datetime,$identifier,$tagstring,$body);
-
 
 	// print('<pre>');
 	// var_dump($_FILES);
@@ -75,7 +73,6 @@ function post($now){
 
 //DB insert
 function dbinsert($handle,$user,$identifier,$datetime,$title,$tags,$body){
-
 	$query = <<< EOM
 
 INSERT INTO basedata
