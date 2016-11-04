@@ -89,16 +89,20 @@ EOM;
 function twitterpost($user,$body,$filename){
 	//TODO 投げっぱなし裏処理にする
 
-	$userini = parse_ini_file("$user.ini");
+	$userini = parse_ini_file("$user.ini",ture);
 
-	$consumerKey = $userini['consumerKey'];
-	$consumerSecret = $userini['consumerSecret'];
-	$accessToken = $userini['accessToken'];
-	$accessTokenSecret = $userini['accessTokenSecret'];
+	if(array_key_exists('twitter_main',$userini) == false){
+		return;
+	}
+
+	$consumerKey = $userini['twitter_main']['consumerKey'];
+	$consumerSecret = $userini['twitter_main']['consumerSecret'];
+	$accessToken = $userini['twitter_main']['accessToken'];
+	$accessTokenSecret = $userini['twitter_main']['accessTokenSecret'];
 
 	$twitter = new TwitterOAuth($consumerKey, $consumerSecret, $accessToken, $accessTokenSecret);
 
-	$parameters = ['status' => $body];
+	$parameters = ['status' => $body.$userini['twitter_main']['suffix']];
 
 	if($filename){	//画像投稿
 		$media = $twitter->upload('media/upload', ['media' => $filename]);
@@ -107,7 +111,32 @@ function twitterpost($user,$body,$filename){
 
 	$result = $twitter->post('statuses/update', $parameters);
 
+
+	if(array_key_exists('twitter_sub',$userini) == false){
+		return;
+	}
+
+	$consumerKey = $userini['twitter_sub']['consumerKey'];
+	$consumerSecret = $userini['twitter_sub']['consumerSecret'];
+	$accessToken = $userini['twitter_sub']['accessToken'];
+	$accessTokenSecret = $userini['twitter_sub']['accessTokenSecret'];
+
+	$twitter = new TwitterOAuth($consumerKey, $consumerSecret, $accessToken, $accessTokenSecret);
+
+	$parameters = ['status' => $body.$userini['twitter_sub']['suffix']];
+
+	//TODO gyazoURL
+	// if($filename){	//画像投稿
+	// 	$media = $twitter->upload('media/upload', ['media' => $filename]);
+	// 	$parameters['media_ids'] = $media->media_id_string;
+	// }
+
+	$result2 = $twitter->post('statuses/update', $parameters);
+
+
 	// print('<pre>');
+	// var_dump($result);
+	// var_dump($result2);
 	// var_dump($userini);
 	// var_dump($twresult);
 	// var_dump($media);
