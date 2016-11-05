@@ -66,7 +66,7 @@ function post($now){
 	ob_flush();
 	flush();
 
-	twitterpost($user,$body,$_FILES['file']['tmp_name']);
+	twitterpost($user,$body,$_FILES['file']['tmp_name'],json_decode($gyazoresults)->permalink_url);
 
 	return;
 }
@@ -86,7 +86,7 @@ EOM;
 }	
 
 //Twitter投稿
-function twitterpost($user,$body,$filename){
+function twitterpost($user,$body,$filename,$gyazourl){
 	//TODO 投げっぱなし裏処理にする
 
 	$userini = parse_ini_file("$user.ini",ture);
@@ -104,7 +104,12 @@ function twitterpost($user,$body,$filename){
 
 	$parameters = ['status' => $body.$userini['twitter_main']['suffix']];
 
-	if($filename){	//画像投稿
+	//画像投稿
+	if($userini['twitter_main']['image'] == 'gyazo'){
+		if($gyazourl){
+			$parameters['status'] .= ' '.$gyazourl;
+		}
+	} elseif($filename){	
 		$media = $twitter->upload('media/upload', ['media' => $filename]);
 		$parameters['media_ids'] = $media->media_id_string;
 	}
@@ -125,11 +130,15 @@ function twitterpost($user,$body,$filename){
 
 	$parameters = ['status' => $body.$userini['twitter_sub']['suffix']];
 
-	//TODO gyazoURL
-	// if($filename){	//画像投稿
-	// 	$media = $twitter->upload('media/upload', ['media' => $filename]);
-	// 	$parameters['media_ids'] = $media->media_id_string;
-	// }
+	//画像投稿
+	if($userini['twitter_sub']['image'] == 'gyazo'){
+		if($gyazourl){
+			$parameters['status'] .= ' '.$gyazourl;
+		}
+	} elseif($filename){	
+		$media = $twitter->upload('media/upload', ['media' => $filename]);
+		$parameters['media_ids'] = $media->media_id_string;
+	}
 
 	$result2 = $twitter->post('statuses/update', $parameters);
 
