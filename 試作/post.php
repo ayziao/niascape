@@ -32,15 +32,16 @@ function post($now){
 		$tagstring .= " with_image:$identifier";
 	}
 
+	$tagstringuser = '';
 	if (mb_strlen($tags)){
 		$tagarr = explode(' ', preg_replace('/\s+/', ' ', $tags));
-		$tagstring .= ' #'.implode(' #', $tagarr); 
+		$tagstringuser .= ' #'.implode(' #', $tagarr); 
 	}
 
 	$datetime = $now->format('Y-m-d H:i:s');
 	$identifier = $now->format('YmdHisu');
 
-	$tagstring .= ' twitter_posted';
+	$tagstring .= ' twitter_posted' + $tagstringuser;
 
 	if(strlen($tagstring) > 0){
 		$tagstring .= ' ';
@@ -66,7 +67,7 @@ function post($now){
 	ob_flush();
 	flush();
 
-	twitterpost($user,$body,$_FILES['file']['tmp_name'],json_decode($gyazoresults)->permalink_url);
+	twitterpost($user,$body.$tagstringuser,$_FILES['file']['tmp_name'],json_decode($gyazoresults)->permalink_url);
 
 	return;
 }
@@ -149,6 +150,23 @@ function twitterpost($user,$body,$filename,$gyazourl){
 	// var_dump($userini);
 	// var_dump($twresult);
 	// var_dump($media);
+
+	//RT ふぁぼ
+	if(array_key_exists('twitter_rt',$userini) == false){
+		return;
+	}
+	if($userini['twitter_rt']['noodle'] == '' or strpos($body, $userini['twitter_rt']['noodle']) !== false){
+		$consumerKey = $userini['twitter_rt']['consumerKey'];
+		$consumerSecret = $userini['twitter_rt']['consumerSecret'];
+		$accessToken = $userini['twitter_rt']['accessToken'];
+		$accessTokenSecret = $userini['twitter_rt']['accessTokenSecret'];
+
+		$twitter = new TwitterOAuth($consumerKey, $consumerSecret, $accessToken, $accessTokenSecret);
+		$result3 = $twitter->post('favorites/create', ['id' => $result->id_str]);
+		$result4 = $twitter->post('statuses/retweet', ['id' => $result->id_str]);
+	}
+	// var_dump($result3);
+	// var_dump($result4);
 
 	return $result;
 }
