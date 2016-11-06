@@ -67,7 +67,7 @@ $content .= "\n\t\t\t</div>";
 
 		<form action="./" method="POST" enctype="multipart/form-data" onsubmit="return submit();">
 			<div class="textarea">
-				<textarea id="box" name="body" onKeyup="showmojilen();"></textarea>
+				<textarea id="box" name="body" onKeyup="showmojilen();"><?=$_GET['form']?></textarea>
 			</div>
 			tag<input id="tag" class="text" type="text" name="tags" onKeyup="showmojilen();">
 			<input id="btn" class="submitbutton" type="submit" name="submit" value="post" onclick="return submit();">
