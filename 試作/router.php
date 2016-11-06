@@ -5,7 +5,6 @@ date_default_timezone_set('Asia/Tokyo');
 //ini_set( 'error_log', 1 ); //ビルトインサーバでのエラーログの出力先がよくわからん		
 //error_log('hoge');
 
-
 //ルーティング
 function routing(){
 	$path = $_SERVER["SCRIPT_NAME"];
@@ -16,15 +15,15 @@ function routing(){
 
 	//TODO トップページ判定
 
-	if (is_kobetupage($path)) { //個別ページ判定	
+	if (is_kobetupage($path)) {        //個別ページ判定	
 		return require('kobetu.php');
-	} elseif(is_daysummary($path)) {	//日サマリー判定	
+	} elseif(is_daysummary($path)) {   //日サマリー判定	
 		return require('daysummary.php');
-	} elseif(is_tagtimeline($path)) {	//タグタイムライン判定
+	} elseif(is_tagtimeline($path)) {  //タグタイムライン判定
 		return require('tagtimeline.php');
-	} elseif(is_search($path)) {	//本文検索
+	} elseif(is_search($path)) {       //本文検索
 		return require('search.php');
-	} elseif(is_sitetimeline($path)) {	//サイトタイムライン判定
+	} elseif(is_sitetimeline($path)) { //サイトタイムライン判定
 		return require('sitetimeline.php');
 	} else {
 		return @include(substr($path,1) . '.php');	//PENDING 画面じゃなくてコンソールにエラーが吐ければ@取りたい
@@ -57,7 +56,5 @@ function is_sitetimeline($path){
 	//TODO バーチャルホスト
 	return preg_match('/^\/@\w/', $path);	//1文字目が＠ならユーザページ
 }
-
-
 
 return routing();
