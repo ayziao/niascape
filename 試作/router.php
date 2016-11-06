@@ -33,28 +33,37 @@ function routing(){
 //個別ページ判定
 function is_kobetupage($path){
 	//PENDING サイトチェック入れるか	
-	return preg_match('/\/[0-9]{20}$/', $path); //末尾が数字20文字だったら個別ページ
+	return preg_match('#/[0-9]{20}$#', $path); //末尾が数字20文字だったら個別ページ
 }
 
 //日サマリー判定
 function is_daysummary($path){
-	return preg_match('/\/[0-9]{8}$/', $path);	//末尾が数字8文字だったら日サマリー
+	return preg_match('#/[0-9]{8}$#', $path);	//末尾が数字8文字だったら日サマリー
 }
 
 //タグタイムライン判定
 function is_tagtimeline($path){
-	return (preg_match('/^\/@\w/', $path) and array_key_exists('tag', $_GET));
+	return (is_sitetimeline($path) and array_key_exists('tag', $_GET));
 }
 
 //本文検索
 function is_search($path){
-	return (preg_match('/^\/@\w/', $path) and array_key_exists('searchbody', $_GET));
+	return (is_sitetimeline($path) and array_key_exists('searchbody', $_GET));
 }
 
 //サイトタイムライン判定
 function is_sitetimeline($path){
 	//TODO バーチャルホスト
-	return preg_match('/^\/@\w/', $path);	//1文字目が＠ならユーザページ
+
+	if (strpos($path, '.')){
+		return false;
+	}
+
+	$ini_array = parse_ini_file("setting.ini");
+	if (strpos($_SERVER['HTTP_HOST'], $ini_array['host']) > 0){
+		return true;
+	}
+	return preg_match('#^/@\w#', $path);	//1文字目が＠ならユーザページ
 }
 
 return routing();

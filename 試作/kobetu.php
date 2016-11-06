@@ -26,6 +26,11 @@ if ($raw) {
 	print('<pre>');
 	var_dump($query);
 	var_dump($raw);
+	var_dump($_SERVER['HTTP_HOST']);
+	var_dump(explode('.'.$ini_array['host'],$_SERVER['HTTP_HOST'])[0]);
+	var_dump($_SERVER);
+
+
 	// print('</pre>');
 } else {
 	return false;

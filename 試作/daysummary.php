@@ -7,9 +7,16 @@ $ini_array = parse_ini_file("setting.ini");
 $location = $ini_array['sqlite_file'];
 $handle = new SQLite3($location); 
 
+
+if (strpos($_SERVER['HTTP_HOST'], $ini_array['host']) > 0){
+	$user = explode('.'.$ini_array['host'],$_SERVER['HTTP_HOST'])[0];
+} else {
+	$user = explode("/", substr($_SERVER["SCRIPT_NAME"],2))[0];
+}
+
 $arr  = explode('/', substr($_SERVER["SCRIPT_NAME"],1));
 $path = array_pop($arr);	//リクエスト末尾から/の直後までを取得 ルーティングで末尾数字8文字判定済み前提
-$user = substr(array_pop($arr), 1); 
+//$user = substr(array_pop($arr), 1); 
 
 $query = <<< EOM
 
