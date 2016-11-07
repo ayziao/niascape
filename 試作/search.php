@@ -64,7 +64,7 @@ $content .= '</div>';
 		<meta name="viewport" content="width=device-width">
 		<title><?=$searchbody?> <?=$user?></title>
 		<link rel="stylesheet" type="text/css" href="/common.css">
-		<link rel="stylesheet" type="text/css" href="/css.css">
+		<link rel="stylesheet" type="text/css" href="./css.css">
 	</head>
 
 	<body>

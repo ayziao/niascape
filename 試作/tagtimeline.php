@@ -66,7 +66,7 @@ $content .= "\n\t\t\t</div>";
 		<meta name="viewport" content="width=device-width">
 		<title><?=$tag?> <?=$user?></title>
 		<link rel="stylesheet" type="text/css" href="/common.css">
-		<link rel="stylesheet" type="text/css" href="/css.css">
+		<link rel="stylesheet" type="text/css" href="./css.css">
 	</head>
 
 	<body>

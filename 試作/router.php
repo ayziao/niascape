@@ -25,6 +25,11 @@ function routing(){
 		return require('search.php');
 	} elseif(is_sitetimeline($path)) { //サイトタイムライン判定
 		return require('sitetimeline.php');
+	} elseif(is_site_static($path)) { //サイト別静的ファイル
+		$ini_array = parse_ini_file("setting.ini");		
+		content_type($path);
+		readfile($ini_array['site_static'].substr($path, 2));
+		return;
 	} else {
 		return @include(substr($path,1) . '.php');	//PENDING 画面じゃなくてコンソールにエラーが吐ければ@取りたい
 	}
@@ -51,6 +56,13 @@ function is_search($path){
 	return (is_sitetimeline($path) and array_key_exists('searchbody', $_GET));
 }
 
+//サイト別静的ファイル
+function is_site_static($path){
+	$ini_array = parse_ini_file("setting.ini");
+
+	return is_readable($ini_array['site_static'].substr($path, 2));
+}
+
 //サイトタイムライン判定
 function is_sitetimeline($path){
 	//TODO バーチャルホスト
@@ -58,12 +70,22 @@ function is_sitetimeline($path){
 	if (strpos($path, '.')){
 		return false;
 	}
-
 	$ini_array = parse_ini_file("setting.ini");
 	if (strpos($_SERVER['HTTP_HOST'], $ini_array['host']) > 0){
 		return true;
 	}
 	return preg_match('#^/@\w#', $path);	//1文字目が＠ならユーザページ
+}
+
+function content_type($path){
+	$ini_array = parse_ini_file("setting.ini");		
+	$kakutyousi = end(explode('.', $path));
+	$arr = ['css' => 'Content-Type: text/css; charset=UTF-8'];
+	if (array_key_exists($kakutyousi, $arr)){
+		header($arr[$kakutyousi]);
+	} else {
+		header('Content-Type: ' . mime_content_type($ini_array['site_static'].substr($path, 2)));
+	}
 }
 
 return routing();
