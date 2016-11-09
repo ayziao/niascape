@@ -53,7 +53,8 @@ while ($row = $results->fetchArray()) {
 		}
 	}
 
-	$content .= "\n\t\t\t\t". '<div class="line"><span class="time"><a href="./'.$row['identifier'].'">'.substr($row['datetime'], -8).'</a></span>&thinsp;'.str_replace("\n", '<br>', $row['body']).$tagstr.'</div>';
+	$content .= "\n\t\t\t\t". '<div class="line"><span class="time"><a href="./'.$row['identifier'].'">'.substr($row['datetime'], -8).'</a></span>&thinsp;'
+	.str_replace("\n", '<br/>', str_replace("\r\n", '<br/>', $row['body'])).$tagstr.'</div>';
 }
 $content .= "\n\t\t\t</div>";
 

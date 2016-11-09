@@ -14,7 +14,7 @@ function post($now){
 	$handle = new SQLite3($ini_array['sqlite_file']); 
 
 	$user = $_POST['user'];
-	$body = $_POST['body'];
+	$body = str_replace("\r\n", "\n", trim($_POST['body']));
 	$tags = trim($_POST['tags']);
 
 	$tagstring = '';
