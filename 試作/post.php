@@ -47,7 +47,10 @@ function post($now){
 		$tagstring .= ' ';
 	}
 
-	$results = dbinsert($handle,$user,$identifier,$datetime,$identifier,$tagstring,$body);
+
+	if($body){
+		$results = dbinsert($handle,$user,$identifier,$datetime,$identifier,$tagstring,$body);
+	}
 
 	// print('<pre>');
 	// var_dump($_FILES);
@@ -67,7 +70,9 @@ function post($now){
 	ob_flush();
 	flush();
 
-	twitterpost($user,$body.$tagstringuser,$_FILES['file']['tmp_name'],json_decode($gyazoresults)->permalink_url);
+	if($body){
+		twitterpost($user,$body.$tagstringuser,$_FILES['file']['tmp_name'],json_decode($gyazoresults)->permalink_url);
+	}
 
 	return;
 }
