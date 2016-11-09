@@ -77,7 +77,7 @@ $content .= "\n\t\t\t</div>";
 			tag<input id="tag" class="text" type="text" name="tags" onKeyup="showmojilen();">
 			<input id="btn" class="submitbutton" type="submit" name="submit" value="post" onclick="return submit();">
 			<input class="file" type="file" name="file" accept="image/*">
-			<input type="hidden" name="user" value="test">
+			<input type="hidden" name="user" value="<?=$user?>">
 			
 			<script type="text/javascript">
 				var key = "none";
