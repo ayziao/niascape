@@ -34,14 +34,14 @@ function post($now){
 
 	$tagstringuser = '';
 	if (mb_strlen($tags)){
-		$tagarr = explode(' ', preg_replace('/\s+/', ' ', $tags));
+		$tagarr = explode(' ', mb_ereg_replace('\s+', ' ', $tags));
 		$tagstringuser .= ' #'.implode(' #', $tagarr); 
 	}
 
 	$datetime = $now->format('Y-m-d H:i:s');
 	$identifier = $now->format('YmdHisu');
 
-	$tagstring .= ' twitter_posted' + $tagstringuser;
+	$tagstring .= ' twitter_posted' . $tagstringuser;
 
 	if(strlen($tagstring) > 0){
 		$tagstring .= ' ';
@@ -87,7 +87,7 @@ VALUES
 ('$user','$identifier','$datetime','$title','$tags','$body')
 
 EOM;
-
+	// var_dump($query);
 	return $handle->query($query); 
 }	
 
