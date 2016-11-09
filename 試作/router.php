@@ -97,7 +97,14 @@ function content_type($path){
 	if (array_key_exists($kakutyousi, $arr)){
 		header($arr[$kakutyousi]);
 	} else {
-		header('Content-Type: ' . mime_content_type($ini_array['site_static'].substr($path, 2)));
+
+		if (strpos($_SERVER['HTTP_HOST'], $ini_array['host']) > 0){
+			$path = explode('.'.$ini_array['host'],$_SERVER['HTTP_HOST'])[0] . $path;
+		} else {
+			$path = substr($path, 2);
+		}
+
+		header('Content-Type: ' . mime_content_type($ini_array['site_static'].$path));
 	}
 }
 
