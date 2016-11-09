@@ -13,6 +13,7 @@ if (strpos($_SERVER['HTTP_HOST'], $ini_array['host']) > 0){
 } else {
 	$user = explode("/", substr($_SERVER["SCRIPT_NAME"],2))[0];
 }
+$userini = parse_ini_file("$user.ini",ture);
 
 $query = <<< EOM
 
@@ -136,7 +137,7 @@ $content .= "\n\t\t\t</div>";
 
 		</form>
 
-		<div id="etc"></div>
+		<div id="etc"><?=$userini['userinsert']?></div>
 		
 		<div>
 
