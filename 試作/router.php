@@ -26,9 +26,16 @@ function routing(){
 	} elseif(is_sitetimeline($path)) { //サイトタイムライン判定
 		return require('sitetimeline.php');
 	} elseif(is_site_static($path)) { //サイト別静的ファイル
-		$ini_array = parse_ini_file("setting.ini");		
+		$ini_array = parse_ini_file("setting.ini");
 		content_type($path);
-		readfile($ini_array['site_static'].substr($path, 2));
+
+		if (strpos($_SERVER['HTTP_HOST'], $ini_array['host']) > 0){
+			$path = explode('.'.$ini_array['host'],$_SERVER['HTTP_HOST'])[0] . $path;
+		} else {
+			$path = substr($path, 2);
+		}
+
+		readfile($ini_array['site_static'].$path);
 		return;
 	} else {
 		return @include(substr($path,1) . '.php');	//PENDING 画面じゃなくてコンソールにエラーが吐ければ@取りたい
@@ -60,7 +67,13 @@ function is_search($path){
 function is_site_static($path){
 	$ini_array = parse_ini_file("setting.ini");
 
-	return is_readable($ini_array['site_static'].substr($path, 2));
+	if (strpos($_SERVER['HTTP_HOST'], $ini_array['host']) > 0){
+		$path = explode('.'.$ini_array['host'],$_SERVER['HTTP_HOST'])[0] . $path;
+	} else {
+		$path = substr($path, 2);
+	}
+
+	return is_readable($ini_array['site_static'].$path);
 }
 
 //サイトタイムライン判定
