@@ -71,7 +71,11 @@ function post($now){
 	flush();
 
 	if($body){
-		twitterpost($user,$body.$tagstringuser,$_FILES['file']['tmp_name'],json_decode($gyazoresults)->permalink_url);
+		if($_FILES['file']['tmp_name']){
+			twitterpost($user,$body.$tagstringuser,$_FILES['file']['tmp_name'],json_decode($gyazoresults)->permalink_url);
+		} else {
+			exec("nohup php -c '' 'multipost.php' '$user' '$identifier' > /dev/null &");
+		}
 	}
 
 	return;
