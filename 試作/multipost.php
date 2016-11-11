@@ -14,7 +14,6 @@ use Abraham\TwitterOAuth\TwitterOAuth;
 
 //Twitter投稿
 function twitterpost($user,$body,$filename,$gyazourl){
-	//TODO 投げっぱなし裏処理にする
 
 	$userini = parse_ini_file("$user.ini",ture);
 
@@ -125,16 +124,25 @@ $results = $handle->query($query);
 $raw = $results->fetchArray();
 
 $body = $raw['body'];
+$tags = $raw['tags'];
 $handle->close();
 
 //TODO 画像どうにか
 
 //echo "hoge\n";
-//var_dump($raw);
+//var_dump($tags);
+
+$tagarr = explode(' ', trim($tags));
+$tagstr = '';
+foreach ($tagarr as $key => $value) {
+	if(strpos($value, '#') === 0){
+		$tagstr.= ' '.$value;
+	}
+}
 
 //Twitter投稿
 if ($body){
-	twitterpost($user,$body,'','');
+	twitterpost($user,$body.$tagstr,'','');
 }
 
 echo "done\n";
