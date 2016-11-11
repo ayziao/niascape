@@ -72,10 +72,12 @@ function post($now){
 
 	if($body){
 		if($_FILES['file']['tmp_name']){
-			twitterpost($user,$body.$tagstringuser,$_FILES['file']['tmp_name'],json_decode($gyazoresults)->permalink_url);
-		} else {
-			exec("nohup php -c '' 'multipost.php' '$user' '$identifier' > /dev/null &");
+		// 	twitterpost($user,$body.$tagstringuser,$_FILES['file']['tmp_name'],json_decode($gyazoresults)->permalink_url);
+			$filename = '/tmp/'.$identifier;
+			$gyazourl = json_decode($gyazoresults)->permalink_url;
+			move_uploaded_file($_FILES['file']['tmp_name'], $filename);
 		}
+		exec("nohup php -c '' 'multipost.php' '$user' '$identifier' '$filename' '$gyazourl'  > /dev/null &");
 	}
 
 	return;

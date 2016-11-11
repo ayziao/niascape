@@ -109,6 +109,8 @@ $handle    = new SQLite3($location);
 //コマンドライン引数受取
 $user = trim($argv[1]);
 $id = trim($argv[2]);
+$filename = trim($argv[3]);
+$gyazourl = trim($argv[4]);
 
 //DB読み出し
 $query = <<< EOM
@@ -142,7 +144,7 @@ foreach ($tagarr as $key => $value) {
 
 //Twitter投稿
 if ($body){
-	twitterpost($user,$body.$tagstr,'','');
+	twitterpost($user,$body.$tagstr,$filename,$gyazourl);
 }
 
 echo "done\n";
