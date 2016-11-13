@@ -42,7 +42,6 @@ function twitterpost($user,$body,$filename,$gyazourl){
 
 	$result = $twitter->post('statuses/update', $parameters);
 
-
 	if(array_key_exists('twitter_sub',$userini) == false){
 		return;
 	}
@@ -54,7 +53,7 @@ function twitterpost($user,$body,$filename,$gyazourl){
 
 	$twitter = new TwitterOAuth($consumerKey, $consumerSecret, $accessToken, $accessTokenSecret);
 
-	$parameters = ['status' => $body.$userini['twitter_sub']['suffix']];
+	$parameters = ['status' => $result->text.$userini['twitter_sub']['suffix']];
 
 	//画像投稿
 	if($userini['twitter_sub']['image'] == 'gyazo'){
