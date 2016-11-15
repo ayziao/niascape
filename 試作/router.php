@@ -12,7 +12,6 @@ function routing(){
 	if($_SERVER["REQUEST_METHOD"] == "POST"){
 		return require('post.php');
 	}
-
 	//TODO トップページ判定
 
 	if (is_kobetupage($path)) {        //個別ページ判定	
@@ -26,6 +25,7 @@ function routing(){
 	} elseif(is_sitetimeline($path)) { //サイトタイムライン判定
 		return require('sitetimeline.php');
 	} elseif(is_site_static($path)) { //サイト別静的ファイル
+
 		$ini_array = parse_ini_file("setting.ini");
 		content_type($path);
 
@@ -36,7 +36,11 @@ function routing(){
 		}
 
 		readfile($ini_array['site_static'].$path);
+		fputs(fopen('php://stdout', 'w'), "$path\n");
 		return;
+
+	} elseif(isset($_GET['kanri'])) {
+		return @include('kanri/'.$_GET['kanri'] . '.php');
 	} else {
 		return @include(substr($path,1) . '.php');	//PENDING 画面じゃなくてコンソールにエラーが吐ければ@取りたい
 	}
@@ -72,8 +76,7 @@ function is_site_static($path){
 	} else {
 		$path = substr($path, 2);
 	}
-
-	return is_readable($ini_array['site_static'].$path);
+	return (!is_dir($ini_array['site_static'].$path) and is_readable($ini_array['site_static'].$path));
 }
 
 //サイトタイムライン判定
@@ -108,4 +111,11 @@ function content_type($path){
 	}
 }
 
+// $stdout = fopen('php://stdout', 'w');
+// fputs($stdout, "STDOUT\n");
+// $stderr = fopen('php://stderr', 'w');
+// fputs($stderr, "Error\n");
 return routing();
+
+
+

@@ -3,7 +3,7 @@ header('Content-Type: text/html; charset=UTF-8');
 
 // タグ別投稿件数
 
-$ini_array = parse_ini_file("setting.ini");
+$ini_array = parse_ini_file("../setting.ini");
 $location = $ini_array['sqlite_file'];
 $user  = $_GET["user"] ? $_GET["user"] : $ini_array['default_user'];
 $tag  = $_GET["tag"] ? $_GET["tag"] : $ini_array['default_tag'];
@@ -57,7 +57,7 @@ while ($row = $results->fetchArray()) {
 }
 
 foreach ($array as $key => $value) {
-	$link .= '<a href="tagcount?user='. $user.'&tag='. urlencode($key) .'">' . $key . '</a> ';
+	$link .= '<a href="?kanri=tagcount&user='. $user.'&tag='. urlencode($key) .'">' . $key . '</a> ';
 }
 
 
@@ -75,7 +75,7 @@ EOM;
 $results = $handle->query($query);
 
 while ($row = $results->fetchArray()) {
-	$userlink .= '<a href="tagcount?user='. $row['user'].'">' . $row['user'] . '</a> ';
+	$userlink .= '<a href="?kanri=tagcount&user='. $row['user'].'">' . $row['user'] . '</a> ';
 }
 
 
@@ -94,12 +94,12 @@ while ($row = $results->fetchArray()) {
 		<h4><?=$user ?> <?=$tag ?> タグ投稿件数</h4>
 			
 		<?=$userlink ?><br>
-		<a href='monthcount?user=<?=$user ?>'>月別</a> <a href='daycount?user=<?=$user ?>'>日別</a> <a href='weekcount?user=<?=$user ?>'>曜日別</a> <a href='hourcount?user=<?=$user ?>'>時別</a> <a href='tagcount?user=<?=$user ?>'>タグ</a><br>
+		<a href='?kanri=monthcount&user=<?=$user ?>'>月別</a> <a href='?kanri=daycount&user=<?=$user ?>'>日別</a> <a href='?kanri=weekcount&user=<?=$user ?>'>曜日別</a> <a href='?kanri=hourcount&user=<?=$user ?>'>時別</a> <a href='?kanri=tagcount&user=<?=$user ?>'>タグ</a><br>
 		<?=$link ?>
 
 		<table>
 			<?=$content ?>
 		</table>
-		<a href='monthcount?user=<?=$user ?>'>月別</a> <a href='daycount?user=<?=$user ?>'>日別</a> <a href='weekcount?user=<?=$user ?>'>曜日別</a> <a href='hourcount?user=<?=$user ?>'>時別</a> <a href='tagcount?user=<?=$user ?>'>タグ</a><br>
+		<a href='?kanri=monthcount&user=<?=$user ?>'>月別</a> <a href='?kanri=daycount&user=<?=$user ?>'>日別</a> <a href='?kanri=weekcount&user=<?=$user ?>'>曜日別</a> <a href='?kanri=hourcount&user=<?=$user ?>'>時別</a> <a href='?kanri=tagcount&user=<?=$user ?>'>タグ</a><br>
 	</body>
 </html>
