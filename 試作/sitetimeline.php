@@ -13,7 +13,7 @@ if (strpos($_SERVER['HTTP_HOST'], $ini_array['host']) > 0){
 } else {
 	$user = explode("/", substr($_SERVER["SCRIPT_NAME"],2))[0];
 }
-$userini = parse_ini_file("$user.ini",ture);
+$userini = parse_ini_file('siteini/'."$user.ini",ture);
 
 $query = <<< EOM
 

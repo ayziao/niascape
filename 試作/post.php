@@ -77,7 +77,7 @@ function post($now){
 			$gyazourl = json_decode($gyazoresults)->permalink_url;
 			move_uploaded_file($_FILES['file']['tmp_name'], $filename);
 		}
-		exec("nohup php -c '' 'multipost.php' '$user' '$identifier' '$filename' '$gyazourl'  > /dev/null &");
+		exec("nohup php -c '' '../multipost.php' '$user' '$identifier' '$filename' '$gyazourl'  > /dev/null &");
 	}
 
 	return;

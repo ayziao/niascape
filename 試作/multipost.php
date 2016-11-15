@@ -15,7 +15,7 @@ use Abraham\TwitterOAuth\TwitterOAuth;
 //Twitter投稿
 function twitterpost($user,$body,$filename,$gyazourl){
 
-	$userini = parse_ini_file("$user.ini",ture);
+	$userini = parse_ini_file('siteini/'."$user.ini",ture);
 
 	if(array_key_exists('twitter_main',$userini) == false){
 		return;

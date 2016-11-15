@@ -48,8 +48,8 @@ while ($row = $results->fetchArray()) {
 	$tags = explode(' ',trim($row['tags']));
 	foreach ($tags as  $value) {
 		if(strpos($value , '#') === 0){
-			$tag = substr($value, 1);
-			$tagstr .= ' <a href="./?tag=' . $tag .'">' . $tag .'</a>';
+			$taga = substr($value, 1);
+			$tagstr .= ' <a href="./?tag=' . $taga .'">' . $taga .'</a>';
 		}
 	}
 
