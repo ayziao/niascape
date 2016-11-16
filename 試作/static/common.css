@@ -1,3 +1,7 @@
+* {
+	font-size  : 1em;	
+}
+
 body {
 	font-size  : small;
 	line-height:   1em;
@@ -7,11 +11,11 @@ body {
 h1 {
 	margin   : 0;
 	padding  : 0;
-	font-size: 1em;
 }
 
 h5 {
-	margin :0;
+	font-size  : x-small;
+	margin :0.2em 0 0;
 	padding:0;
 }
 
@@ -27,7 +31,7 @@ textarea {
 
 input.submitbutton{
 	width    : 3em;
-	height   : 2em;
+	height   : 1.5em;
 	font-size: 2em;
 }
 
@@ -39,12 +43,11 @@ input.file{
 	width: 14em;
 }
 
-
 div.line{
-	padding-left:  2.9em;
-	text-indent : -2.9em;
-	white-space : pre-wrap;
-	word-break:break-all;
+	padding-left :  2.9em;
+	text-indent  : -2.9em;
+	white-space  : pre-wrap;
+	word-break   : break-all;
 	background-color: #fff;
 }
 
