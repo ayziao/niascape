@@ -5,7 +5,7 @@ header('Content-Type: text/html; charset=UTF-8');
 
 $ini_array = parse_ini_file("../setting.ini");
 $location = $ini_array['sqlite_file'];
-$user  = $_GET["user"] ? $_GET["user"] : $ini_array['default_user'];
+$site  = $_GET["site"] ? $_GET["site"] : $ini_array['default_site'];
 $tag  = $_GET["tag"] ? $_GET["tag"] : $ini_array['default_tag'];
 $handle = new SQLite3($location); 
 
@@ -17,7 +17,7 @@ SELECT
 	replace(substr(quote(zeroblob((count(*) + 1) / 2)), 3, count(*)), '0', '|') as 'graf' 
 FROM basedata 
 WHERE
-	user = '$user'
+	site = '$site'
 	and tags like '% $tag %'
 GROUP BY DATE(`datetime`) 
 ORDER BY DATE(`datetime`)  DESC
@@ -38,7 +38,7 @@ SELECT
 	COUNT(*) as 'count'
 FROM basedata 
 WHERE
-	user = '$user'
+	site = '$site'
 GROUP BY tags
 ORDER BY COUNT(*) DESC
 EOM;
@@ -57,25 +57,25 @@ while ($row = $results->fetchArray()) {
 }
 
 foreach ($array as $key => $value) {
-	$link .= '<a href="?kanri=tagcount&user='. $user.'&tag='. urlencode($key) .'">' . $key . '</a> ';
+	$link .= '<a href="?kanri=tagcount&site='. $site.'&tag='. urlencode($key) .'">' . $key . '</a> ';
 }
 
 
-//userリンク
+//siteリンク
 
 $query = <<< EOM
 SELECT 
-	user
+	site
 	, COUNT(*)
 FROM basedata 
-GROUP BY user
+GROUP BY site
 ORDER BY COUNT(*) DESC
 EOM;
 
 $results = $handle->query($query);
 
 while ($row = $results->fetchArray()) {
-	$userlink .= '<a href="?kanri=tagcount&user='. $row['user'].'">' . $row['user'] . '</a> ';
+	$sitelink .= '<a href="?kanri=tagcount&site='. $row['site'].'">' . $row['site'] . '</a> ';
 }
 
 
@@ -91,15 +91,15 @@ while ($row = $results->fetchArray()) {
 	</head>
 	
 	<body>
-		<h4><?=$user ?> <?=$tag ?> タグ投稿件数</h4>
+		<h4><?=$site ?> <?=$tag ?> タグ投稿件数</h4>
 			
-		<?=$userlink ?><br>
-		<a href='?kanri=monthcount&user=<?=$user ?>'>月別</a> <a href='?kanri=daycount&user=<?=$user ?>'>日別</a> <a href='?kanri=weekcount&user=<?=$user ?>'>曜日別</a> <a href='?kanri=hourcount&user=<?=$user ?>'>時別</a> <a href='?kanri=tagcount&user=<?=$user ?>'>タグ</a><br>
+		<?=$sitelink ?><br>
+		<a href='?kanri=monthcount&site=<?=$site ?>'>月別</a> <a href='?kanri=daycount&site=<?=$site ?>'>日別</a> <a href='?kanri=weekcount&site=<?=$site ?>'>曜日別</a> <a href='?kanri=hourcount&site=<?=$site ?>'>時別</a> <a href='?kanri=tagcount&site=<?=$site ?>'>タグ</a><br>
 		<?=$link ?>
 
 		<table>
 			<?=$content ?>
 		</table>
-		<a href='?kanri=monthcount&user=<?=$user ?>'>月別</a> <a href='?kanri=daycount&user=<?=$user ?>'>日別</a> <a href='?kanri=weekcount&user=<?=$user ?>'>曜日別</a> <a href='?kanri=hourcount&user=<?=$user ?>'>時別</a> <a href='?kanri=tagcount&user=<?=$user ?>'>タグ</a><br>
+		<a href='?kanri=monthcount&site=<?=$site ?>'>月別</a> <a href='?kanri=daycount&site=<?=$site ?>'>日別</a> <a href='?kanri=weekcount&site=<?=$site ?>'>曜日別</a> <a href='?kanri=hourcount&site=<?=$site ?>'>時別</a> <a href='?kanri=tagcount&site=<?=$site ?>'>タグ</a><br>
 	</body>
 </html>

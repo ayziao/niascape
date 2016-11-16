@@ -9,19 +9,19 @@ $handle = new SQLite3($location);
 
 
 if (strpos($_SERVER['HTTP_HOST'], $ini_array['host']) > 0){
-	$user = explode('.'.$ini_array['host'],$_SERVER['HTTP_HOST'])[0];
+	$site = explode('.'.$ini_array['host'],$_SERVER['HTTP_HOST'])[0];
 } else {
-	$user = explode("/", substr($_SERVER["SCRIPT_NAME"],2))[0];
+	$site = explode("/", substr($_SERVER["SCRIPT_NAME"],2))[0];
 }
 
 $arr  = explode('/', substr($_SERVER["SCRIPT_NAME"],1));
 $path = array_pop($arr);	//リクエスト末尾から/の直後までを取得 ルーティングで末尾数字8文字判定済み前提
-//$user = substr(array_pop($arr), 1); 
+//$site = substr(array_pop($arr), 1); 
 
 $query = <<< EOM
 
 SELECT * FROM basedata
-WHERE user = '$user'
+WHERE site = '$site'
 AND tags NOT LIKE '% gyazo_posted %'
 AND title LIKE '$path%' 
 ORDER BY identifier ASC LIMIT 1000
@@ -67,14 +67,14 @@ $content .= "\n\t\t\t</div>";
 	<head>
 		<meta charset="UTF-8">
 		<meta name="viewport" content="width=device-width">
-		<title><?=$path?> <?=$user?></title>
+		<title><?=$path?> <?=$site?></title>
 		<link rel="icon" type="image/png" href="./favicon.png">
 		<link rel="stylesheet" type="text/css" href="/common.css">
 		<link rel="stylesheet" type="text/css" href="./css.css">
 	</head>
 
 	<body>
-		<h1><?=$user?> <?=$path?></h1>
+		<h1><?=$site?> <?=$path?></h1>
 
 		<div id="etc"></div>
 		

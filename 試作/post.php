@@ -13,7 +13,7 @@ function post($now){
 	$ini_array = parse_ini_file("setting.ini");
 	$handle = new SQLite3($ini_array['sqlite_file']); 
 
-	$user = $_POST['user'];
+	$site = $_POST['site'];
 	$body = str_replace("\r\n", "\n", trim($_POST['body']));
 	$tags = trim($_POST['tags']);
 
@@ -25,23 +25,23 @@ function post($now){
 		$datetime = $now->format('Y-m-d H:i:s');
 		$identifier = $now->format('YmdHisu');
 
-		$results = dbinsert($handle,$user,$identifier,$datetime,$identifier,' gyazo_posted ',$gyazoresults); //gyazo投稿情報
+		$results = dbinsert($handle,$site,$identifier,$datetime,$identifier,' gyazo_posted ',$gyazoresults); //gyazo投稿情報
 
 		$now = \DateTime::createFromFormat('U.u', sprintf('%6F', microtime(true)));
 		$now->setTimezone( new DateTimeZone('Asia/Tokyo'));
 		$tagstring .= " with_image:$identifier";
 	}
 
-	$tagstringuser = '';
+	$tagstringsite = '';
 	if (mb_strlen($tags)){
 		$tagarr = explode(' ', mb_ereg_replace('\s+', ' ', $tags));
-		$tagstringuser .= ' #'.implode(' #', $tagarr); 
+		$tagstringsite .= ' #'.implode(' #', $tagarr); 
 	}
 
 	$datetime = $now->format('Y-m-d H:i:s');
 	$identifier = $now->format('YmdHisu');
 
-	$tagstring .= ' twitter_posted' . $tagstringuser;
+	$tagstring .= ' twitter_posted' . $tagstringsite;
 
 	if(strlen($tagstring) > 0){
 		$tagstring .= ' ';
@@ -49,7 +49,7 @@ function post($now){
 
 
 	if($body){
-		$results = dbinsert($handle,$user,$identifier,$datetime,$identifier,$tagstring,$body);
+		$results = dbinsert($handle,$site,$identifier,$datetime,$identifier,$tagstring,$body);
 	}
 
 	// print('<pre>');
@@ -72,25 +72,25 @@ function post($now){
 
 	if($body){
 		if($_FILES['file']['tmp_name']){
-		// 	twitterpost($user,$body.$tagstringuser,$_FILES['file']['tmp_name'],json_decode($gyazoresults)->permalink_url);
+		// 	twitterpost($site,$body.$tagstringsite,$_FILES['file']['tmp_name'],json_decode($gyazoresults)->permalink_url);
 			$filename = '/tmp/'.$identifier;
 			$gyazourl = json_decode($gyazoresults)->permalink_url;
 			move_uploaded_file($_FILES['file']['tmp_name'], $filename);
 		}
-		exec("nohup php -c '' '../multipost.php' '$user' '$identifier' '$filename' '$gyazourl'  > /dev/null &");
+		exec("nohup php -c '' '../multipost.php' '$site' '$identifier' '$filename' '$gyazourl'  > /dev/null &");
 	}
 
 	return;
 }
 
 //DB insert
-function dbinsert($handle,$user,$identifier,$datetime,$title,$tags,$body){
+function dbinsert($handle,$site,$identifier,$datetime,$title,$tags,$body){
 	$query = <<< EOM
 
 INSERT INTO basedata
-(user,identifier,datetime,title,tags,body)
+(site,identifier,datetime,title,tags,body)
 VALUES 
-('$user','$identifier','$datetime','$title','$tags','$body')
+('$site','$identifier','$datetime','$title','$tags','$body')
 
 EOM;
 	// var_dump($query);
@@ -98,26 +98,26 @@ EOM;
 }	
 
 //Twitter投稿
-function twitterpost($user,$body,$filename,$gyazourl){
+function twitterpost($site,$body,$filename,$gyazourl){
 	//TODO 投げっぱなし裏処理にする
 
-	$userini = parse_ini_file("$user.ini",ture);
+	$siteini = parse_ini_file("$site.ini",ture);
 
-	if(array_key_exists('twitter_main',$userini) == false){
+	if(array_key_exists('twitter_main',$siteini) == false){
 		return;
 	}
 
-	$consumerKey = $userini['twitter_main']['consumerKey'];
-	$consumerSecret = $userini['twitter_main']['consumerSecret'];
-	$accessToken = $userini['twitter_main']['accessToken'];
-	$accessTokenSecret = $userini['twitter_main']['accessTokenSecret'];
+	$consumerKey = $siteini['twitter_main']['consumerKey'];
+	$consumerSecret = $siteini['twitter_main']['consumerSecret'];
+	$accessToken = $siteini['twitter_main']['accessToken'];
+	$accessTokenSecret = $siteini['twitter_main']['accessTokenSecret'];
 
 	$twitter = new TwitterOAuth($consumerKey, $consumerSecret, $accessToken, $accessTokenSecret);
 
-	$parameters = ['status' => $body.$userini['twitter_main']['suffix']];
+	$parameters = ['status' => $body.$siteini['twitter_main']['suffix']];
 
 	//画像投稿
-	if($userini['twitter_main']['image'] == 'gyazo'){
+	if($siteini['twitter_main']['image'] == 'gyazo'){
 		if($gyazourl){
 			$parameters['status'] .= ' '.$gyazourl;
 		}
@@ -129,21 +129,21 @@ function twitterpost($user,$body,$filename,$gyazourl){
 	$result = $twitter->post('statuses/update', $parameters);
 
 
-	if(array_key_exists('twitter_sub',$userini) == false){
+	if(array_key_exists('twitter_sub',$siteini) == false){
 		return;
 	}
 
-	$consumerKey = $userini['twitter_sub']['consumerKey'];
-	$consumerSecret = $userini['twitter_sub']['consumerSecret'];
-	$accessToken = $userini['twitter_sub']['accessToken'];
-	$accessTokenSecret = $userini['twitter_sub']['accessTokenSecret'];
+	$consumerKey = $siteini['twitter_sub']['consumerKey'];
+	$consumerSecret = $siteini['twitter_sub']['consumerSecret'];
+	$accessToken = $siteini['twitter_sub']['accessToken'];
+	$accessTokenSecret = $siteini['twitter_sub']['accessTokenSecret'];
 
 	$twitter = new TwitterOAuth($consumerKey, $consumerSecret, $accessToken, $accessTokenSecret);
 
-	$parameters = ['status' => $body.$userini['twitter_sub']['suffix']];
+	$parameters = ['status' => $body.$siteini['twitter_sub']['suffix']];
 
 	//画像投稿
-	if($userini['twitter_sub']['image'] == 'gyazo'){
+	if($siteini['twitter_sub']['image'] == 'gyazo'){
 		if($gyazourl){
 			$parameters['status'] .= ' '.$gyazourl;
 		}
@@ -158,19 +158,19 @@ function twitterpost($user,$body,$filename,$gyazourl){
 	// print('<pre>');
 	// var_dump($result);
 	// var_dump($result2);
-	// var_dump($userini);
+	// var_dump($siteini);
 	// var_dump($twresult);
 	// var_dump($media);
 
 	//RT ふぁぼ
-	if(array_key_exists('twitter_rt',$userini) == false){
+	if(array_key_exists('twitter_rt',$siteini) == false){
 		return;
 	}
-	if($userini['twitter_rt']['noodle'] == '' or strpos($body, $userini['twitter_rt']['noodle']) !== false){
-		$consumerKey = $userini['twitter_rt']['consumerKey'];
-		$consumerSecret = $userini['twitter_rt']['consumerSecret'];
-		$accessToken = $userini['twitter_rt']['accessToken'];
-		$accessTokenSecret = $userini['twitter_rt']['accessTokenSecret'];
+	if($siteini['twitter_rt']['noodle'] == '' or strpos($body, $siteini['twitter_rt']['noodle']) !== false){
+		$consumerKey = $siteini['twitter_rt']['consumerKey'];
+		$consumerSecret = $siteini['twitter_rt']['consumerSecret'];
+		$accessToken = $siteini['twitter_rt']['accessToken'];
+		$accessTokenSecret = $siteini['twitter_rt']['accessTokenSecret'];
 
 		$twitter = new TwitterOAuth($consumerKey, $consumerSecret, $accessToken, $accessTokenSecret);
 		$result3 = $twitter->post('favorites/create', ['id' => $result->id_str]);

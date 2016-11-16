@@ -6,7 +6,7 @@ header('Content-Type: text/html; charset=UTF-8');
 $week = ['日','月','火','水','木','金','土'];
 $ini_array = parse_ini_file("../setting.ini");
 $location = $ini_array['sqlite_file'];
-$user  = $_GET["user"] ? $_GET["user"] : $ini_array['default_user'];
+$site  = $_GET["site"] ? $_GET["site"] : $ini_array['default_site'];
 $handle = new SQLite3($location); 
 
 //今週
@@ -17,7 +17,7 @@ FROM
 SELECT 
 	strftime('%w',`datetime`) as `Date` 
 FROM basedata 
-WHERE user = '$user' 
+WHERE site = '$site' 
 GROUP BY strftime('%w',`datetime`)
 ) t2
 LEFT JOIN
@@ -27,7 +27,7 @@ SELECT
 	COUNT(*) as 'count',
 	replace(substr(quote(zeroblob((round(count(*) / 5) + 1) / 2)), 3, (round(count(*) / 5))), '0', '|') as 'graf' 
 FROM basedata 
-WHERE user = '$user' 
+WHERE site = '$site' 
 AND strftime('%Y%W',`datetime`) = strftime('%Y%W',DATE('now', "localtime"))
 GROUP BY strftime('%w',`datetime`)
 ) t1
@@ -55,7 +55,7 @@ SELECT
 	COUNT(*) as 'count',
 	replace(substr(quote(zeroblob((round(count(*) / 5) + 1) / 2)), 3, (round(count(*) / 5))), '0', '|') as 'graf' 
 FROM basedata 
-WHERE user = '$user' 
+WHERE site = '$site' 
 AND strftime('%Y%m',`datetime`) = strftime('%Y%m',DATE('now', "localtime"))
 GROUP BY strftime('%w',`datetime`)
 EOM;
@@ -76,7 +76,7 @@ SELECT
 	COUNT(*) as 'count',
 	replace(substr(quote(zeroblob((round(count(*) / 20) + 1) / 2)), 3, (round(count(*) / 20))), '0', '|') as 'graf' 
 FROM basedata 
-WHERE user = '$user' 
+WHERE site = '$site' 
 AND strftime('%Y',`datetime`) = strftime('%Y',DATE('now', "localtime"))
 GROUP BY strftime('%w',`datetime`)
 EOM;
@@ -99,7 +99,7 @@ SELECT
 	COUNT(*) as 'count',
 	replace(substr(quote(zeroblob((round(count(*) / 20) + 1) / 2)), 3, (round(count(*) / 20))), '0', '|') as 'graf' 
 FROM basedata 
-WHERE user = '$user' 
+WHERE site = '$site' 
 GROUP BY strftime('%w',`datetime`)
 EOM;
 $results = $handle->query($query); 
@@ -112,18 +112,18 @@ $row = $sun;
 $zenkikan .= "\n			" . '<tr>'.'<td nowrap>'.$week[$row['Date']].'</td>'.'<td align="right">'.$row['count'].'</td>'.'<td>'.$row['graf'].'</td>'.'</tr>' . "\n\n";
 
 
-//userリンク
+//siteリンク
 $query = <<< EOM
-SELECT user,COUNT(*)
+SELECT site,COUNT(*)
 FROM basedata 
-GROUP BY user
+GROUP BY site
 ORDER BY COUNT(*) DESC
 EOM;
 
 $results = $handle->query($query);
 
 while ($row = $results->fetchArray()) {
-	$userlink .= '<a href="?kanri=weekcount&user='. $row['user'].'">' . $row['user'] . '</a> ';
+	$sitelink .= '<a href="?kanri=weekcount&site='. $row['site'].'">' . $row['site'] . '</a> ';
 }
 
 ?>
@@ -138,10 +138,10 @@ while ($row = $results->fetchArray()) {
 	</head>
 
 	<body>
-		<h4><?=$user ?> <?=$tag ?> 曜日別投稿件数</h4>
+		<h4><?=$site ?> <?=$tag ?> 曜日別投稿件数</h4>
 			
-		<?=$userlink ?><br>
-		<a href='?kanri=monthcount&user=<?=$user ?>'>月別</a> <a href='?kanri=daycount&user=<?=$user ?>'>日別</a> <a href='?kanri=weekcount&user=<?=$user ?>'>曜日別</a> <a href='?kanri=hourcount&user=<?=$user ?>'>時別</a> <a href='?kanri=tagcount&user=<?=$user ?>'>タグ</a><br>
+		<?=$sitelink ?><br>
+		<a href='?kanri=monthcount&site=<?=$site ?>'>月別</a> <a href='?kanri=daycount&site=<?=$site ?>'>日別</a> <a href='?kanri=weekcount&site=<?=$site ?>'>曜日別</a> <a href='?kanri=hourcount&site=<?=$site ?>'>時別</a> <a href='?kanri=tagcount&site=<?=$site ?>'>タグ</a><br>
 		<h5>今週</h5>
 		<table>
 			<?=$konsyu ?>
@@ -158,6 +158,6 @@ while ($row = $results->fetchArray()) {
 		<table>
 			<?=$zenkikan ?>
 		</table>
-		<a href='?kanri=monthcount&user=<?=$user ?>'>月別</a> <a href='?kanri=daycount&user=<?=$user ?>'>日別</a> <a href='?kanri=weekcount&user=<?=$user ?>'>曜日別</a> <a href='?kanri=hourcount&user=<?=$user ?>'>時別</a> <a href='?kanri=tagcount&user=<?=$user ?>'>タグ</a><br>
+		<a href='?kanri=monthcount&site=<?=$site ?>'>月別</a> <a href='?kanri=daycount&site=<?=$site ?>'>日別</a> <a href='?kanri=weekcount&site=<?=$site ?>'>曜日別</a> <a href='?kanri=hourcount&site=<?=$site ?>'>時別</a> <a href='?kanri=tagcount&site=<?=$site ?>'>タグ</a><br>
 	</body>
 </html>

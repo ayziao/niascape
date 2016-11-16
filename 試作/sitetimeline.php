@@ -9,16 +9,16 @@ $handle = new SQLite3($location);
 
 
 if (strpos($_SERVER['HTTP_HOST'], $ini_array['host']) > 0){
-	$user = explode('.'.$ini_array['host'],$_SERVER['HTTP_HOST'])[0];
+	$site = explode('.'.$ini_array['host'],$_SERVER['HTTP_HOST'])[0];
 } else {
-	$user = explode("/", substr($_SERVER["SCRIPT_NAME"],2))[0];
+	$site = explode("/", substr($_SERVER["SCRIPT_NAME"],2))[0];
 }
-$userini = parse_ini_file('siteini/'."$user.ini",ture);
+$siteini = parse_ini_file('siteini/'."$site.ini",ture);
 
 $query = <<< EOM
 
 SELECT * FROM basedata
-WHERE user = '$user'
+WHERE site = '$site'
 AND tags NOT LIKE '% gyazo_posted %'
 ORDER BY identifier DESC LIMIT 200
 
@@ -64,14 +64,14 @@ $content .= "\n\t\t\t</div>";
 	<head>
 		<meta charset="UTF-8">
 		<meta name="viewport" content="width=device-width">
-		<title>タイムライン <?=$user?></title>
+		<title>タイムライン <?=$site?></title>
 		<link rel="icon" type="image/png" href="./favicon.png">
 		<link rel="stylesheet" type="text/css" href="/common.css">
 		<link rel="stylesheet" type="text/css" href="./css.css">
 	</head>
 
 	<body>
-		<h1><?=$user?></h1>
+		<h1><?=$site?></h1>
 
 		<form action="./" method="POST" enctype="multipart/form-data" onsubmit="return submit();">
 			<div class="textarea">
@@ -80,7 +80,7 @@ $content .= "\n\t\t\t</div>";
 			tag<input id="tag" class="text" type="text" name="tags" onKeyup="showmojilen();">
 			<input id="btn" class="submitbutton" type="submit" name="submit" value="post" onclick="return submit();">
 			<input class="file" type="file" name="file" accept="image/*">
-			<input type="hidden" name="user" value="<?=$user?>">
+			<input type="hidden" name="site" value="<?=$site?>">
 			
 			<script type="text/javascript">
 				var key = "none";
@@ -139,7 +139,7 @@ $content .= "\n\t\t\t</div>";
 
 		</form>
 
-		<div id="etc"><?=$userini['userinsert']?></div>
+		<div id="etc"><?=$siteini['siteinsert']?></div>
 		
 		<div>
 

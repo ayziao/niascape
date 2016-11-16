@@ -8,9 +8,9 @@ $location = $ini_array['sqlite_file'];
 $handle = new SQLite3($location); 
 
 if (strpos($_SERVER['HTTP_HOST'], $ini_array['host']) > 0){
-	$user = explode('.'.$ini_array['host'],$_SERVER['HTTP_HOST'])[0];
+	$site = explode('.'.$ini_array['host'],$_SERVER['HTTP_HOST'])[0];
 } else {
-	$user = explode("/", substr($_SERVER["SCRIPT_NAME"],2))[0];
+	$site = explode("/", substr($_SERVER["SCRIPT_NAME"],2))[0];
 }
 
 
@@ -19,7 +19,7 @@ $tag  = $_GET['tag'];
 $query = <<< EOM
 
 SELECT * FROM basedata
-WHERE user = '$user'
+WHERE site = '$site'
 AND tags LIKE '%$tag%' 
 ORDER BY identifier ASC LIMIT 1000
 
@@ -64,14 +64,14 @@ $content .= "\n\t\t\t</div>";
 	<head>
 		<meta charset="UTF-8">
 		<meta name="viewport" content="width=device-width">
-		<title><?=$tag?> <?=$user?></title>
+		<title><?=$tag?> <?=$site?></title>
 		<link rel="icon" type="image/png" href="./favicon.png">
 		<link rel="stylesheet" type="text/css" href="/common.css">
 		<link rel="stylesheet" type="text/css" href="./css.css">
 	</head>
 
 	<body>
-		<h1><?=$user?> <?=$tag?></h1>
+		<h1><?=$site?> <?=$tag?></h1>
 
 		<div id="etc"></div>
 		

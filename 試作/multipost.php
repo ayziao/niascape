@@ -1,7 +1,7 @@
 <?php
 /* マルチポスト
 
-exec("nohup php -c '' 'multipost.php' 'user' 'id' > /dev/null &");
+exec("nohup php -c '' 'multipost.php' 'site' 'id' > /dev/null &");
 
 */
 
@@ -119,7 +119,7 @@ FROM basedata
 WHERE  identifier = '$id'
 
 EOM;
-//AND user = '$user'  //PENDING サイト判定いれるか
+//AND site = '$user'  //PENDING サイト判定いれるか
 //var_dump($query);
 $results = $handle->query($query); 
 $raw = $results->fetchArray();
