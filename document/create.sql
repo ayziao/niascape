@@ -1,3 +1,4 @@
+--ベースデータ
 CREATE TABLE "basedata" 
 (
 	`site` TEXT
@@ -8,5 +9,14 @@ CREATE TABLE "basedata"
 	,`body` TEXT
 
 	,PRIMARY KEY(`site`,`identifier`)
+);
+
+--キーバリューストア PENDINGリレーショナルDBから取り除く？
+CREATE TABLE `keyvalue` 
+(
+	`key` TEXT NOT NULL
+	,`value` TEXT NOT NULL
+
+	,PRIMARY KEY(`key`)
 );
 

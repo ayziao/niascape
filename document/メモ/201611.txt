@@ -1,0 +1,34 @@
+■2016/11/22 火 
+●20:18:43.513000 siteIni書き込みスクリプト
+
+$ini_array = parse_ini_file("setting.ini");
+$arr = scandir('siteini');
+$handle = new SQLite3($ini_array['sqlite_file']); 
+
+foreach ($arr as $key => $value) {
+	if(strpos($value, '.ini') > 0){
+		$site = substr($value, 0 ,strpos($value, '.ini'));
+		$siteini = parse_ini_file('siteini/'.$value,ture);
+		$json = json_encode($siteini,JSON_PRETTY_PRINT);
+
+		insert($handle,$site,$json);
+	}
+}
+
+function insert($handle ,$key ,$value){
+
+	$ecapeval = SQLite3::escapeString($value);
+
+	$query = <<< EOM
+
+INSERT INTO keyvalue
+(key,value)
+VALUES 
+('sitesetting_$key','$ecapeval')
+
+EOM;
+	return $handle->query($query); 
+}
+
+//21:22:51.391000
+
