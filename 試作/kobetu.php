@@ -6,8 +6,7 @@ $ini_array = parse_ini_file("setting.ini");
 $location  = $ini_array['sqlite_file'];
 $handle    = new SQLite3($location); 
 
-//$
- = $_GET["site"] ? $_GET["site"] : $ini_array['default_site'];
+//$site = $_GET["site"] ? $_GET["site"] : $ini_array['default_site'];
 $path = array_pop(explode('/', substr($_SERVER["SCRIPT_NAME"],1)));	//リクエスト末尾から/の直後までを取得 ルーティングで末尾数字20文字判定済み前提
 
 //PENDING サイト判定いれるか
