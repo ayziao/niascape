@@ -18,18 +18,33 @@ function post($now){
 	$tags = trim($_POST['tags']);
 
 	$tagstring = '';
+	$filename = '';
+	$gyazourl = '';
+
+	$image_extension_arr = ['jpg','jpeg','gif','png'];
 
 	if (strpos($_FILES['file']['type'],'image') !== false){ //画像投稿
-		$gyazoresults = gyazopost($ini_array['gyazo'],$_FILES['file']['tmp_name']); //gyazo
+		$extension = strtolower(array_pop(explode('.', $_FILES['file']['name'])));
 
-		$datetime = $now->format('Y-m-d H:i:s');
-		$identifier = $now->format('YmdHisu');
+		if (in_array($extension, $image_extension_arr)){
 
-		$results = dbinsert($handle,$site,$identifier,$datetime,$identifier,' gyazo_posted ',$gyazoresults); //gyazo投稿情報
+			$gyazoresults = gyazopost($ini_array['gyazo'],$_FILES['file']['tmp_name']); //gyazo
+	//		$gyazoresults = gyazopost($ini_array['gyazo'],$filename); //gyazo
 
-		$now = \DateTime::createFromFormat('U.u', sprintf('%6F', microtime(true)));
-		$now->setTimezone( new DateTimeZone('Asia/Tokyo'));
-		$tagstring .= " with_image:$identifier";
+			$gyazourl = json_decode($gyazoresults)->permalink_url;
+
+			$datetime = $now->format('Y-m-d H:i:s');
+			$identifier = $now->format('YmdHisu');
+
+			$results = dbinsert($handle,$site,$identifier,$datetime,$identifier,' gyazo_posted ',$gyazoresults); //gyazo投稿情報
+
+			$now = \DateTime::createFromFormat('U.u', sprintf('%6F', microtime(true)));
+			$now->setTimezone( new DateTimeZone('Asia/Tokyo'));
+			$tagstring .= " with_image:$identifier";
+
+			$filename = '/tmp/'.$identifier .'.'.$extension;
+			move_uploaded_file($_FILES['file']['tmp_name'], $filename);
+		}
 	}
 
 	$tagstringsite = '';
@@ -54,6 +69,7 @@ function post($now){
 
 	// print('<pre>');
 	// var_dump($_FILES);
+	// var_dump($filename);
 	// var_dump(json_decode($gyazoresults));
 	// var_dump($tags);
 	// var_dump($tagarr);
@@ -71,11 +87,6 @@ function post($now){
 	flush();
 
 	if($body){
-		if($_FILES['file']['tmp_name']){
-			$filename = '/tmp/'.$identifier;
-			$gyazourl = json_decode($gyazoresults)->permalink_url;
-			move_uploaded_file($_FILES['file']['tmp_name'], $filename);
-		}
 		exec("nohup php -c '' '../multipost.php' '$site' '$identifier' '$filename' '$gyazourl'  > /dev/null &");
 	}
 

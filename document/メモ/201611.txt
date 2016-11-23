@@ -32,3 +32,22 @@ EOM;
 
 //21:22:51.391000
 
+■2016/11/23 水 
+●17:04:24.730000 _FILES
+
+array(1) {
+  ["file"]=>
+  array(5) {
+    ["name"]=>
+    string(xx) "filename.png"
+    ["type"]=>
+    string(9) "image/png"
+    ["tmp_name"]=>
+    string(xx) "xxxxxxxx"
+    ["error"]=>
+    int(0)
+    ["size"]=>
+    int(125206)
+  }
+}
+
