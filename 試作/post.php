@@ -72,7 +72,6 @@ function post($now){
 
 	if($body){
 		if($_FILES['file']['tmp_name']){
-		// 	twitterpost($site,$body.$tagstringsite,$_FILES['file']['tmp_name'],json_decode($gyazoresults)->permalink_url);
 			$filename = '/tmp/'.$identifier;
 			$gyazourl = json_decode($gyazoresults)->permalink_url;
 			move_uploaded_file($_FILES['file']['tmp_name'], $filename);
@@ -95,91 +94,6 @@ VALUES
 EOM;
 	// var_dump($query);
 	return $handle->query($query); 
-}	
-
-//Twitter投稿
-function twitterpost($site,$body,$filename,$gyazourl){
-	//TODO 投げっぱなし裏処理にする
-
-	$siteini = parse_ini_file("$site.ini",ture);
-
-	if(array_key_exists('twitter_main',$siteini) == false){
-		return;
-	}
-
-	$consumerKey = $siteini['twitter_main']['consumerKey'];
-	$consumerSecret = $siteini['twitter_main']['consumerSecret'];
-	$accessToken = $siteini['twitter_main']['accessToken'];
-	$accessTokenSecret = $siteini['twitter_main']['accessTokenSecret'];
-
-	$twitter = new TwitterOAuth($consumerKey, $consumerSecret, $accessToken, $accessTokenSecret);
-
-	$parameters = ['status' => $body.$siteini['twitter_main']['suffix']];
-
-	//画像投稿
-	if($siteini['twitter_main']['image'] == 'gyazo'){
-		if($gyazourl){
-			$parameters['status'] .= ' '.$gyazourl;
-		}
-	} elseif($filename){	
-		$media = $twitter->upload('media/upload', ['media' => $filename]);
-		$parameters['media_ids'] = $media->media_id_string;
-	}
-
-	$result = $twitter->post('statuses/update', $parameters);
-
-
-	if(array_key_exists('twitter_sub',$siteini) == false){
-		return;
-	}
-
-	$consumerKey = $siteini['twitter_sub']['consumerKey'];
-	$consumerSecret = $siteini['twitter_sub']['consumerSecret'];
-	$accessToken = $siteini['twitter_sub']['accessToken'];
-	$accessTokenSecret = $siteini['twitter_sub']['accessTokenSecret'];
-
-	$twitter = new TwitterOAuth($consumerKey, $consumerSecret, $accessToken, $accessTokenSecret);
-
-	$parameters = ['status' => $body.$siteini['twitter_sub']['suffix']];
-
-	//画像投稿
-	if($siteini['twitter_sub']['image'] == 'gyazo'){
-		if($gyazourl){
-			$parameters['status'] .= ' '.$gyazourl;
-		}
-	} elseif($filename){	
-		$media = $twitter->upload('media/upload', ['media' => $filename]);
-		$parameters['media_ids'] = $media->media_id_string;
-	}
-
-	$result2 = $twitter->post('statuses/update', $parameters);
-
-
-	// print('<pre>');
-	// var_dump($result);
-	// var_dump($result2);
-	// var_dump($siteini);
-	// var_dump($twresult);
-	// var_dump($media);
-
-	//RT ふぁぼ
-	if(array_key_exists('twitter_rt',$siteini) == false){
-		return;
-	}
-	if($siteini['twitter_rt']['noodle'] == '' or strpos($body, $siteini['twitter_rt']['noodle']) !== false){
-		$consumerKey = $siteini['twitter_rt']['consumerKey'];
-		$consumerSecret = $siteini['twitter_rt']['consumerSecret'];
-		$accessToken = $siteini['twitter_rt']['accessToken'];
-		$accessTokenSecret = $siteini['twitter_rt']['accessTokenSecret'];
-
-		$twitter = new TwitterOAuth($consumerKey, $consumerSecret, $accessToken, $accessTokenSecret);
-		$result3 = $twitter->post('favorites/create', ['id' => $result->id_str]);
-		$result4 = $twitter->post('statuses/retweet', ['id' => $result->id_str]);
-	}
-	// var_dump($result3);
-	// var_dump($result4);
-
-	return $result;
 }
 
 //gyazo投稿
