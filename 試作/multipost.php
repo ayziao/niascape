@@ -13,25 +13,23 @@ require "twitteroauth/autoload.php";
 use Abraham\TwitterOAuth\TwitterOAuth;
 
 //Twitter投稿
-function twitterpost($user,$body,$filename,$gyazourl){
+function twitterpost($sitesetting,$site,$body,$filename,$gyazourl){
 
-	$userini = parse_ini_file('siteini/'."$user.ini",ture);
-
-	if(array_key_exists('twitter_main',$userini) == false){
+	if(array_key_exists('twitter_main',$sitesetting) == false){
 		return;
 	}
 
-	$consumerKey = $userini['twitter_main']['consumerKey'];
-	$consumerSecret = $userini['twitter_main']['consumerSecret'];
-	$accessToken = $userini['twitter_main']['accessToken'];
-	$accessTokenSecret = $userini['twitter_main']['accessTokenSecret'];
+	$consumerKey = $sitesetting['twitter_main']['consumerKey'];
+	$consumerSecret = $sitesetting['twitter_main']['consumerSecret'];
+	$accessToken = $sitesetting['twitter_main']['accessToken'];
+	$accessTokenSecret = $sitesetting['twitter_main']['accessTokenSecret'];
 
 	$twitter = new TwitterOAuth($consumerKey, $consumerSecret, $accessToken, $accessTokenSecret);
 
-	$parameters = ['status' => $body.$userini['twitter_main']['suffix']];
+	$parameters = ['status' => $body.$sitesetting['twitter_main']['suffix']];
 
 	//画像投稿
-	if($userini['twitter_main']['image'] == 'gyazo'){
+	if($sitesetting['twitter_main']['image'] == 'gyazo'){
 		if($gyazourl){
 			$parameters['status'] .= ' '.$gyazourl;
 		}
@@ -42,21 +40,21 @@ function twitterpost($user,$body,$filename,$gyazourl){
 
 	$result = $twitter->post('statuses/update', $parameters);
 
-	if(array_key_exists('twitter_sub',$userini) == false){
+	if(array_key_exists('twitter_sub',$sitesetting) == false){
 		return;
 	}
 
-	$consumerKey = $userini['twitter_sub']['consumerKey'];
-	$consumerSecret = $userini['twitter_sub']['consumerSecret'];
-	$accessToken = $userini['twitter_sub']['accessToken'];
-	$accessTokenSecret = $userini['twitter_sub']['accessTokenSecret'];
+	$consumerKey = $sitesetting['twitter_sub']['consumerKey'];
+	$consumerSecret = $sitesetting['twitter_sub']['consumerSecret'];
+	$accessToken = $sitesetting['twitter_sub']['accessToken'];
+	$accessTokenSecret = $sitesetting['twitter_sub']['accessTokenSecret'];
 
 	$twitter = new TwitterOAuth($consumerKey, $consumerSecret, $accessToken, $accessTokenSecret);
 
-	$parameters = ['status' => $result->text.$userini['twitter_sub']['suffix']];
+	$parameters = ['status' => $result->text.$sitesetting['twitter_sub']['suffix']];
 
 	//画像投稿
-	if($userini['twitter_sub']['image'] == 'gyazo'){
+	if($sitesetting['twitter_sub']['image'] == 'gyazo'){
 		if($gyazourl){
 			$parameters['status'] .= ' '.$gyazourl;
 		}
@@ -71,19 +69,19 @@ function twitterpost($user,$body,$filename,$gyazourl){
 	// print('<pre>');
 	// var_dump($result);
 	// var_dump($result2);
-	// var_dump($userini);
+	// var_dump($sitesetting);
 	// var_dump($twresult);
 	// var_dump($media);
 
 	//RT ふぁぼ
-	if(array_key_exists('twitter_rt',$userini) == false){
+	if(array_key_exists('twitter_rt',$sitesetting) == false){
 		return;
 	}
-	if($userini['twitter_rt']['noodle'] == '' or strpos($body, $userini['twitter_rt']['noodle']) !== false){
-		$consumerKey = $userini['twitter_rt']['consumerKey'];
-		$consumerSecret = $userini['twitter_rt']['consumerSecret'];
-		$accessToken = $userini['twitter_rt']['accessToken'];
-		$accessTokenSecret = $userini['twitter_rt']['accessTokenSecret'];
+	if($sitesetting['twitter_rt']['noodle'] == '' or strpos($body, $sitesetting['twitter_rt']['noodle']) !== false){
+		$consumerKey = $sitesetting['twitter_rt']['consumerKey'];
+		$consumerSecret = $sitesetting['twitter_rt']['consumerSecret'];
+		$accessToken = $sitesetting['twitter_rt']['accessToken'];
+		$accessTokenSecret = $sitesetting['twitter_rt']['accessTokenSecret'];
 
 		$twitter = new TwitterOAuth($consumerKey, $consumerSecret, $accessToken, $accessTokenSecret);
 		$result3 = $twitter->post('favorites/create', ['id' => $result->id_str]);
@@ -106,7 +104,7 @@ $handle    = new SQLite3($location);
 //var_dump($argv);
 
 //コマンドライン引数受取
-$user = trim($argv[1]);
+$site = trim($argv[1]);
 $id = trim($argv[2]);
 $filename = trim($argv[3]);
 $gyazourl = trim($argv[4]);
@@ -119,13 +117,14 @@ FROM basedata
 WHERE  identifier = '$id'
 
 EOM;
-//AND site = '$user'  //PENDING サイト判定いれるか
+//AND site = '$site'  //PENDING サイト判定いれるか
 //var_dump($query);
 $results = $handle->query($query); 
 $raw = $results->fetchArray();
 
 $body = $raw['body'];
 $tags = $raw['tags'];
+$sitesetting = getSitesetting($handle,$site);
 $handle->close();
 
 //TODO 画像どうにか
@@ -143,7 +142,26 @@ foreach ($tagarr as $key => $value) {
 
 //Twitter投稿
 if ($body){
-	twitterpost($user,$body.$tagstr,$filename,$gyazourl);
+	twitterpost($sitesetting,$site,$body.$tagstr,$filename,$gyazourl);
 }
 
 echo "done\n";
+
+
+
+
+function getSitesetting($handle,$site){
+
+	$query = <<< EOM
+
+SELECT * FROM keyvalue	
+WHERE key = 'sitesetting_$site'
+
+EOM;
+
+	$results = $handle->query($query); 
+	$row = $results->fetchArray();
+
+	return json_decode($row['value'],ture);
+}
+

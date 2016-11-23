@@ -13,7 +13,24 @@ if (strpos($_SERVER['HTTP_HOST'], $ini_array['host']) > 0){
 } else {
 	$site = explode("/", substr($_SERVER["SCRIPT_NAME"],2))[0];
 }
-$siteini = parse_ini_file('siteini/'."$site.ini",ture);
+
+$sitesetting = getSitesetting($handle,$site);
+
+function getSitesetting($handle,$site){
+
+	$query = <<< EOM
+
+SELECT * FROM keyvalue	
+WHERE key = 'sitesetting_$site'
+
+EOM;
+
+	$results = $handle->query($query); 
+	$row = $results->fetchArray();
+
+	return json_decode($row['value'],ture);
+}
+
 
 $query = <<< EOM
 
@@ -139,7 +156,7 @@ $content .= "\n\t\t\t</div>";
 
 		</form>
 
-		<div id="etc"><?=$siteini['siteinsert']?></div>
+		<div id="etc"><?=$sitesetting['siteinsert']?></div>
 		
 		<div>
 
