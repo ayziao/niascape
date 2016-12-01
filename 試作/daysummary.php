@@ -18,6 +18,58 @@ $arr  = explode('/', substr($_SERVER["SCRIPT_NAME"],1));
 $path = array_pop($arr);	//リクエスト末尾から/の直後までを取得 ルーティングで末尾数字8文字判定済み前提
 //$site = substr(array_pop($arr), 1); 
 
+
+//前日以前取得 
+$query = <<< EOM
+
+SELECT title FROM basedata
+WHERE site = '$site'
+AND tags NOT LIKE '% gyazo_posted %'
+AND title < '{$path}000000000000' 
+ORDER BY identifier DESC LIMIT 1
+
+EOM;
+// print('<pre>');
+// var_dump($query);
+// var_dump($path);
+
+$results = $handle->query($query); 
+
+$row = $results->fetchArray(SQLITE3_ASSOC);
+
+// var_dump($row);
+
+$maenohi = substr($row['title'], 0,8);
+
+// var_dump($maenohi);
+
+//翌日以後取得
+
+$query = <<< EOM
+
+SELECT title FROM basedata
+WHERE site = '$site'
+AND tags NOT LIKE '% gyazo_posted %'
+AND title > '{$path}999999999999' 
+ORDER BY identifier ASC LIMIT 1
+
+EOM;
+// print('<pre>');
+// var_dump($query);
+// var_dump($path);
+
+$results = $handle->query($query); 
+
+$row = $results->fetchArray(SQLITE3_ASSOC);
+
+// var_dump($row);
+
+$tuginohi = substr($row['title'], 0,8);
+
+// var_dump($tuginohi);
+
+
+
 $query = <<< EOM
 
 SELECT * FROM basedata
@@ -38,7 +90,7 @@ $day = '';
 
 //TODO 時間区切りを入れる
 
-while ($row = $results->fetchArray()) {
+while ($row = $results->fetchArray(SQLITE3_ASSOC)) {
 	$day2 = substr($row['datetime'], 0,10);
 	if($day != $day2){
 		if($day != ''){
@@ -77,6 +129,8 @@ $content .= "\n\t\t\t</div>";
 		<h1><?=$site?> <?=$path?></h1>
 
 		<div id="etc"></div>
+
+		<div style="font-size: xx-small;"> <a href="./<?=$maenohi?>"><?=$maenohi?></a> <a href="./<?=$tuginohi?>"><?=$tuginohi?></a></div>
 		
 		<div>
 
