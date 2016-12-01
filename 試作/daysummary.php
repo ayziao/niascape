@@ -22,10 +22,10 @@ $path = array_pop($arr);	//リクエスト末尾から/の直後までを取得 
 //前日以前取得 
 $query = <<< EOM
 
-SELECT title FROM basedata
+SELECT identifier FROM basedata
 WHERE site = '$site'
 AND tags NOT LIKE '% gyazo_posted %'
-AND title < '{$path}000000000000' 
+AND identifier < '{$path}000000000000' 
 ORDER BY identifier DESC LIMIT 1
 
 EOM;
@@ -39,7 +39,7 @@ $row = $results->fetchArray(SQLITE3_ASSOC);
 
 // var_dump($row);
 
-$maenohi = substr($row['title'], 0,8);
+$maenohi = substr($row['identifier'], 0,8);
 
 // var_dump($maenohi);
 
@@ -47,10 +47,10 @@ $maenohi = substr($row['title'], 0,8);
 
 $query = <<< EOM
 
-SELECT title FROM basedata
+SELECT identifier FROM basedata
 WHERE site = '$site'
 AND tags NOT LIKE '% gyazo_posted %'
-AND title > '{$path}999999999999' 
+AND identifier > '{$path}999999999999' 
 ORDER BY identifier ASC LIMIT 1
 
 EOM;
@@ -64,7 +64,7 @@ $row = $results->fetchArray(SQLITE3_ASSOC);
 
 // var_dump($row);
 
-$tuginohi = substr($row['title'], 0,8);
+$tuginohi = substr($row['identifier'], 0,8);
 
 // var_dump($tuginohi);
 
@@ -126,7 +126,7 @@ $content .= "\n\t\t\t</div>";
 	</head>
 
 	<body>
-		<h1><?=$site?> <?=$path?></h1>
+		<h1><a href="./"><?=$site?></a> <?=$path?></h1>
 
 		<div id="etc"></div>
 
