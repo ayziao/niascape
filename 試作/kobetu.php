@@ -46,14 +46,17 @@ if ($row) {
 
 $title = $row['title'];
 $tagstr = '';
+$systagstr = '';
 $tags = explode(' ',trim($row['tags']));
 foreach ($tags as  $value) {
 	if(strpos($value , '#') === 0){
 		$tag = substr($value, 1);
 		$tagstr .= ' <a href="./?tag=' . $tag .'">' . $tag .'</a>';
-	}
+	} else {
+		$systagstr .= "$value ";
+	}	
 }
-$content = $row['datetime'].'<br><br>'.str_replace("\n", '<br>', $row['body']).'<br><br>'.$tagstr;
+$content = $row['datetime'].'<br><br>'.str_replace("\n", '<br>', $row['body']).'<br><br>'.$tagstr.'<br><br>'.$systagstr;
 
 
 ?>
