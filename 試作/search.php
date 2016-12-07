@@ -69,8 +69,7 @@ $content .= '</div>';
 	</head>
 
 	<body>
-		<h1><?=$site?> <?=$searchbody?></h1>
-
+		<h1><a href="./"><?=$site?></a> <?=$searchbody?></h1>
 		<div id="etc"></div>
 		
 		<div>

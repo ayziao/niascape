@@ -88,7 +88,7 @@ $content .= "\n\t\t\t</div>";
 	</head>
 
 	<body>
-		<h1><?=$site?></h1>
+		<h1><a href="./"><?=$site?></a></h1>
 
 		<form action="./" method="POST" enctype="multipart/form-data" onsubmit="return submit();">
 			<div class="textarea">

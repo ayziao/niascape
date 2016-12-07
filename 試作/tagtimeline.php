@@ -71,7 +71,7 @@ $content .= "\n\t\t\t</div>";
 	</head>
 
 	<body>
-		<h1><?=$site?> <?=$tag?></h1>
+		<h1><a href="./"><?=$site?></a> <?=$tag?></h1>
 
 		<div id="etc"></div>
 		
