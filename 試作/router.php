@@ -10,7 +10,11 @@ function routing(){
 	$path = $_SERVER["SCRIPT_NAME"];
 
 	if($_SERVER["REQUEST_METHOD"] == "POST"){
-		return require('post.php');
+		if (array_key_exists('post',$_POST)){
+			return require('post.php');
+		} elseif (array_key_exists('tagUpdate',$_POST)){
+			return require('tagUpdate.php');
+		}
 	}
 	//TODO トップページ判定
 

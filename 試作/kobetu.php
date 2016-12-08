@@ -46,16 +46,19 @@ if ($row) {
 
 $title = $row['title'];
 $tagstr = '';
+$tagstr2 = '';
 $systagstr = '';
 $tags = explode(' ',trim($row['tags']));
 foreach ($tags as  $value) {
 	if(strpos($value , '#') === 0){
 		$tag = substr($value, 1);
 		$tagstr .= ' <a href="./?tag=' . $tag .'">' . $tag .'</a>';
+		$tagstr2 .= $tag . ' ';
 	} else {
 		$systagstr .= "$value ";
-	}	
+	}
 }
+$tagstr2 = trim($tagstr2);
 $content = $row['datetime'].'<br><br>'.str_replace("\n", '<br>', $row['body']).'<br><br>'.$tagstr.'<br><br>'.$systagstr;
 
 
@@ -66,9 +69,9 @@ $content = $row['datetime'].'<br><br>'.str_replace("\n", '<br>', $row['body']).'
 		<meta charset="UTF-8">
 		<meta name="viewport" content="width=device-width">
 		<title><?=$title?> <?=$site?></title>
-		<link rel="icon" type="image/png" href="./favicon.png">
-		<link rel="stylesheet" type="text/css" href="/common.css">
-		<link rel="stylesheet" type="text/css" href="./css.css">
+		<link rel="icon"       type="image/png" href="./favicon.png">
+		<link rel="stylesheet" type="text/css"  href="/common.css">
+		<link rel="stylesheet" type="text/css"  href="./css.css">
 	</head>
 
 	<body>
@@ -83,6 +86,15 @@ $content = $row['datetime'].'<br><br>'.str_replace("\n", '<br>', $row['body']).'
 			<?=$content?>
 
 		</div>
+
+		<form action="./" method="POST">
+			<input type="text"   name="tags"       value="<?=$tagstr2?>">
+			<input type="submit" name="tagUpdate"  value="タグ修正">
+			<input type="hidden" name="site"       value="<?=$site?>">
+			<input type="hidden" name="identifier" value="<?=$row['identifier']?>">
+
+
+		</form>
 
 		<div><a href="./">top</a></div>
 
