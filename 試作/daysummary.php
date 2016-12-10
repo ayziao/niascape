@@ -127,7 +127,9 @@ $content .= "\n\t\t\t</div>";
 
 		<div id="etc"></div>
 
-		<div style="font-size: xx-small;"> <a href="./<?=$maenohi?>"><?=$maenohi?></a> <a href="./<?=$tuginohi?>"><?=$tuginohi?></a></div>
+		<div class="navi">
+			<a href="./<?=$maenohi?>"><?=$maenohi?></a> <a href="./<?=$tuginohi?>"><?=$tuginohi?></a>
+		</div>
 		
 		<div>
 
@@ -135,7 +137,10 @@ $content .= "\n\t\t\t</div>";
 
 		</div>
 
-		<div><a href="./">top</a></div>
+		<div class="navi">
+			<a href="./<?=$maenohi?>"><?=$maenohi?></a> <a href="./<?=$tuginohi?>"><?=$tuginohi?></a><br>
+			<a href="./">top</a>
+		</div>
 		<form action="./" method="GET">
 			<input id="search" class="text" type="text" name="searchbody">
 			<input id="btn" class="submitbutton" type="submit" name="submit" value="検索">
