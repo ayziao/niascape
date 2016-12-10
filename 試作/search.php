@@ -15,14 +15,17 @@ if (strpos($_SERVER['HTTP_HOST'], $ini_array['host']) > 0){
 
 $searchbody  = $_GET['searchbody'];
 
+$order = isset($_GET['order']) ? $_GET['order'] : 'DESC';
+
 $query = <<< EOM
 
 SELECT * FROM basedata
 WHERE site = '$site'
 AND body LIKE '%$searchbody%' 
-ORDER BY identifier ASC LIMIT 1000
+ORDER BY identifier $order LIMIT 1000
 
 EOM;
+//ASC DESC
 //print('<pre>');
 //var_dump($query);
 
@@ -30,6 +33,8 @@ $results = $handle->query($query);
 //$raw = $results->fetchArray();
 
 $day = '';
+
+$order = ($order == 'DESC')? 'ASC':'DESC';
 
 //TODO 時間区切りを入れる
 
@@ -71,7 +76,11 @@ $content .= '</div>';
 	<body>
 		<h1><a href="./"><?=$site?></a> <?=$searchbody?></h1>
 		<div id="etc"></div>
-		
+
+		<div class="navi">
+			<a href="./?searchbody=<?=$searchbody?>&order=<?=$order?>"><?=$order?></a>
+		</div>
+				
 		<div>
 
 			<?=$content?>

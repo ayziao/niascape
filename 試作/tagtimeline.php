@@ -16,12 +16,14 @@ if (strpos($_SERVER['HTTP_HOST'], $ini_array['host']) > 0){
 
 $tag  = $_GET['tag'];
 
+$order = isset($_GET['order']) ? $_GET['order'] : 'DESC';
+
 $query = <<< EOM
 
 SELECT * FROM basedata
 WHERE site = '$site'
-AND tags LIKE '%$tag%' 
-ORDER BY identifier ASC LIMIT 1000
+AND tags LIKE '%#$tag %' 
+ORDER BY identifier $order LIMIT 1000
 
 EOM;
 //print('<pre>');
@@ -32,6 +34,7 @@ $results = $handle->query($query);
 
 $day = '';
 
+$order = ($order == 'DESC')? 'ASC':'DESC';
 //TODO 時間区切りを入れる
 
 while ($row = $results->fetchArray()) {
@@ -75,6 +78,10 @@ $content .= "\n\t\t\t</div>";
 
 		<div id="etc"></div>
 		
+		<div class="navi">
+			<a href="./?tag=<?=$tag?>&order=<?=$order?>"><?=$order?></a>
+		</div>
+				
 		<div>
 
 			<?=$content?>
