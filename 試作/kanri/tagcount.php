@@ -18,7 +18,7 @@ SELECT
 FROM basedata 
 WHERE
 	site = '$site'
-	and tags like '% $tag %'
+	and (tags like '% $tag %' or tags like '% $tag:%')
 GROUP BY DATE(`datetime`) 
 ORDER BY DATE(`datetime`)  DESC
 EOM;
