@@ -57,7 +57,7 @@ while ($row = $results->fetchArray()) {
 }
 
 foreach ($array as $key => $value) {
-	$link .= '<a href="?kanri=tagcount&site='. $site.'&tag='. urlencode($key) .'">' . $key . '</a> ';
+	$link .= '<a href="?kanri=tagcount&site='. $site.'&tag='. urlencode($key) .'">' . $key . '</a> '.$value.'<br>';
 }
 
 
@@ -87,6 +87,8 @@ while ($row = $results->fetchArray()) {
 			table {
 				font-size: 70%;
 			}
+			.table { display: table; width: 100%; }
+			.cell { display: table-cell; white-space: nowrap;}
 		</style>
 	</head>
 	
@@ -95,11 +97,17 @@ while ($row = $results->fetchArray()) {
 			
 		<?=$sitelink ?><br>
 		<a href='?kanri=monthcount&site=<?=$site ?>'>月別</a> <a href='?kanri=daycount&site=<?=$site ?>'>日別</a> <a href='?kanri=weekcount&site=<?=$site ?>'>曜日別</a> <a href='?kanri=hourcount&site=<?=$site ?>'>時別</a> <a href='?kanri=tagcount&site=<?=$site ?>'>タグ</a><br>
-		<?=$link ?>
 
-		<table>
-			<?=$content ?>
-		</table>
+		<div class="table">
+			<div class="cell">
+				<?=$link ?>
+			</div>
+			<div class="cell" style="width: 100%;">
+				<table>
+					<?=$content ?>
+				</table>
+			</div>
+		</div>
 		<a href='?kanri=monthcount&site=<?=$site ?>'>月別</a> <a href='?kanri=daycount&site=<?=$site ?>'>日別</a> <a href='?kanri=weekcount&site=<?=$site ?>'>曜日別</a> <a href='?kanri=hourcount&site=<?=$site ?>'>時別</a> <a href='?kanri=tagcount&site=<?=$site ?>'>タグ</a><br>
 	</body>
 </html>
