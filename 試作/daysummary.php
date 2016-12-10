@@ -86,20 +86,11 @@ EOM;
 $results = $handle->query($query); 
 //$raw = $results->fetchArray();
 
-$day = '';
+$count = 0; //日件数
+$content = "";
 
 //TODO 時間区切りを入れる
-
 while ($row = $results->fetchArray(SQLITE3_ASSOC)) {
-	$day2 = substr($row['datetime'], 0,10);
-	if($day != $day2){
-		if($day != ''){
-			$content .= "\n\t\t\t</div>";
-		}
-		$content .= "\n\t\t\t". '<h5><a href="./'. str_replace('-', '', $day2).'">'.$day2.'</a></h5> '. "\n\t\t\t". '<div class="lines">';
-		$day = $day2;
-	}
-
 	$tagstr = '';
 	$tags = explode(' ',trim($row['tags']));
 	foreach ($tags as  $value) {
@@ -110,8 +101,14 @@ while ($row = $results->fetchArray(SQLITE3_ASSOC)) {
 	}
 
 	$content .= "\n\t\t\t\t". '<div class="line"><span class="time"><a href="./'.$row['identifier'].'">'.substr($row['datetime'], -8).'</a></span>&thinsp;'.str_replace("\n", '<br>', $row['body']).$tagstr.'</div>';
+
+	$count++;
 }
+
+//$day = substr($row['datetime'], 0,10);
+$content = "\n\t\t\t". '<h5><a href="./'. str_replace('-', '', $path).'">'.$path.'</a> '. $count.'</h5> ' ."\n\t\t\t". '<div class="lines">'.$content;
 $content .= "\n\t\t\t</div>";
+
 
 ?>
 <!DOCTYPE html>
