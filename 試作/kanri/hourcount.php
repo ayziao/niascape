@@ -6,6 +6,11 @@ header('Content-Type: text/html; charset=UTF-8');
 $ini_array = parse_ini_file("../setting.ini");
 $location = $ini_array['sqlite_file'];
 $site = $_GET["site"] ? $_GET["site"] : $ini_array['default_site'];
+$tag  = $_GET["tag"] ? $_GET["tag"] : '';
+
+if ($tag){
+	$tagwhere = "	and (tags like '% $tag %' or tags like '% $tag:%')";
+}
 $handle = new SQLite3($location); 
 
 //今日
@@ -21,6 +26,7 @@ SELECT
 	replace(substr(quote(zeroblob((count(*) + 1) / 2)), 3, count(*)), '0', '|') as 'graf' 
 FROM basedata 
 WHERE site = '$site' 
+$tagwhere 
 AND DATE(`datetime`) = DATE('now', "localtime")
 GROUP BY strftime('%H',`datetime`)
 ) counts
@@ -49,6 +55,7 @@ SELECT
 	replace(substr(quote(zeroblob((count(*) + 1) / 2)), 3, count(*)), '0', '|') as 'graf' 
 FROM basedata 
 WHERE site = '$site' 
+$tagwhere 
 AND strftime('%Y%W',`datetime`) = strftime('%Y%W',DATE('now', "localtime"))
 GROUP BY strftime('%H',`datetime`)
 ) t1
@@ -73,6 +80,7 @@ SELECT
 	replace(substr(quote(zeroblob((count(*) + 1) / 2)), 3, count(*)), '0', '|') as 'graf' 
 FROM basedata 
 WHERE site = '$site' 
+$tagwhere 
 AND strftime('%Y-%m',`datetime`) = strftime('%Y-%m',DATE('now', "localtime"))
 GROUP BY strftime('%H',`datetime`)
 EOM;
@@ -91,6 +99,7 @@ SELECT
 	replace(substr(quote(zeroblob((round(count(*) / 10) + 1) / 2)), 3, (round(count(*) / 10))), '0', '|') as 'graf' 
 FROM basedata 
 WHERE site = '$site' 
+$tagwhere 
 AND strftime('%Y',`datetime`) = strftime('%Y',DATE('now', "localtime"))
 GROUP BY strftime('%H',`datetime`)
 EOM;
@@ -110,6 +119,7 @@ SELECT
 	replace(substr(quote(zeroblob((round(count(*) / 10) + 1) / 2)), 3, (round(count(*) / 10))), '0', '|') as 'graf' 
 FROM basedata 
 WHERE site = '$site' 
+$tagwhere 
 GROUP BY strftime('%H',`datetime`)
 EOM;
 $results = $handle->query($query); 
@@ -117,6 +127,39 @@ $results = $handle->query($query);
 while ($row = $results->fetchArray()) {
 	$zenkikan .= '<tr>'.'<td nowrap>'.$row['Date'].'</td>'.'<td align="right">'.$row['count'].'</td>'.'<td>'.$row['graf'].'</td>'.'</tr>';
 }
+
+//タグ利用頻度順リンク
+//タグ件数取得
+
+$query = <<< EOM
+SELECT 
+	tags ,
+	COUNT(*) as 'count'
+FROM basedata 
+WHERE
+	site = '$site'
+GROUP BY tags
+ORDER BY COUNT(*) DESC
+EOM;
+//, replace(substr(quote(zeroblob((count(*) + 1) / 2)), 3, count(*)), '0', '|') as 'graf' 
+
+$results = $handle->query($query);
+$array = [];
+while ($row = $results->fetchArray()) {
+	$tags = explode(" ", str_replace("\t",' ',trim($row['tags'])));
+	foreach ($tags as $value) {
+		$aaa = mb_strstr($value,':',ture)?mb_strstr($value,':',ture):$value; //スペースで切り離し
+		$array[$aaa] += $row['count']; //件数足し足し
+	}
+	ksort($array);
+	arsort($array);
+}
+
+$link .= '<a href="?kanri=hourcount&site='. $site. '">全て</a><br>';
+foreach ($array as $key => $value) {
+	$link .= '<a href="?kanri=hourcount&site='. $site.'&tag='. urlencode($key) .'">' . $key . '</a> '.$value.'<br>';
+}
+
 
 
 //siteリンク
@@ -144,6 +187,8 @@ while ($row = $results->fetchArray()) {
 			table {
 				font-size: 70%;
 			}
+			.table { display: table; width: 100%; }
+			.cell { display: table-cell; white-space: nowrap;}
 		</style>
 	</head>
 	
@@ -153,26 +198,33 @@ while ($row = $results->fetchArray()) {
 		<?=$sitelink ?><br>
 		<a href='?kanri=monthcount&site=<?=$site ?>'>月別</a> <a href='?kanri=daycount&site=<?=$site ?>'>日別</a> <a href='?kanri=weekcount&site=<?=$site ?>'>曜日別</a> <a href='?kanri=hourcount&site=<?=$site ?>'>時別</a> <a href='?kanri=tagcount&site=<?=$site ?>'>タグ</a><br>
 		
-		<h5>今日</h5>
-		<table>
-			<?=$today ?>
-		</table>
-		<h5>今週</h5>
-		<table>
-			<?=$konsyu ?>
-		</table>
-		<h5>今月</h5>
-		<table>
-			<?=$kongetu ?>
-		</table>
-		<h5>今年</h5>
-		<table>
-			<?=$kotosi ?>
-		</table>
-		<h5>全期間</h5>
-		<table>
-		<?=$zenkikan ?>
-		</table>
+		<div class="table">
+			<div class="cell">
+				<?=$link ?>
+			</div>
+			<div class="cell" style="width: 100%;">
+				<h5>今日</h5>
+				<table>
+					<?=$today ?>
+				</table>
+				<h5>今週</h5>
+				<table>
+					<?=$konsyu ?>
+				</table>
+				<h5>今月</h5>
+				<table>
+					<?=$kongetu ?>
+				</table>
+				<h5>今年</h5>
+				<table>
+					<?=$kotosi ?>
+				</table>
+				<h5>全期間</h5>
+				<table>
+				<?=$zenkikan ?>
+				</table>
+			</div>
+		</div>		
 		<a href='?kanri=monthcount&site=<?=$site ?>'>月別</a> <a href='?kanri=daycount&site=<?=$site ?>'>日別</a> <a href='?kanri=weekcount&site=<?=$site ?>'>曜日別</a> <a href='?kanri=hourcount&site=<?=$site ?>'>時別</a> <a href='?kanri=tagcount&site=<?=$site ?>'>タグ</a><br>
 	</body>
 </html>
