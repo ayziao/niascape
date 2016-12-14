@@ -1,9 +1,12 @@
 <?php 
 date_default_timezone_set('Asia/Tokyo');
 
-//ini_set( 'display_errors', 0 ); //ビルトインサーバでのエラーログの出力先がよくわからん		
-//ini_set( 'error_log', 1 ); //ビルトインサーバでのエラーログの出力先がよくわからん		
-//error_log('hoge');
+ini_set('display_errors',0);
+ini_set('log_errors','On');
+ini_set('error_log', 'php://stderr');
+
+require('common.php');
+
 
 //ルーティング
 function routing(){
@@ -30,7 +33,7 @@ function routing(){
 		return require('sitetimeline.php');
 	} elseif(is_site_static($path)) { //サイト別静的ファイル
 
-		$ini_array = parse_ini_file("setting.ini");
+		$ini_array = loadIni();
 		content_type($path);
 
 		if (strpos($_SERVER['HTTP_HOST'], $ini_array['host']) > 0){
@@ -40,11 +43,11 @@ function routing(){
 		}
 
 		readfile($ini_array['site_static'].$path);
-		fputs(fopen('php://stdout', 'w'), "$path\n");
+		consoleLog($path);
 		return;
 
 	} elseif(isset($_GET['kanri'])) {
-		return @include('kanri/'.$_GET['kanri'] . '.php');
+		return include('kanri/'.$_GET['kanri'] . '.php');
 	} else {
 		return @include(substr($path,1) . '.php');	//PENDING 画面じゃなくてコンソールにエラーが吐ければ@取りたい
 	}
@@ -73,7 +76,7 @@ function is_search($path){
 
 //サイト別静的ファイル
 function is_site_static($path){
-	$ini_array = parse_ini_file("setting.ini");
+	$ini_array = loadIni(); //parse_ini_file(__FILE__."/setting.ini");
 
 	if (strpos($_SERVER['HTTP_HOST'], $ini_array['host']) > 0){
 		$path = explode('.'.$ini_array['host'],$_SERVER['HTTP_HOST'])[0] . $path;
@@ -90,7 +93,7 @@ function is_sitetimeline($path){
 	if (strpos($path, '.')){
 		return false;
 	}
-	$ini_array = parse_ini_file("setting.ini");
+	$ini_array = loadIni(); //parse_ini_file(__FILE__."/setting.ini");
 	if (strpos($_SERVER['HTTP_HOST'], $ini_array['host']) > 0){
 		return true;
 	}
@@ -98,7 +101,7 @@ function is_sitetimeline($path){
 }
 
 function content_type($path){
-	$ini_array = parse_ini_file("setting.ini");		
+	$ini_array = loadIni(); //parse_ini_file(__FILE__."/setting.ini");		
 	$kakutyousi = end(explode('.', $path));
 	$arr = ['css' => 'Content-Type: text/css; charset=UTF-8'];
 	if (array_key_exists($kakutyousi, $arr)){
@@ -120,6 +123,4 @@ function content_type($path){
 // $stderr = fopen('php://stderr', 'w');
 // fputs($stderr, "Error\n");
 return routing();
-
-
 

@@ -4,7 +4,7 @@ header('Content-Type: text/html; charset=UTF-8');
 //曜日別投稿件数
 
 $week = ['日','月','火','水','木','金','土'];
-$ini_array = parse_ini_file("../setting.ini");
+$ini_array = loadIni();
 $location = $ini_array['sqlite_file'];
 $site  = $_GET["site"] ? $_GET["site"] : $ini_array['default_site'];
 $tag  = $_GET["tag"] ? $_GET["tag"] : '';

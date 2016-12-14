@@ -4,7 +4,7 @@ date_default_timezone_set('Asia/Tokyo');
 
 // \r\n検索
 
-$ini_array = parse_ini_file("setting.ini");
+$ini_array = loadIni();
 $handle = new SQLite3($ini_array['sqlite_file2']); 
 
 $search = "\r\n";

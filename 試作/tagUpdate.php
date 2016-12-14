@@ -2,7 +2,7 @@
 header('Content-Type: text/html; charset=UTF-8');
 //タグ修正
 
-$ini_array = parse_ini_file("setting.ini");
+$ini_array = loadIni(); 
 $location  = $ini_array['sqlite_file'];
 $handle    = new SQLite3($location); 
 

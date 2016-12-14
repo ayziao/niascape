@@ -2,15 +2,7 @@
 header('Content-Type: text/html; charset=UTF-8');
 //個別ページ
 
-function vdump($obj){
-  ob_start();
-  var_dump($obj);
-  $dump = ob_get_contents();
-  ob_end_clean();
-  return $dump;
-}
-
-$ini_array = parse_ini_file("setting.ini");
+$ini_array = loadIni(); 
 $location  = $ini_array['sqlite_file'];
 $handle    = new SQLite3($location); 
 

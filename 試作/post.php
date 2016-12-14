@@ -10,7 +10,7 @@ header('Content-Type: text/html; charset=UTF-8');
 //投稿
 function post($now){
 
-	$ini_array = parse_ini_file("setting.ini");
+	$ini_array = loadIni();
 	$handle = new SQLite3($ini_array['sqlite_file']); 
 
 	$site = $_POST['site'];
@@ -87,7 +87,8 @@ function post($now){
 	flush();
 
 	if($body){
-		exec("nohup php -c '' '../multipost.php' '$site' '$identifier' '$filename' '$gyazourl'  > /dev/null &");
+		$path = dirname(__FILE__);
+		exec("nohup php -c '' '$path/multipost.php' '$site' '$identifier' '$filename' '$gyazourl'  > /dev/null &");
 	}
 
 	return;
