@@ -36,11 +36,11 @@ if ($row) {
 	return false;
 }
 
-$title = $row['title'];
-$tagstr = '';
-$tagstr2 = '';
+$title     = $row['title'];
+$tagstr    = '';
+$tagstr2   = '';
 $systagstr = '';
-$tags = explode(' ',trim($row['tags']));
+$tags      = explode(' ',trim($row['tags']));
 foreach ($tags as  $value) {
 	if(strpos($value , '#') === 0){
 		$tag = substr($value, 1);
@@ -84,8 +84,6 @@ $content = $row['datetime'].'<br><br>'.str_replace("\n", '<br>', $row['body']).'
 			<input type="submit" name="tagUpdate"  value="タグ修正">
 			<input type="hidden" name="site"       value="<?=$site?>">
 			<input type="hidden" name="identifier" value="<?=$row['identifier']?>">
-
-
 		</form>
 
 		<div><a href="./">top</a></div>

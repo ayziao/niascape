@@ -29,7 +29,6 @@ function post($now){
 		if (in_array($extension, $image_extension_arr)){
 
 			$gyazoresults = gyazopost($ini_array['gyazo'],$_FILES['file']['tmp_name']); //gyazo
-	//		$gyazoresults = gyazopost($ini_array['gyazo'],$filename); //gyazo
 
 			$gyazourl = json_decode($gyazoresults)->permalink_url;
 

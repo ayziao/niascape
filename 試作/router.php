@@ -76,7 +76,7 @@ function is_search($path){
 
 //サイト別静的ファイル
 function is_site_static($path){
-	$ini_array = loadIni(); //parse_ini_file(__FILE__."/setting.ini");
+	$ini_array = loadIni();
 
 	if (strpos($_SERVER['HTTP_HOST'], $ini_array['host']) > 0){
 		$path = explode('.'.$ini_array['host'],$_SERVER['HTTP_HOST'])[0] . $path;
@@ -93,7 +93,7 @@ function is_sitetimeline($path){
 	if (strpos($path, '.')){
 		return false;
 	}
-	$ini_array = loadIni(); //parse_ini_file(__FILE__."/setting.ini");
+	$ini_array = loadIni();
 	if (strpos($_SERVER['HTTP_HOST'], $ini_array['host']) > 0){
 		return true;
 	}
@@ -101,7 +101,7 @@ function is_sitetimeline($path){
 }
 
 function content_type($path){
-	$ini_array = loadIni(); //parse_ini_file(__FILE__."/setting.ini");		
+	$ini_array = loadIni();
 	$kakutyousi = end(explode('.', $path));
 	$arr = ['css' => 'Content-Type: text/css; charset=UTF-8'];
 	if (array_key_exists($kakutyousi, $arr)){
@@ -118,9 +118,4 @@ function content_type($path){
 	}
 }
 
-// $stdout = fopen('php://stdout', 'w');
-// fputs($stdout, "STDOUT\n");
-// $stderr = fopen('php://stderr', 'w');
-// fputs($stderr, "Error\n");
 return routing();
-
