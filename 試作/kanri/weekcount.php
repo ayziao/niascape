@@ -8,10 +8,15 @@ $ini_array = loadIni();
 $location = $ini_array['sqlite_file'];
 $site  = $_GET["site"] ? $_GET["site"] : $ini_array['default_site'];
 $tag  = $_GET["tag"] ? $_GET["tag"] : '';
+$searchbody  = $_GET["searchbody"] ? $_GET["searchbody"] : '';
 
 if ($tag){
 	$tagwhere = "	and (tags like '% $tag %' or tags like '% $tag:%')";
 }
+if ($searchbody){
+	$bodywhere = "	AND body LIKE '%$searchbody%'";
+}
+
 
 $handle = new SQLite3($location); 
 
@@ -35,6 +40,7 @@ SELECT
 FROM basedata 
 WHERE site = '$site' 
 $tagwhere 
+$bodywhere
 AND strftime('%Y%W',`datetime`) = strftime('%Y%W',DATE('now', "localtime"))
 GROUP BY strftime('%w',`datetime`)
 ) t1
@@ -64,6 +70,7 @@ SELECT
 FROM basedata 
 WHERE site = '$site' 
 $tagwhere 
+$bodywhere
 AND strftime('%Y%m',`datetime`) = strftime('%Y%m',DATE('now', "localtime"))
 GROUP BY strftime('%w',`datetime`)
 EOM;
@@ -86,6 +93,7 @@ SELECT
 FROM basedata 
 WHERE site = '$site' 
 $tagwhere 
+$bodywhere
 AND strftime('%Y',`datetime`) = strftime('%Y',DATE('now', "localtime"))
 GROUP BY strftime('%w',`datetime`)
 EOM;
@@ -110,6 +118,7 @@ SELECT
 FROM basedata 
 WHERE site = '$site' 
 $tagwhere 
+$bodywhere
 GROUP BY strftime('%w',`datetime`)
 EOM;
 $results = $handle->query($query); 
@@ -188,6 +197,13 @@ while ($row = $results->fetchArray()) {
 		<a href='?kanri=monthcount&site=<?=$site ?>'>月別</a> <a href='?kanri=daycount&site=<?=$site ?>'>日別</a> <a href='?kanri=weekcount&site=<?=$site ?>'>曜日別</a> <a href='?kanri=hourcount&site=<?=$site ?>'>時別</a> <a href='?kanri=tagcount&site=<?=$site ?>'>タグ</a><br>
 		<div class="table">
 			<div class="cell">
+				<form action="./" method="GET">
+					<input type="hidden" name="kanri" value="weekcount">
+					<input type="hidden" name="site" value="<?=$site?>">
+					<input type="hidden" name="tag" value="<?=$tag?>">
+					<input class="text" type="text" name="searchbody" value="<?=$searchbody?>">
+					<input id="btn" class="submitbutton" type="submit" name="submit" value="検索">
+				</form>
 				<?=$link ?>
 			</div>
 			<div class="cell" style="width: 100%;">
