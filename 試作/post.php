@@ -55,7 +55,8 @@ if($body){
 	$identifier = $now->format('YmdHisu');
 	$results = dbinsert($handle,$site,$identifier,$datetime,$identifier,$tagstring,$body);
 	$path = dirname(__FILE__);
-	exec("nohup php -c '' '$path/multipost.php' '$site' '$identifier' '$filename' '$gyazourl'  > /dev/null &");
+//	exec("nohup php -c '' '$path/multipost.php' '$site' '$identifier' '$filename' '$gyazourl'  > /dev/null 2>&1 &");
+	exec("nohup php -c '' '$path/multipost.php' '$site' '$identifier' '$filename' '$gyazourl'  > /tmp/multipost.log 2>&1 &");
 }
 
 header('Location: http://' . $_SERVER["HTTP_HOST"] . $_SERVER["REQUEST_URI"]);
