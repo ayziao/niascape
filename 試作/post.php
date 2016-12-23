@@ -38,6 +38,10 @@ if (strpos($_FILES['file']['type'],'image') !== false){ //画像投稿
 
 		$filename = '/tmp/'.$identifier .'.'.$extension;
 		move_uploaded_file($_FILES['file']['tmp_name'], $filename);
+
+		consoleLog(vdump($_FILES));
+		consoleLog(vdump(exif_read_data($filename)));
+		consoleLog(vdump($gyazoresults));
 	}
 }
 

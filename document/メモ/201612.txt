@@ -1,0 +1,231 @@
+■2016/12/19 月 
+●23:39:02.202000 exif
+array(10) {
+  ["FileName"]=>
+  string(9) "php1RTbNf"
+  ["FileDateTime"]=>
+  int(1482158255)
+  ["FileSize"]=>
+  int(35569)
+  ["FileType"]=>
+  int(2)
+  ["MimeType"]=>
+  string(10) "image/jpeg"
+  ["SectionsFound"]=>
+  string(19) "ANY_TAG, IFD0, EXIF"
+  ["COMPUTED"]=>
+  array(5) {
+    ["html"]=>
+    string(24) "width="607" height="504""
+    ["Height"]=>
+    int(504)
+    ["Width"]=>
+    int(607)
+    ["IsColor"]=>
+    int(1)
+    ["ByteOrderMotorola"]=>
+    int(1)
+  }
+  ["Orientation"]=>
+  int(1)
+  ["ExifImageWidth"]=>
+  int(607)
+  ["ExifImageLength"]=>
+  int(504)
+}
+
+
+FILE	FileName, FileSize, FileDateTime, SectionsFound
+
+COMPUTED	html, Width, Height, IsColor, および他の取得可能なもの。Height および Width は getimagesize() と同じ方法で取得した もので、その値はヘッダの一部ではありません。また、html は 通常の HTML 内で使用される height/width の 文字列です。
+
+ANY_TAG	タグを有するすべての情報。例えば IFD0, EXIF, ...
+
+IFD0	IFD0 のすべてのタグつきデータ。通常の画像ファイルでは、 ここに画像のサイズが含まれます。
+
+THUMBNAIL	2 番目の IFD がある場合、ファイルにサムネイルが含まれている 可能性があります。埋め込まれたサムネイルに関するすべての タグつき情報はこのセクションに格納されます。
+
+COMMENT	JPEG 画像のコメントヘッダ。
+EXIF	EXIF セクションは IFD0 のサブセクションです。ここには 画像に関する詳細な情報が含まれています。これらのエントリの ほとんどはデジタルカメラに関連するものです。
+
+■2016/12/20 火 
+●01:04:09.006000 
+string(320) "{"type":"png","thumb_url":"https://i.gyazo.com/thumb/200/_21ce789e79b6a66b71ffbaf85566d64b-png.jpg","created_at":"2016-12-19T16:29:43+0000","image_id":"cba1aa2269ec994fcaaeacdf3d6f3745","permalink_url":"https://gyazo.com/cba1aa2269ec994fcaaeacdf3d6f3745","url":"https://i.gyazo.com/cba1aa2269ec994fcaaeacdf3d6f3745.png"}"
+
+[Tue Dec 20 01:29:44 2016] 127.0.0.1:56384 [200]: /common.css
+test/css.css
+
+●01:34:01.609000 
+array(1) {
+  ["file"]=>
+  array(5) {
+    ["name"]=>
+    string(12) "PA220881.JPG"
+    ["type"]=>
+    string(10) "image/jpeg"
+    ["tmp_name"]=>
+    string(66) "/private/var/folders/9n/1pzswlk54856nchq8w2vrkrm0000gn/T/phpHoJTAa"
+    ["error"]=>
+    int(0)
+    ["size"]=>
+    int(1811556)
+  }
+}
+
+array(53) {
+  ["FileName"]=>
+  string(24) "20161220013304246968.jpg"
+  ["FileDateTime"]=>
+  int(1482165184)
+  ["FileSize"]=>
+  int(1811556)
+  ["FileType"]=>
+  int(2)
+  ["MimeType"]=>
+  string(10) "image/jpeg"
+  ["SectionsFound"]=>
+  string(39) "ANY_TAG, IFD0, THUMBNAIL, EXIF, INTEROP"
+  ["COMPUTED"]=>
+  array(10) {
+    ["html"]=>
+    string(26) "width="3136" height="2352""
+    ["Height"]=>
+    int(2352)
+    ["Width"]=>
+    int(3136)
+    ["IsColor"]=>
+    int(1)
+    ["ByteOrderMotorola"]=>
+    int(0)
+    ["ApertureFNumber"]=>
+    string(5) "f/1.0"
+    ["UserComment"]=>
+    string(1) " "
+    ["UserCommentEncoding"]=>
+    string(9) "UNDEFINED"
+    ["Thumbnail.FileType"]=>
+    int(2)
+    ["Thumbnail.MimeType"]=>
+    string(10) "image/jpeg"
+  }
+  ["ImageDescription"]=>
+  string(31) "OLYMPUS DIGITAL CAMERA         "
+  ["Make"]=>
+  string(23) "OLYMPUS IMAGING CORP.  "
+  ["Model"]=>
+  string(16) "E-330           "
+  ["Orientation"]=>
+  int(1)
+  ["XResolution"]=>
+  string(5) "314/1"
+  ["YResolution"]=>
+  string(5) "314/1"
+  ["ResolutionUnit"]=>
+  int(2)
+  ["Software"]=>
+  string(31) "Version 1.3                    "
+  ["DateTime"]=>
+  string(19) "2008:10:22 00:08:55"
+  ["YCbCrPositioning"]=>
+  int(2)
+  ["Exif_IFD_Pointer"]=>
+  int(290)
+  ["THUMBNAIL"]=>
+  array(6) {
+    ["Compression"]=>
+    int(6)
+    ["XResolution"]=>
+    string(4) "72/1"
+    ["YResolution"]=>
+    string(4) "72/1"
+    ["ResolutionUnit"]=>
+    int(2)
+    ["JPEGInterchangeFormat"]=>
+    int(13012)
+    ["JPEGInterchangeFormatLength"]=>
+    int(5759)
+  }
+  ["ExposureTime"]=>
+  string(4) "1/20"
+  ["FNumber"]=>
+  string(4) "0/10"
+  ["ExposureProgram"]=>
+  int(2)
+  ["ISOSpeedRatings"]=>
+  int(100)
+  ["ExifVersion"]=>
+  string(4) "0221"
+  ["DateTimeOriginal"]=>
+  string(19) "2008:10:22 00:08:55"
+  ["DateTimeDigitized"]=>
+  string(19) "2008:10:22 00:08:55"
+  ["ComponentsConfiguration"]=>
+  string(4) ""
+  ["ExposureBiasValue"]=>
+  string(4) "0/10"
+  ["MaxApertureValue"]=>
+  string(5) "0/256"
+  ["MeteringMode"]=>
+  int(5)
+  ["LightSource"]=>
+  int(0)
+  ["Flash"]=>
+  int(24)
+  ["FocalLength"]=>
+  string(4) "0/10"
+  ["MakerNote"]=>
+  string(2318) "OLYMPThx?	 ?	??@@)*+?,-.@
+????????????0100?  X                                /0	 f  ??0 ?~@ ?P p?
+
+??*0100?t?@D
+h
+
+
+? ?"??0100
+?
+
+
+#0111?? ?p	T(	: )	L  ?T$%;,@
+                                          0	
+                                               	Lp??%?% ?%
+?%????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ??????????????????????????????????????????????"
+  ["UserComment"]=>
+  string(125) " "
+  ["FlashPixVersion"]=>
+  string(4) "0100"
+  ["ColorSpace"]=>
+  int(1)
+  ["ExifImageWidth"]=>
+  int(3136)
+  ["ExifImageLength"]=>
+  int(2352)
+  ["InteroperabilityOffset"]=>
+  int(758)
+  ["FileSource"]=>
+  string(1) ""
+  ["CustomRendered"]=>
+  int(0)
+  ["ExposureMode"]=>
+  int(0)
+  ["WhiteBalance"]=>
+  int(0)
+  ["DigitalZoomRatio"]=>
+  string(7) "100/100"
+  ["SceneCaptureType"]=>
+  int(0)
+  ["GainControl"]=>
+  int(0)
+  ["Contrast"]=>
+  int(0)
+  ["Saturation"]=>
+  int(2)
+  ["Sharpness"]=>
+  int(0)
+  ["InterOperabilityIndex"]=>
+  string(3) "R98"
+  ["InterOperabilityVersion"]=>
+  string(4) "0100"
+}
+
+string(320) "{"type":"jpg","thumb_url":"https://i.gyazo.com/thumb/200/_c9ebdb5843cfa957960dc6680e8a4a7f-jpg.jpg","created_at":"2016-12-19T16:33:05+0000","image_id":"9febe6386aa718adf2de970b62c1c3d7","permalink_url":"https://gyazo.com/9febe6386aa718adf2de970b62c1c3d7","url":"https://i.gyazo.com/9febe6386aa718adf2de970b62c1c3d7.jpg"}"
+
