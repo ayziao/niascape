@@ -13,6 +13,9 @@ if (strpos($_SERVER['HTTP_HOST'], $ini_array['host']) > 0){
 } else {
 	$site = explode("/", substr($_SERVER["SCRIPT_NAME"],2))[0];
 }
+if ($_GET['tagiji']){
+	$tagiji = 'checked="checked"';
+}
 
 $sitesetting = getSitesetting($handle,$site);
 
@@ -94,9 +97,10 @@ $content .= "\n\t\t\t</div>";
 			<div class="textarea">
 				<textarea id="box" name="body" onKeyup="showmojilen();"><?=$_GET['form']?></textarea>
 			</div>
-			tag<input id="tag" class="text" type="text" name="tags" onKeyup="showmojilen();">
+			tag<input id="tag" class="text" type="text" name="tags" onKeyup="showmojilen();" value="<?=$_GET['ijitag']?>">
 			<input id="btn" class="submitbutton" type="submit" name="post" value="post" onclick="return submit();">
 			<input class="file" type="file" name="file" accept="image/*">
+			<input type="checkbox" name="tagiji" value="tagiji" <?=$tagiji?>>タグ維持
 			<input type="hidden" name="site" value="<?=$site?>">
 			
 			<script type="text/javascript">

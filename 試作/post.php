@@ -63,7 +63,10 @@ if($body){
 	exec("nohup php -c '' '$path/multipost.php' '$site' '$identifier' '$filename' '$gyazourl'  > /tmp/multipost.log 2>&1 &");
 }
 
-header('Location: http://' . $_SERVER["HTTP_HOST"] . $_SERVER["REQUEST_URI"]);
+if($_POST['tagiji']){
+	$tagiji = '/?tagiji=true&ijitag=' .urlencode($tags);
+}
+header('Location: http://' . $_SERVER["HTTP_HOST"] . $_SERVER["REQUEST_URI"] .$tagiji);
 
 // header('Content-Type: text/html; charset=UTF-8'); print('<pre>');
 // var_dump($_FILES);
