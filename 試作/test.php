@@ -1,45 +1,56 @@
 <?php 
 date_default_timezone_set('Asia/Tokyo');
-//phpinfo();
+// phpinfo();
 
-// \r\n検索
+//Twitterタイムライン取得
+require "twitteroauth/autoload.php";
+use Abraham\TwitterOAuth\TwitterOAuth;
 
-$ini_array = loadIni();
-$handle = new SQLite3($ini_array['sqlite_file2']); 
 
-$search = "\r\n";
+$ini_array = parse_ini_file("setting.ini");
+$handle    = new SQLite3($ini_array['sqlite_file']); 
+$sitesetting = getSitesetting($handle,$ini_array['default_site']);
+$consumerKey = $sitesetting['twitter_main']['consumerKey'];
+$consumerSecret = $sitesetting['twitter_main']['consumerSecret'];
+$accessToken = $sitesetting['twitter_main']['accessToken'];
+$accessTokenSecret = $sitesetting['twitter_main']['accessTokenSecret'];
+$twitter = new TwitterOAuth($consumerKey, $consumerSecret, $accessToken, $accessTokenSecret);
 
-$query = <<< EOM
-SELECT * FROM basedata
-WHERE body LIKE '%$search%' 
-ORDER BY identifier ASC LIMIT 1000
+$parms = array('count' => '5');
+$res = $twitter->get('statuses/user_timeline', $parms);
+
+//echo '<pre>';
+var_dump($res);
+
+
+return;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+function getSitesetting($handle,$site){
+
+	$query = <<< EOM
+
+SELECT * FROM keyvalue	
+WHERE key = 'sitesetting_$site'
+
 EOM;
-var_dump($query);
 
-$results = $handle->query($query); 
+	$results = $handle->query($query); 
+	$row = $results->fetchArray();
 
-while ($row = $results->fetchArray(SQLITE3_ASSOC)) {
-	var_dump($row);
+	return json_decode($row['value'],ture);
 }
 
-$query = <<< EOM
-SELECT count(*) FROM basedata
-WHERE body LIKE '%$search%' 
-EOM;
-var_dump($query);
-
-$results = $handle->query($query); 
-while ($row = $results->fetchArray(SQLITE3_ASSOC)) {
-	var_dump($row);
-}
-
-
-$query = <<< EOM
-SELECT count(*) FROM basedata
-EOM;
-var_dump($query);
-
-$results = $handle->query($query); 
-while ($row = $results->fetchArray(SQLITE3_ASSOC)) {
-	var_dump($row);
-}
