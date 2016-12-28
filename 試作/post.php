@@ -64,7 +64,7 @@ if($body){
 }
 
 if($_POST['tagiji']){
-	$tagiji = '/?tagiji=true&ijitag=' .urlencode($tags);
+	$tagiji = '?tagiji=true&ijitag=' .urlencode($tags);
 }
 header('Location: http://' . $_SERVER["HTTP_HOST"] . $_SERVER["REQUEST_URI"] .$tagiji);
 
