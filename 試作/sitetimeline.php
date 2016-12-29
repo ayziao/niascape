@@ -88,19 +88,29 @@ $content .= "\n\t\t\t</div>";
 		<link rel="icon" type="image/png" href="./favicon.png">
 		<link rel="stylesheet" type="text/css" href="/common.css">
 		<link rel="stylesheet" type="text/css" href="./css.css">
+		<style type="text/css">
+			.table { display: table; width: 100%; }
+			.cell { display: table-cell; white-space: nowrap;}
+		</style>
 	</head>
 
 	<body>
 		<h1><a href="./"><?=$site?></a></h1>
 
 		<form action="./" method="POST" enctype="multipart/form-data" onsubmit="return submit();">
-			<div class="textarea">
-				<textarea id="box" name="body" onKeyup="showmojilen();"><?=$_GET['form']?></textarea>
-			</div>
-			tag<input id="tag" class="text" type="text" name="tags" onKeyup="showmojilen();" value="<?=$_GET['ijitag']?>">
-			<input id="btn" class="submitbutton" type="submit" name="post" value="post" onclick="return submit();">
-			<input class="file" type="file" name="file" accept="image/*">
+			<input id="tag" class="text" type="text" name="tags" onKeyup="showmojilen();" value="<?=$_GET['ijitag']?>" placeholder="タグ">
 			<input type="checkbox" name="tagiji" value="tagiji" <?=$tagiji?>>タグ維持
+			<input class="file" type="file" name="file" accept="image/*">
+		    <input type="text" name="post" style="display:none;">
+			<div class="table">
+				<div class="textarea cell" style="width: 100%;">
+					<textarea id="box" name="body" onKeyup="showmojilen();"><?=$_GET['form']?></textarea>
+				</div>
+				<div class="cell" style="vertical-align: middle;">
+					<input id="btn" class="submitbutton" type="button" name="post" value="post" onclick="return submit();">
+				</div>
+			</div>
+				
 			<input type="hidden" name="site" value="<?=$site?>">
 			
 			<script type="text/javascript">
