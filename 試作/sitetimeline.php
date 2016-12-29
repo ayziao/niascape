@@ -90,18 +90,20 @@ $content .= "\n\t\t\t</div>";
 		<link rel="stylesheet" type="text/css" href="./css.css">
 		<style type="text/css">
 			.table { display: table; width: 100%; }
-			.cell { display: table-cell; white-space: nowrap;}
+			.cell { display: table-cell;}
 		</style>
 	</head>
 
 	<body>
-		<h1><a href="./"><?=$site?></a></h1>
-
 		<form action="./" method="POST" enctype="multipart/form-data" onsubmit="return submit();">
-			<input id="tag" class="text" type="text" name="tags" onKeyup="showmojilen();" value="<?=$_GET['ijitag']?>" placeholder="タグ">
-			<input type="checkbox" name="tagiji" value="tagiji" <?=$tagiji?>>タグ維持
-			<input class="file" type="file" name="file" accept="image/*">
-		    <input type="text" name="post" style="display:none;">
+			<div class="table">
+				<h1 class="cell"><a href="./"><?=$site?></a>　</h1>
+				<div class="cell">
+					<input class="file" type="file" name="file" accept="image/*">
+					<input type="checkbox" name="tagiji" value="tagiji" <?=$tagiji?>>タグ維持
+					<input id="tag" class="text" type="text" name="tags" onKeyup="showmojilen();" value="<?=$_GET['ijitag']?>" placeholder="タグ">
+				</div>
+			</div>
 			<div class="table">
 				<div class="textarea cell" style="width: 100%;">
 					<textarea id="box" name="body" onKeyup="showmojilen();"><?=$_GET['form']?></textarea>
@@ -111,6 +113,7 @@ $content .= "\n\t\t\t</div>";
 				</div>
 			</div>
 				
+		    <input type="text" name="post" style="display:none;">
 			<input type="hidden" name="site" value="<?=$site?>">
 			
 			<script type="text/javascript">
