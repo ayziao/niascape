@@ -229,3 +229,12 @@ h
 
 string(320) "{"type":"jpg","thumb_url":"https://i.gyazo.com/thumb/200/_c9ebdb5843cfa957960dc6680e8a4a7f-jpg.jpg","created_at":"2016-12-19T16:33:05+0000","image_id":"9febe6386aa718adf2de970b62c1c3d7","permalink_url":"https://gyazo.com/9febe6386aa718adf2de970b62c1c3d7","url":"https://i.gyazo.com/9febe6386aa718adf2de970b62c1c3d7.jpg"}"
 
+■2016/12/29 木 
+●14:43:01.045000 URLエンコードされたマルチバイト文字をデコードしつteil
+tail -f tw_20161229.txt | perl -pe 's/\n/\n\n/g' | python -c 'from sys import stdin; print stdin.readline().decode("unicode-escape")'
+tail -f tw_20161229.txt | python -c 'from sys import stdin; print stdin.readline().decode("unicode-escape")'
+tail -f tw_20161229.txt | perl -MEncode -ple 'BEGIN { my $X = qr/[[:xdigit:]]{4}/; $U = qr/\\u$X/; $UC = qr/\\u($X)/; } $_ = encode_utf8 join q{}, map { /^$U/ ? decode "utf-16-be", pack "n*", map { hex } m/$UC/g : $_ } split qr/($U*)/' | perl -pe 's/\n/\n\n/g' 
+tail -f tw_20161229.txt | python -c "import re; print re.sub(r'\\u[0-9(a-f|A-F)]{4}', lambda x: chr(int(u'0x' + x.group(0)[2:], 16)), raw_input())"
+$ echo '\ud842\udfb7\u91ce\u5bb6' | python -c 'from sys import stdin; print stdin.readline().decode("unicode-escape")'
+
+
