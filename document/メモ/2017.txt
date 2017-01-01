@@ -2,6 +2,32 @@
 ●11:17:26.149000 ツイッター認証
 参考 http://noumenon-th.net/programming/2016/03/08/twitteroauth/
 
+▼認証
+
+$ini_array = parse_ini_file("setting.ini");
+$handle = new SQLite3($ini_array['sqlite_file']);
+$site = $ini_array['default_site'];
+$sitesetting = getSitesetting($handle,$site);
+$consumerKey = $sitesetting['twitter_main']['consumerKey'];
+$consumerSecret = $sitesetting['twitter_main']['consumerSecret'];
+
+define('Callback', 'url');
+ 
+require "twitteroauth/autoload.php";
+use Abraham\TwitterOAuth\TwitterOAuth;
+
+$connection = new TwitterOAuth($consumerKey, $consumerSecret);
+$request_token = $connection->oauth("oauth/request_token", array("oauth_callback" => Callback));
+
+consoleLog($request_token['oauth_token']);
+consoleLog($request_token['oauth_token_secret']);
+ 
+// Twitterの認証画面へリダイレクト
+$url = $connection->url("oauth/authorize", array("oauth_token" => $request_token['oauth_token']));
+header('Location: ' . $url);
+
+
+▼コールバック
 
 $ini_array = parse_ini_file("setting.ini");
 $handle = new SQLite3($ini_array['sqlite_file']);
