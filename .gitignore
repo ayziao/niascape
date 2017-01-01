@@ -60,3 +60,4 @@ docs/_build/
 
 twitteroauth/
 db.sqlite3
+/試作/nbproject/private/

@@ -19,21 +19,6 @@ if ($_GET['tagiji']) {
 
 $sitesetting = getSitesetting($handle, $site);
 
-function getSitesetting($handle, $site) {
-
-	$query = <<< EOM
-
-SELECT * FROM keyvalue	
-WHERE key = 'sitesetting_$site'
-
-EOM;
-
-	$results = $handle->query($query);
-	$row = $results->fetchArray();
-
-	return json_decode($row['value'], ture);
-}
-
 $query = <<< EOM
 
 SELECT * FROM basedata

@@ -2,6 +2,8 @@
 date_default_timezone_set('Asia/Tokyo');
 // phpinfo();
 
+require('common.php');
+
 //Twitterタイムライン取得
 require "twitteroauth/autoload.php";
 use Abraham\TwitterOAuth\TwitterOAuth;
@@ -21,36 +23,4 @@ $res = $twitter->get('statuses/user_timeline', $parms);
 
 //echo '<pre>';
 var_dump($res);
-
-
-return;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-function getSitesetting($handle,$site){
-
-	$query = <<< EOM
-
-SELECT * FROM keyvalue	
-WHERE key = 'sitesetting_$site'
-
-EOM;
-
-	$results = $handle->query($query); 
-	$row = $results->fetchArray();
-
-	return json_decode($row['value'],ture);
-}
 
