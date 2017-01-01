@@ -40,3 +40,18 @@ register_shutdown_function('shutdown');
 function loadIni(){
 	return parse_ini_file(dirname(__FILE__)."/setting.ini");
 }
+
+function getSitesetting($handle, $site) {
+
+	$query = <<< EOM
+
+SELECT * FROM keyvalue	
+WHERE key = 'sitesetting_$site'
+
+EOM;
+
+	$results = $handle->query($query);
+	$row = $results->fetchArray();
+
+	return json_decode($row['value'], ture);
+}

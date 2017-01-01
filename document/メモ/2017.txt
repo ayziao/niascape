@@ -1,0 +1,27 @@
+■2017/01/01 日 
+●11:17:26.149000 ツイッター認証
+参考 http://noumenon-th.net/programming/2016/03/08/twitteroauth/
+
+
+$ini_array = parse_ini_file("setting.ini");
+$handle = new SQLite3($ini_array['sqlite_file']);
+$site = $ini_array['default_site'];
+$sitesetting = getSitesetting($handle, $site);
+$consumerKey = $sitesetting['twitter_main']['consumerKey'];
+$consumerSecret = $sitesetting['twitter_main']['consumerSecret'];
+
+require "twitteroauth/autoload.php";
+use Abraham\TwitterOAuth\TwitterOAuth;
+
+$connection = new TwitterOAuth($consumerKey, $consumerSecret, $_SESSION['oauth_token'], $_SESSION['oauth_token_secret']);
+$access_token = $connection->oauth('oauth/access_token', array('oauth_verifier' => $_GET['oauth_verifier'], 'oauth_token' => $_GET['oauth_token']));
+
+$user_connection = new TwitterOAuth($consumerKey, $consumerSecret, $access_token['oauth_token'], $access_token['oauth_token_secret']);
+$user_info = $user_connection->get('account/verify_credentials');
+
+consoleLog($access_token['oauth_token']);
+consoleLog($access_token['oauth_token_secret']);
+
+var_dump($access_token);
+var_dump($user_info);
+
