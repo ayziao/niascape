@@ -84,6 +84,17 @@ consoleLog("done");
 //Twitter投稿
 function twitterpost($sitesetting, $site, $body, $filename, $gyazourl) {
 
+	//PENDING 設定の保存の仕方考える
+	$pre = $sitesetting['pre'];
+	$word_list = $sitesetting['preword'];
+	console_var_dump($sitesetting);
+//	console_var_dump(json_encode($sitesetting,JSON_PRETTY_PRINT));
+
+	str_replace($word_list, "", $body, $count);
+	if ($count !== 0) {
+		$body = $pre . $body;
+	}
+
 	if (array_key_exists('twitter_main', $sitesetting) == false) {
 		return;
 	}
@@ -121,7 +132,10 @@ function twitterpost($sitesetting, $site, $body, $filename, $gyazourl) {
 
 	$twitter = new TwitterOAuth($consumerKey, $consumerSecret, $accessToken, $accessTokenSecret);
 
-	$parameters = ['status' => $result->text . $sitesetting['twitter_sub']['suffix']];
+	//PENDING 接頭と画像をうまいことやる
+	$body = preg_replace("/^$pre/", '', $result->text);
+
+	$parameters = ['status' => $body . $sitesetting['twitter_sub']['suffix']];
 
 	//画像投稿
 	if ($sitesetting['twitter_sub']['image'] == 'gyazo') {
