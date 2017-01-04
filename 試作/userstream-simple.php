@@ -50,9 +50,10 @@ class MyUserConsumer extends UserstreamPhirehose
 
     $data = json_decode($status, true);
     if($data['text']){
-      echo date("● Y-m-d H:i:s ").$data['user']['screen_name']."\t".$data['user']['name']."\n".$data['text']."\n";
+      echo '● '. date("Y-m-d H:i:s  ") .str_pad($data['user']['screen_name'], 16).$data['user']['name'] ."\n".$data['text']."\n";
     }else{
-      echo date("○ Y-m-d H:i:s ").key(array_slice($data, 0, 1))."\n";
+//      echo date("○ Y-m-d H:i:s ").key(array_slice($data, 0, 1))."\n";
+      echo date("○ Y-m-d H:i:s ").$status."\n";
     }
   }
 
