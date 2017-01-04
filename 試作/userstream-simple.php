@@ -45,8 +45,15 @@ class MyUserConsumer extends UserstreamPhirehose
      */
     // $data = json_decode($status, true);
     // echo date("Y-m-d H:i:s (").strlen($status)."):".print_r($data,true)."\n";
+    
+    file_put_contents('/var/tmp/tw_'.date("Ymd").'.txt', $status."\n" , FILE_APPEND);
 
-    file_put_contents('tw_'.date("Ymd").'.txt', $status."\n" , FILE_APPEND);
+    $data = json_decode($status, true);
+    if($data['text']){
+      echo date("● Y-m-d H:i:s ").$data['user']['screen_name']."\t".$data['user']['name']."\n".$data['text']."\n";
+    }else{
+      echo date("○ Y-m-d H:i:s ").key(array_slice($data, 0, 1))."\n";
+    }
   }
 
 }
