@@ -51,3 +51,45 @@ consoleLog($access_token['oauth_token_secret']);
 var_dump($access_token);
 var_dump($user_info);
 
+■2017/01/06 金 
+●20:52:05.715000 ツイッタータイムラインストリーム保存したやつ読む
+http://westplain.sakuraweb.com/translate/twitter/Documentation/Streaming-APIs/Overview/Streaming-message-types.cgi
+
+var_dump($argv);
+
+$file = fopen($argv[1], "r");
+if (!$file) {
+	fclose($file);
+	exit();
+}
+
+$count = ['friends' => 0, 'tw' => 0, 'rt' => 0, 'delete' => 0, 'scrub_geo' => 0, 'event' => '■■■■■■■■■■■■■■'];
+$count2 = 0;
+
+while ($line = fgets($file)) {
+	$aaa = json_decode($line, true);
+	if ($aaa['friends']) {
+		$count['friends'] ++;
+	} elseif ($aaa['retweeted_status']) {
+		$count['rt'] ++;
+	} elseif ($aaa['text']) {
+		$count['tw'] ++;
+	} elseif ($aaa['delete']) {
+		$count['delete'] ++;
+	} elseif ($aaa['scrub_geo']) {
+		$count['scrub_geo'] ++;
+	} elseif ($aaa['event']) {
+		$count[$aaa['event']] ++;
+	} else {
+		var_dump($aaa);
+	}
+	$count2++;
+	if ($count2 > 1000) {
+		echo ".";
+		$count2 = 0;
+	}
+}
+fclose($file);
+
+echo "\n";
+var_dump($count);

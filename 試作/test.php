@@ -1,26 +1,46 @@
-<?php 
+<?php
+
+//ツイッタータイムラインストリーム保存したやつ読む
+
 date_default_timezone_set('Asia/Tokyo');
 // phpinfo();
+//require('common.php');
+var_dump($argv);
 
-require('common.php');
+$file = fopen($argv[1], "r");
+if (!$file) {
+	fclose($file);
+	exit();
+}
 
-//Twitterタイムライン取得
-require "twitteroauth/autoload.php";
-use Abraham\TwitterOAuth\TwitterOAuth;
+$count = ['friends' => 0, 'tw' => 0, 'rt' => 0, 'delete' => 0, 'scrub_geo' => 0, 'event' => '■■■■■■■■■■■■■■'];
+$count2 = 0;
 
+while ($line = fgets($file)) {
+	$aaa = json_decode($line, true);
+	if ($aaa['friends']) {
+		$count['friends'] ++;
+	} elseif ($aaa['retweeted_status']) {
+		$count['rt'] ++;
+	} elseif ($aaa['text']) {
+		$count['tw'] ++;
+	} elseif ($aaa['delete']) {
+		$count['delete'] ++;
+	} elseif ($aaa['scrub_geo']) {
+		$count['scrub_geo'] ++;
+	} elseif ($aaa['event']) {
+		$count[$aaa['event']] ++;
+	} else {
+		var_dump($aaa);
+	}
+	$count2++;
+	if ($count2 > 1000) {
+		echo ".";
+		$count2 = 0;
+	}
+}
+fclose($file);
 
-$ini_array = parse_ini_file("setting.ini");
-$handle    = new SQLite3($ini_array['sqlite_file']); 
-$sitesetting = getSitesetting($handle,$ini_array['default_site']);
-$consumerKey = $sitesetting['twitter_main']['consumerKey'];
-$consumerSecret = $sitesetting['twitter_main']['consumerSecret'];
-$accessToken = $sitesetting['twitter_main']['accessToken'];
-$accessTokenSecret = $sitesetting['twitter_main']['accessTokenSecret'];
-$twitter = new TwitterOAuth($consumerKey, $consumerSecret, $accessToken, $accessTokenSecret);
-
-$parms = array('count' => '5');
-$res = $twitter->get('statuses/user_timeline', $parms);
-
-//echo '<pre>';
-var_dump($res);
+echo "\n";
+var_dump($count);
 
