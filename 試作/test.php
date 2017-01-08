@@ -16,6 +16,7 @@ if (!$file) {
 $count = ['friends' => 0, 'tw' => 0, 'rt' => 0, 'delete' => 0, 'scrub_geo' => 0, 'event' => '■■■■■■■■■■■■■■'];
 $count2 = 0;
 $fav = [];
+$fofav = [];
 
 while ($line = fgets($file)) {
 	$aaa = json_decode($line, true);
@@ -32,11 +33,15 @@ while ($line = fgets($file)) {
 	} elseif ($aaa['event']) {
 		$count[$aaa['event']] ++;
 		if($aaa['event'] = 'favorite'){
-			// if(!$fav[$aaa['source']['id']]){
-			// 	$fav[$aaa['source']['id']] = ['name' => $aaa['source']['screen_name'], 'count' => 0];
-			// }
-			// $fav[$aaa['source']['id']]['count']++;
-			$fav[$aaa['source']['screen_name']]++;
+			if($aaa['source']['screen_name'] == $argv[3]){
+				$fofav[$aaa['target']['screen_name']]++;				
+			} else {
+				// if(!$fav[$aaa['source']['id']]){
+				// 	$fav[$aaa['source']['id']] = ['name' => $aaa['source']['screen_name'], 'count' => 0];
+				// }
+				// $fav[$aaa['source']['id']]['count']++;
+				$fav[$aaa['source']['screen_name']]++;				
+			}
 		}
 		// if($count['favorite'] == 1){
 		// 	var_dump($aaa);
@@ -55,10 +60,15 @@ fclose($file);
 echo "\n";
 var_dump($count);
 asort($fav);
+asort($fofav);
 //var_dump($fav);
 
 foreach ($fav as $key => $value) {
 	$bbb .= '<a href="https://twitter.com/'.$key.'">'."$key</a> ($value)<br>\n"; 
+}
+
+foreach ($fofav as $key => $value) {
+	$ccc .= '<a href="https://twitter.com/'.$key.'">'."$key</a> ($value)<br>\n"; 
 }
 
 ob_start();
@@ -66,11 +76,14 @@ ob_start();
 ?>
 <html>
 	<head>
-		<title>ふぁぼられ</title>
+		<title>ふぁぼ</title>
 	</head>
 	<body>
 		<h1><?=$argv[1] ?></h1>
+		<h2>ふぁられ</h2>
 		<?=$bbb ?>
+		<h2>ふぁぼり</h2>
+		<?=$ccc ?>
 	</body>
 </html>
 <?php
