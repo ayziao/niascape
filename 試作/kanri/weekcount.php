@@ -1,24 +1,26 @@
 <?php
-header('Content-Type: text/html; charset=UTF-8');
-	
-//曜日別投稿件数
+/*
+ * 曜日別投稿件数
+ */
 
-$week = ['日','月','火','水','木','金','土'];
+header('Content-Type: text/html; charset=UTF-8');
+
+$week = ['日', '月', '火', '水', '木', '金', '土'];
 $ini_array = loadIni();
 $location = $ini_array['sqlite_file'];
-$site  = $_GET["site"] ? $_GET["site"] : $ini_array['default_site'];
-$tag  = $_GET["tag"] ? $_GET["tag"] : '';
-$searchbody  = $_GET["searchbody"] ? $_GET["searchbody"] : '';
+$site = $_GET["site"] ? $_GET["site"] : $ini_array['default_site'];
+$tag = $_GET["tag"] ? $_GET["tag"] : '';
+$searchbody = $_GET["searchbody"] ? $_GET["searchbody"] : '';
 
-if ($tag){
+if ($tag) {
 	$tagwhere = "	and (tags like '% $tag %' or tags like '% $tag:%')";
 }
-if ($searchbody){
+if ($searchbody) {
 	$bodywhere = "	AND body LIKE '%$searchbody%'";
 }
 
 
-$handle = new SQLite3($location); 
+$handle = new SQLite3($location);
 
 //今週
 $query = <<< EOM
@@ -51,14 +53,14 @@ EOM;
 // var_dump($query);
 // print('</pre>');
 
-$results = $handle->query($query); 
+$results = $handle->query($query);
 
 $sun = $results->fetchArray();
 while ($row = $results->fetchArray()) {
-	$konsyu .= "\n			" . '<tr>'.'<td nowrap>'.$week[$row['Date']].'</td>'.'<td align="right">'.$row['count'].'</td>'.'<td>'.$row['graf'].'</td>'.'</tr>';
+	$konsyu .= "\n			" . '<tr>' . '<td nowrap>' . $week[$row['Date']] . '</td>' . '<td align="right">' . $row['count'] . '</td>' . '<td>' . $row['graf'] . '</td>' . '</tr>';
 }
 $row = $sun;
-$konsyu .= "\n			" . '<tr>'.'<td nowrap>'.$week[$row['Date']].'</td>'.'<td align="right">'.$row['count'].'</td>'.'<td>'.$row['graf'].'</td>'.'</tr>' . "\n\n";
+$konsyu .= "\n			" . '<tr>' . '<td nowrap>' . $week[$row['Date']] . '</td>' . '<td align="right">' . $row['count'] . '</td>' . '<td>' . $row['graf'] . '</td>' . '</tr>' . "\n\n";
 
 
 //今月
@@ -74,14 +76,14 @@ $bodywhere
 AND strftime('%Y%m',`datetime`) = strftime('%Y%m',DATE('now', "localtime"))
 GROUP BY strftime('%w',`datetime`)
 EOM;
-$results = $handle->query($query); 
+$results = $handle->query($query);
 
 $sun = $results->fetchArray();
 while ($row = $results->fetchArray()) {
-	$kongetu .= "\n			" . '<tr>'.'<td nowrap>'.$week[$row['Date']].'</td>'.'<td align="right">'.$row['count'].'</td>'.'<td>'.$row['graf'].'</td>'.'</tr>';
+	$kongetu .= "\n			" . '<tr>' . '<td nowrap>' . $week[$row['Date']] . '</td>' . '<td align="right">' . $row['count'] . '</td>' . '<td>' . $row['graf'] . '</td>' . '</tr>';
 }
 $row = $sun;
-$kongetu .= "\n			" . '<tr>'.'<td nowrap>'.$week[$row['Date']].'</td>'.'<td align="right">'.$row['count'].'</td>'.'<td>'.$row['graf'].'</td>'.'</tr>' . "\n\n";
+$kongetu .= "\n			" . '<tr>' . '<td nowrap>' . $week[$row['Date']] . '</td>' . '<td align="right">' . $row['count'] . '</td>' . '<td>' . $row['graf'] . '</td>' . '</tr>' . "\n\n";
 
 
 //今年
@@ -97,14 +99,14 @@ $bodywhere
 AND strftime('%Y',`datetime`) = strftime('%Y',DATE('now', "localtime"))
 GROUP BY strftime('%w',`datetime`)
 EOM;
-$results = $handle->query($query); 
+$results = $handle->query($query);
 
 $sun = $results->fetchArray();
 while ($row = $results->fetchArray()) {
-	$kotosi .= "\n			" . '<tr>'.'<td nowrap>'.$week[$row['Date']].'</td>'.'<td align="right">'.$row['count'].'</td>'.'<td>'.$row['graf'].'</td>'.'</tr>';
+	$kotosi .= "\n			" . '<tr>' . '<td nowrap>' . $week[$row['Date']] . '</td>' . '<td align="right">' . $row['count'] . '</td>' . '<td>' . $row['graf'] . '</td>' . '</tr>';
 }
 $row = $sun;
-$kotosi .= "\n			" . '<tr>'.'<td nowrap>'.$week[$row['Date']].'</td>'.'<td align="right">'.$row['count'].'</td>'.'<td>'.$row['graf'].'</td>'.'</tr>' . "\n\n";
+$kotosi .= "\n			" . '<tr>' . '<td nowrap>' . $week[$row['Date']] . '</td>' . '<td align="right">' . $row['count'] . '</td>' . '<td>' . $row['graf'] . '</td>' . '</tr>' . "\n\n";
 
 
 
@@ -121,14 +123,14 @@ $tagwhere
 $bodywhere
 GROUP BY strftime('%w',`datetime`)
 EOM;
-$results = $handle->query($query); 
+$results = $handle->query($query);
 
 $sun = $results->fetchArray();
 while ($row = $results->fetchArray()) {
-	$zenkikan .= "\n			" . '<tr>'.'<td nowrap>'.$week[$row['Date']].'</td>'.'<td align="right">'.$row['count'].'</td>'.'<td>'.$row['graf'].'</td>'.'</tr>';
+	$zenkikan .= "\n			" . '<tr>' . '<td nowrap>' . $week[$row['Date']] . '</td>' . '<td align="right">' . $row['count'] . '</td>' . '<td>' . $row['graf'] . '</td>' . '</tr>';
 }
 $row = $sun;
-$zenkikan .= "\n			" . '<tr>'.'<td nowrap>'.$week[$row['Date']].'</td>'.'<td align="right">'.$row['count'].'</td>'.'<td>'.$row['graf'].'</td>'.'</tr>' . "\n\n";
+$zenkikan .= "\n			" . '<tr>' . '<td nowrap>' . $week[$row['Date']] . '</td>' . '<td align="right">' . $row['count'] . '</td>' . '<td>' . $row['graf'] . '</td>' . '</tr>' . "\n\n";
 
 //タグ利用頻度順リンク
 //タグ件数取得
@@ -148,18 +150,18 @@ EOM;
 $results = $handle->query($query);
 $array = [];
 while ($row = $results->fetchArray()) {
-	$tags = explode(" ", str_replace("\t",' ',trim($row['tags'])));
+	$tags = explode(" ", str_replace("\t", ' ', trim($row['tags'])));
 	foreach ($tags as $value) {
-		$aaa = mb_strstr($value,':',ture)?mb_strstr($value,':',ture):$value; //スペースで切り離し
+		$aaa = mb_strstr($value, ':', ture) ? mb_strstr($value, ':', ture) : $value; //スペースで切り離し
 		$array[$aaa] += $row['count']; //件数足し足し
 	}
 	ksort($array);
 	arsort($array);
 }
 
-$link .= '<a href="?kanri=weekcount&site='. $site. '">全て</a><br>';
+$link .= '<a href="?kanri=weekcount&site=' . $site . '">全て</a><br>';
 foreach ($array as $key => $value) {
-	$link .= '<a href="?kanri=weekcount&site='. $site.'&tag='. urlencode($key) .'">' . $key . '</a> '.$value.'<br>';
+	$link .= '<a href="?kanri=weekcount&site=' . $site . '&tag=' . urlencode($key) . '">' . $key . '</a> ' . $value . '<br>';
 }
 
 
@@ -174,9 +176,8 @@ EOM;
 $results = $handle->query($query);
 
 while ($row = $results->fetchArray()) {
-	$sitelink .= '<a href="?kanri=weekcount&site='. $row['site'].'">' . $row['site'] . '</a> ';
+	$sitelink .= '<a href="?kanri=weekcount&site=' . $row['site'] . '">' . $row['site'] . '</a> ';
 }
-
 ?>
 <html>
 	<head>
@@ -191,41 +192,41 @@ while ($row = $results->fetchArray()) {
 	</head>
 
 	<body>
-		<h4><?=$site ?> <?=$tag ?> 曜日別投稿件数</h4>
-			
-		<?=$sitelink ?><br>
-		<a href='?kanri=monthcount&site=<?=$site ?>'>月別</a> <a href='?kanri=daycount&site=<?=$site ?>'>日別</a> <a href='?kanri=weekcount&site=<?=$site ?>'>曜日別</a> <a href='?kanri=hourcount&site=<?=$site ?>'>時別</a> <a href='?kanri=tagcount&site=<?=$site ?>'>タグ</a><br>
+		<h4><?= $site ?> <?= $tag ?> 曜日別投稿件数</h4>
+
+		<?= $sitelink ?><br>
+		<a href='?kanri=monthcount&site=<?= $site ?>'>月別</a> <a href='?kanri=daycount&site=<?= $site ?>'>日別</a> <a href='?kanri=weekcount&site=<?= $site ?>'>曜日別</a> <a href='?kanri=hourcount&site=<?= $site ?>'>時別</a> <a href='?kanri=tagcount&site=<?= $site ?>'>タグ</a><br>
 		<div class="table">
 			<div class="cell">
 				<form action="./" method="GET">
 					<input type="hidden" name="kanri" value="weekcount">
-					<input type="hidden" name="site" value="<?=$site?>">
-					<input type="hidden" name="tag" value="<?=$tag?>">
-					<input class="text" type="text" name="searchbody" value="<?=$searchbody?>">
+					<input type="hidden" name="site" value="<?= $site ?>">
+					<input type="hidden" name="tag" value="<?= $tag ?>">
+					<input class="text" type="text" name="searchbody" value="<?= $searchbody ?>">
 					<input id="btn" class="submitbutton" type="submit" name="submit" value="検索">
 				</form>
-				<?=$link ?>
+				<?= $link ?>
 			</div>
 			<div class="cell" style="width: 100%;">
 				<h5>今週</h5>
 				<table>
-					<?=$konsyu ?>
+					<?= $konsyu ?>
 				</table>
 				<h5>今月</h5>
 				<table>
-					<?=$kongetu ?>
+					<?= $kongetu ?>
 				</table>
 				<h5>今年</h5>
 				<table>
-					<?=$kotosi ?>
+					<?= $kotosi ?>
 				</table>
 				<h5>全期間</h5>
 				<table>
-					<?=$zenkikan ?>
+					<?= $zenkikan ?>
 				</table>
 			</div>
 		</div>		
 
-		<a href='?kanri=monthcount&site=<?=$site ?>'>月別</a> <a href='?kanri=daycount&site=<?=$site ?>'>日別</a> <a href='?kanri=weekcount&site=<?=$site ?>'>曜日別</a> <a href='?kanri=hourcount&site=<?=$site ?>'>時別</a> <a href='?kanri=tagcount&site=<?=$site ?>'>タグ</a><br>
+		<a href='?kanri=monthcount&site=<?= $site ?>'>月別</a> <a href='?kanri=daycount&site=<?= $site ?>'>日別</a> <a href='?kanri=weekcount&site=<?= $site ?>'>曜日別</a> <a href='?kanri=hourcount&site=<?= $site ?>'>時別</a> <a href='?kanri=tagcount&site=<?= $site ?>'>タグ</a><br>
 	</body>
 </html>

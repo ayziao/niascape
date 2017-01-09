@@ -1,7 +1,9 @@
 <?php
-header('Content-Type: text/html; charset=UTF-8');
+/*
+ * サイトタイムライン 
+ */
 
-//サイトタイムライン 
+header('Content-Type: text/html; charset=UTF-8');
 
 $ini_array = loadIni();
 $location = $ini_array['sqlite_file'];

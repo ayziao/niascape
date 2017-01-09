@@ -1,8 +1,9 @@
 <?php
+/*
+ *  マルチポスト
+ * 
 
-/* マルチポスト
-
-  exec("nohup php -c '' 'multipost.php' '$site' '$identifier' '$filename' '$gyazourl'  > /dev/null &");
+exec("nohup php -c '' 'multipost.php' '$site' '$identifier' '$filename' '$gyazourl'  > /dev/null &");
 
  */
 
@@ -26,7 +27,6 @@ function console_var_dump($var) {
 
 date_default_timezone_set('Asia/Tokyo');
 require "twitteroauth/autoload.php";
-
 use Abraham\TwitterOAuth\TwitterOAuth;
 
 $now = \DateTime::createFromFormat('U.u', sprintf('%6F', microtime(true)));

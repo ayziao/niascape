@@ -1,12 +1,12 @@
 <?php
-
-//投稿
+/*
+ * 投稿
+ */
 
 $now = \DateTime::createFromFormat('U.u', sprintf('%6F', microtime(true)));
 $now->setTimezone(new DateTimeZone('Asia/Tokyo'));
 
 require "twitteroauth/autoload.php";
-
 use Abraham\TwitterOAuth\TwitterOAuth;
 
 $ini_array = loadIni();
@@ -101,6 +101,7 @@ EOM;
 /*
  * gyazo投稿
  */
+
 function gyazopost($token, $file) {
 
 	$ch = curl_init();

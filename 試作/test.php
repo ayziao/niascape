@@ -1,5 +1,7 @@
 <?php
-//ツイッタータイムラインストリーム保存したやつ読む
+/*
+ * ツイッタータイムラインストリーム保存したやつ読む
+ */
 
 date_default_timezone_set('Asia/Tokyo');
 // phpinfo();
@@ -48,7 +50,7 @@ while ($line = fgets($file)) {
 	} else {
 		var_dump($aaa);
 	}
-	$count2++;
+	$count2 ++;
 	if ($count2 > 1000) {
 		echo ".";
 		$count2 = 0;

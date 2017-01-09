@@ -1,10 +1,13 @@
-<?php 
-header('Content-Type: text/html; charset=UTF-8');
-//タグ修正
+<?php
+/*
+ * タグ修正
+ */
 
-$ini_array = loadIni(); 
-$location  = $ini_array['sqlite_file'];
-$handle    = new SQLite3($location); 
+header('Content-Type: text/html; charset=UTF-8');
+
+$ini_array = loadIni();
+$location = $ini_array['sqlite_file'];
+$handle = new SQLite3($location);
 
 $site = $_POST['site'];
 $identifier = $_POST['identifier'];
@@ -20,27 +23,27 @@ WHERE  identifier = '$identifier'
 EOM;
 //AND site = '$site' 
 
-$results = $handle->query($query); 
+$results = $handle->query($query);
 $row = $results->fetchArray(SQLITE3_ASSOC);
 
 // tag取り出し
 // システムタグとユーザタグ切り分け
 $tagstring = '';
-$tags = explode(' ',trim($row['tags']));
-foreach ($tags as  $value) {
-	if(strpos($value , '#') !== 0){
+$tags = explode(' ', trim($row['tags']));
+foreach ($tags as $value) {
+	if (strpos($value, '#') !== 0) {
 		$tagstring .= " $value";
 	}
 }
 
 
 // システムタグに修正タグを組み込んで
-if (mb_strlen($updateTags)){
+if (mb_strlen($updateTags)) {
 	$tagarr = explode(' ', mb_ereg_replace('\s+', ' ', $updateTags));
-	$tagstring .= ' #'.implode(' #', $tagarr); 
+	$tagstring .= ' #' . implode(' #', $tagarr);
 }
 
-if(strlen($tagstring) > 0){
+if (strlen($tagstring) > 0) {
 	$tagstring .= ' ';
 }
 
@@ -53,7 +56,7 @@ SET	tags = '$tagstring'
 WHERE	identifier = '$identifier'
 
 EOM;
-$results = $handle->query($query); 
+$results = $handle->query($query);
 
 header('Location: http://' . $_SERVER["HTTP_HOST"] . $_SERVER["REQUEST_URI"] . $identifier);
 
