@@ -3,9 +3,24 @@
  * サイトタイムライン 
  */
 
+function getSitesetting($handle, $site) {
+
+	$query = <<< EOM
+
+SELECT * FROM keyvalue	
+WHERE key = 'sitesetting_$site'
+
+EOM;
+
+	$results = $handle->query($query);
+	$row = $results->fetchArray();
+
+	return json_decode($row['value'], ture);
+}
+
 header('Content-Type: text/html; charset=UTF-8');
 
-$ini_array = loadIni();
+$ini_array = parse_ini_file(dirname(__FILE__) . "/setting.ini");
 $location = $ini_array['sqlite_file'];
 $handle = new SQLite3($location);
 

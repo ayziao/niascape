@@ -3,13 +3,22 @@
  * 投稿
  */
 
+function vdump($obj) {
+	ob_start();
+	var_dump($obj);
+	$dump = ob_get_contents();
+	ob_end_clean();
+	return $dump;
+}
+
+
 $now = \DateTime::createFromFormat('U.u', sprintf('%6F', microtime(true)));
 $now->setTimezone(new DateTimeZone('Asia/Tokyo'));
 
 require "twitteroauth/autoload.php";
 use Abraham\TwitterOAuth\TwitterOAuth;
 
-$ini_array = loadIni();
+$ini_array = parse_ini_file(dirname(__FILE__) . "/setting.ini");
 $handle = new SQLite3($ini_array['sqlite_file']);
 
 $site = $_POST['site'];

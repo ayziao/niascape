@@ -19,11 +19,7 @@ function consoleLog($str) {
 	echo ("\033[0m$str\n\033[0;31m");
 }
 
-function console_var_dump($var) {
-	echo "\033[0m";
-	var_dump($var);
-	echo "\033[0;31m";
-}
+
 
 date_default_timezone_set('Asia/Tokyo');
 require "twitteroauth/autoload.php";
