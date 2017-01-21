@@ -11,14 +11,13 @@ function loadIni() {
 	return parse_ini_file(dirname(__FILE__) . "/setting.ini");
 }
 
-
 /*
  * 環境どうにかするやつ
  */
 
 function consoleLog($str) {
 	// fputs(fopen('php://stdout', 'w'), "\033[0;31m$str\n");
-	fputs(fopen('php://stdout', 'w'), "\033[0m$str\n\033[0;31m");
+	fputs(fopen('php://stdout', 'w'), "\033[0m$str\n\033[0;31m"); //エラーの色つけのために黒にしてからなんか出して赤にしてる
 }
 
 function consoleErr($str) {
@@ -27,57 +26,11 @@ function consoleErr($str) {
 }
 
 function shutdown() {
-	fputs(fopen('php://stdout', 'w'), "\033[0m");
+	fputs(fopen('php://stdout', 'w'), "\033[0m"); //終了時色を戻す
 }
 
 fputs(fopen('php://stdout', 'w'), "\033[0;31m");
 register_shutdown_function('shutdown');
-
-
-
-
-//ルーティング
-function routing() {
-	$path = $_SERVER["SCRIPT_NAME"];
-
-	if ($_SERVER["REQUEST_METHOD"] == "POST") {
-		if (array_key_exists('post', $_POST)) {
-			return require('post.php');
-		} elseif (array_key_exists('tagUpdate', $_POST)) {
-			return require('tagUpdate.php');
-		}
-	}
-	//TODO トップページ判定
-
-	if (is_kobetupage($path)) {				//個別ページ判定	
-		return require('kobetu.php');
-	} elseif (is_daysummary($path)) {	 //日サマリー判定	
-		return require('daysummary.php');
-	} elseif (is_tagtimeline($path)) {	//タグタイムライン判定
-		return require('tagtimeline.php');
-	} elseif (is_search($path)) {			 //本文検索
-		return require('search.php');
-	} elseif (is_sitetimeline($path)) { //サイトタイムライン判定
-		return require('sitetimeline.php');
-	} elseif (is_site_static($path)) { //サイト別静的ファイル
-		$ini_array = loadIni();
-		content_type($path);
-
-		if (strpos($_SERVER['HTTP_HOST'], $ini_array['host']) > 0) {
-			$path = explode('.' . $ini_array['host'], $_SERVER['HTTP_HOST'])[0] . $path;
-		} else {
-			$path = substr($path, 2);
-		}
-
-		readfile($ini_array['site_static'] . $path);
-		consoleLog($path);
-		return;
-	} elseif (isset($_GET['kanri'])) {
-		return include('kanri/' . $_GET['kanri'] . '.php');
-	} else {
-		return @include(substr($path, 1) . '.php'); //PENDING 画面じゃなくてコンソールにエラーが吐ければ@取りたい
-	}
-}
 
 //個別ページ判定
 function is_kobetupage($path) {
@@ -144,4 +97,44 @@ function content_type($path) {
 	}
 }
 
-return routing();
+$path = $_SERVER["SCRIPT_NAME"];
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+	if (array_key_exists('post', $_POST)) {
+		return require('post.php');
+	} elseif (array_key_exists('tagUpdate', $_POST)) {
+		return require('tagUpdate.php');
+	}
+}
+//TODO トップページ判定
+
+if (is_kobetupage($path)) { //個別ページ判定	
+	return require('kobetu.php');
+} elseif (is_daysummary($path)) { //日サマリー判定	
+	return require('daysummary.php');
+} elseif (is_tagtimeline($path)) { //タグタイムライン判定
+	return require('tagtimeline.php');
+} elseif (is_search($path)) { //本文検索
+	return require('search.php');
+} elseif (is_sitetimeline($path)) { //サイトタイムライン判定
+	return require('sitetimeline.php');
+} elseif (is_site_static($path)) { //サイト別静的ファイル
+	$ini_array = loadIni();
+	content_type($path);
+
+	if (strpos($_SERVER['HTTP_HOST'], $ini_array['host']) > 0) {
+		$path = explode('.' . $ini_array['host'], $_SERVER['HTTP_HOST'])[0] . $path;
+	} else {
+		$path = substr($path, 2);
+	}
+
+	readfile($ini_array['site_static'] . $path);
+	consoleLog($path);
+	return;
+} elseif (isset($_GET['kanri'])) {//管理系
+	return include('kanri/' . $_GET['kanri'] . '.php');
+} if(file_exists(substr($path, 1) . '.php')) {
+	return include(substr($path, 1) . '.php');
+}
+
+return false;
