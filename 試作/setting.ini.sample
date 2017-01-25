@@ -1,6 +1,12 @@
+host = Internet domain name
+
 sqlite_file = sqlite3 File Path
 
 default_site = default site
 
 default_tag = '#タグ'
 
+
+
+gyazo = gyazo API Key
+twitterdb = twitter sqlite3 File Path
