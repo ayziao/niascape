@@ -15,7 +15,7 @@ function vdump($obj) {
 $now = \DateTime::createFromFormat('U.u', sprintf('%6F', microtime(true)));
 $now->setTimezone(new DateTimeZone('Asia/Tokyo'));
 
-require "twitteroauth/autoload.php";
+require "lib/twitteroauth/autoload.php";
 use Abraham\TwitterOAuth\TwitterOAuth;
 
 $ini_array = parse_ini_file(dirname(__FILE__) . "/setting.ini");

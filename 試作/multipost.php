@@ -27,7 +27,7 @@ function console_var_dump($var) {
 
 
 date_default_timezone_set('Asia/Tokyo');
-require "twitteroauth/autoload.php";
+require "lib/twitteroauth/autoload.php";
 use Abraham\TwitterOAuth\TwitterOAuth;
 
 $now = \DateTime::createFromFormat('U.u', sprintf('%6F', microtime(true)));
