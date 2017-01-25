@@ -14,64 +14,78 @@ if (!$file) {
 	exit();
 }
 
-$count = ['friends' => 0, 'tw' => 0, 'rt' => 0, 'delete' => 0, 'scrub_geo' => 0, 'event' => '■■■■■■■■■■■■■■'];
-$count2 = 0;
-$fav = [];
-$fofav = [];
+$count = ['friends' => 0, 'tw' => 0, 'rt' => 0, 'delete' => 0, 'scrub_geo' => 0, 'favrare' => 0, 'favri' => 0, 'event' => '■■■■■■■■■■■■■■'];
+$progress = 0;
+$favrare = [];
+$favri = [];
+$user = [];
+
+$ini_array = parse_ini_file(dirname(__FILE__) . "/setting.ini");
+$location = $ini_array['twitterdb'];
+$handle = new SQLite3($location);
 
 while ($line = fgets($file)) {
-	$aaa = json_decode($line, true);
-	if ($aaa['friends']) {
+	$twit = json_decode($line, true);
+	if ($twit['friends']) {
 		$count['friends'] ++;
-	} elseif ($aaa['retweeted_status']) {
+	} elseif ($twit['retweeted_status']) {
 		$count['rt'] ++;
-	} elseif ($aaa['text']) {
+	} elseif ($twit['text']) {
+		if ($count['tw'] == 0) {
+			var_dump($twit);
+		}
 		$count['tw'] ++;
-	} elseif ($aaa['delete']) {
+		$user[$twit['user']['id']] = $twit['user'];
+	} elseif ($twit['delete']) {
 		$count['delete'] ++;
-	} elseif ($aaa['scrub_geo']) {
+	} elseif ($twit['scrub_geo']) {
 		$count['scrub_geo'] ++;
-	} elseif ($aaa['event']) {
-		$count[$aaa['event']] ++;
-		if ($aaa['event'] = 'favorite') {
-			if ($aaa['source']['screen_name'] == $argv[3]) {
-				$fofav[$aaa['target']['screen_name']] ++;
+	} elseif ($twit['event']) {
+		$count[$twit['event']] ++;
+		if ($twit['event'] == 'favorite') {
+			if ($twit['source']['screen_name'] == $argv[3]) {
+				$favri[$twit['target']['screen_name']] ++;
+				$count['favri'] ++;
+				$favraretotalcount += $value;
 			} else {
-				// if(!$fav[$aaa['source']['id']]){
-				// 	$fav[$aaa['source']['id']] = ['name' => $aaa['source']['screen_name'], 'count' => 0];
+				// if(!$fav[$twit['source']['id']]){
+				// 	$fav[$twit['source']['id']] = ['name' => $twit['source']['screen_name'], 'count' => 0];
 				// }
-				// $fav[$aaa['source']['id']]['count']++;
-				$fav[$aaa['source']['screen_name']] ++;
+				// $fav[$twit['source']['id']]['count']++;
+				$favrare[$twit['source']['screen_name']] ++;
+				$count['favrare'] ++;
 			}
+		} elseif ($twit['event'] == 'favorited_retweet') {
+			//var_dump($twit);
 		}
 		// if($count['favorite'] == 1){
-		// 	var_dump($aaa);
+		// 	var_dump($twit);
 		// }
 	} else {
-		var_dump($aaa);
+		//var_dump($twit);
 	}
-	$count2 ++;
-	if ($count2 > 1000) {
+	$progress ++;
+	if ($progress > 1000) {
 		echo ".";
-		$count2 = 0;
+		$progress = 0;
 	}
 }
 fclose($file);
 
 echo "\n";
 var_dump($count);
-asort($fav);
-asort($fofav);
+asort($favrare);
+asort($favri);
 //var_dump($fav);
 
-foreach ($fav as $key => $value) {
-	$bbb .= '<a href="https://twitter.com/' . $key . '">' . "$key</a> ($value)<br>\n";
-	$bbbtotal += $value;
+foreach ($favrare as $key => $value) {
+	$favrarelink .= '<a href="https://twitter.com/' . $key . '">' . "$key</a> ($value)<br>\n";
+	$favraretotalcount += $value;
 }
 
-foreach ($fofav as $key => $value) {
-	$ccc .= '<a href="https://twitter.com/' . $key . '">' . "$key</a> ($value)<br>\n";
-	$ccctotal += $value;
+foreach ($favri as $key => $value) {
+	$favrilink .= '<a href="https://twitter.com/' . $key . '">' . "$key</a> ($value)<br>\n";
+	$favritotalcount += $value;
 }
 
 ob_start();
@@ -82,15 +96,25 @@ ob_start();
 	</head>
 	<body>
 		<h1><?= $argv[1] ?></h1>
-		<h2>ふぁられ <?= $bbbtotal ?></h2>
-		<?= $bbb ?>
-		<h2>ふぁぼり <?= $ccctotal ?></h2>
-		<?= $ccc ?>
+		<h2>ふぁられ <?= $count['favrare'] ?></h2>
+		<?= $favrarelink ?>
+		<h2>ふぁぼり <?= $count['favri'] ?></h2>
+		<?= $favrilink ?>
 	</body>
 </html>
 <?php
 $dump = ob_get_contents();
 ob_end_clean();
 
-
 file_put_contents($argv[2] . '/fav.html', $dump);
+
+$query = 'INSERT OR REPLACE INTO user VALUES ';
+foreach ($user as $key => $value) {
+//	dbreplace($handle, $key, $value['screen_name']);
+	$query .= "($key,'" . $value['screen_name'] . "'),";
+}
+
+$query = substr($query, 0, -1);
+//var_dump($query);
+
+$handle->query($query);
