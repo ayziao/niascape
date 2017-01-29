@@ -20,7 +20,7 @@ $favrare = [];
 $favri = [];
 $user = [];
 
-$ini_array = parse_ini_file(dirname(__FILE__) . "/setting.ini");
+$ini_array = parse_ini_file(dirname(__FILE__) . "/../setting.ini");
 $location = $ini_array['twitterdb'];
 $handle = new SQLite3($location);
 
@@ -28,14 +28,17 @@ while ($line = fgets($file)) {
 	$twit = json_decode($line, true);
 	if ($twit['friends']) {
 		$count['friends'] ++;
+		$friends = $twit['friends'];
+//		var_dump($twit);
+		
 	} elseif ($twit['retweeted_status']) {
 		$count['rt'] ++;
 	} elseif ($twit['text']) {
 		if ($count['tw'] == 0) {
-			var_dump($twit);
+			//var_dump($twit);
 		}
 		$count['tw'] ++;
-		$user[$twit['user']['id']] = $twit['user'];
+		$user[$twit['user']['id']] = $twit;
 	} elseif ($twit['delete']) {
 		$count['delete'] ++;
 	} elseif ($twit['scrub_geo']) {
@@ -111,10 +114,28 @@ file_put_contents($argv[2] . '/fav.html', $dump);
 $query = 'INSERT OR REPLACE INTO user VALUES ';
 foreach ($user as $key => $value) {
 //	dbreplace($handle, $key, $value['screen_name']);
-	$query .= "($key,'" . $value['screen_name'] . "'),";
+	$datetime = date('Y-m-d H:i:s', strtotime($value['created_at']));
+
+	$query .= "($key,'" . $value['user']['screen_name'] . "','" . SQLite3::escapeString ($value['user']['name']) . "','$datetime','$datetime'),";
 }
 
 $query = substr($query, 0, -1);
 //var_dump($query);
 
 $handle->query($query);
+
+
+
+if($count['friends']){
+	//var_dump($friends);
+	$query = 'INSERT OR IGNORE INTO user(id) VALUES';
+	foreach ($friends as $value) {
+		$query .= "($value),";
+	}
+	$query = substr($query, 0, -1);
+	//var_dump($query);
+
+	$handle->query($query);
+}
+
+
