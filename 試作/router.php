@@ -131,8 +131,10 @@ if (is_kobetupage($path)) { //個別ページ判定
 	readfile($ini_array['site_static'] . $path);
 	consoleLog($path);
 	return;
-} elseif (isset($_GET['kanri'])) {//管理系
+} elseif (isset($_GET['kanri'])) { //管理系
 	return include('kanri/' . $_GET['kanri'] . '.php');
+} elseif (isset($_GET['plugin'])) { //プラグイン
+	return include('plugin/' . $_GET['plugin'] . '.php');
 } if(file_exists(substr($path, 1) . '.php')) {
 	return include(substr($path, 1) . '.php');
 }
