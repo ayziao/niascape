@@ -81,8 +81,86 @@ asort($favrare);
 asort($favri);
 //var_dump($fav);
 
+
+$query = 'select * from user WHERE id in(';
+foreach ($user as $key => $value) {
+	$names .= ",'$key'";
+}
+$query .=  substr($names, 1) .')';
+$results = $handle->query($query);
+
+while ($row = $results->fetchArray(SQLITE3_ASSOC)) {
+	$userinfo1[$row['id']] = $row;
+}
+
+$query = '';
+$insertquery = 'INSERT OR REPLACE INTO user (id, screen_name, name,lastdate,checkdate)VALUES ';
+foreach ($user as $key => $value) {
+	$datetime = date('Y-m-d H:i:s', strtotime($value['created_at']));
+	if(array_key_exists($key, $userinfo1)){
+		$query .= "UPDATE user SET screen_name = '" . $value['user']['screen_name'] ."',";
+		$query .= "name = '" . SQLite3::escapeString ($value['user']['name'])  ."',";
+		$query .= "lastdate = '$datetime', checkdate = '$datetime'";
+		$query .= "WHERE id = $key;";
+	}else{
+		$isinsert = true;
+//	dbreplace($handle, $key, $value['screen_name']);
+	$insertquery .= "($key,'" . $value['user']['screen_name'] . "','" 
+					. SQLite3::escapeString ($value['user']['name']) . "','$datetime','$datetime'),";
+	}
+}
+
+$insertquery = substr($insertquery, 0, -1) . ';';
+
+$handle->query($query);
+if($isinsert){
+	$handle->query($insertquery);
+}
+
+
+
+if($count['friends']){
+	//var_dump($friends);
+	$query = 'INSERT OR IGNORE INTO user(id) VALUES';
+	foreach ($friends as $value) {
+		$query .= "($value),";
+	}
+	$query = substr($query, 0, -1);
+	//var_dump($query);
+
+	$handle->query($query);
+}
+
+
+
+$query = 'select * from user WHERE screen_name in(';
 foreach ($favrare as $key => $value) {
-	$favrarelink .= '<a href="https://twitter.com/' . $key . '">' . "$key</a> ($value)<br>\n";
+	$names .= ",'$key'";
+}
+$query .=  substr($names, 1) .')';
+$results = $handle->query($query);
+
+
+while ($row = $results->fetchArray(SQLITE3_ASSOC)) {
+	$userinfo[$row['screen_name']] = $row;
+}
+//var_dump($userinfo);
+
+foreach ($favrare as $key => $value) {
+	$favrarelink .= '<a href="https://twitter.com/' . $key . '">' . "$key</a> ($value) ";
+	$favrarelink .= $userinfo[$key]['name'];
+	
+	if($userinfo[$key]['following'] == 1 && $userinfo[$key]['followed'] == 1){
+		$favrarelink .= ' 相互';
+	} elseif ($userinfo[$key]['following'] == 1 && $userinfo[$key]['followed'] == 0) {
+		$favrarelink .= ' 片思い';
+	} elseif ($userinfo[$key]['following'] == 0 && $userinfo[$key]['followed'] == 1) {
+		$favrarelink .= ' 片思われ';
+	} else {
+		$favrarelink .= ' 無関係';
+	}
+	
+	$favrarelink .= "<br>\n";
 	$favraretotalcount += $value;
 }
 
@@ -99,9 +177,9 @@ ob_start();
 	</head>
 	<body>
 		<h1><?= $argv[1] ?></h1>
-		<h2>ふぁられ <?= $count['favrare'] ?></h2>
+		<h2>ふぁられ <?= $count['favrare'] ?>(<?= count($favrare) ?>)</h2>
 		<?= $favrarelink ?>
-		<h2>ふぁぼり <?= $count['favri'] ?></h2>
+		<h2>ふぁぼり <?= $count['favri'] ?>(<?= count($favri) ?>)</h2>
 		<?= $favrilink ?>
 	</body>
 </html>
@@ -110,32 +188,4 @@ $dump = ob_get_contents();
 ob_end_clean();
 
 file_put_contents($argv[2] . '/fav.html', $dump);
-
-$query = 'INSERT OR REPLACE INTO user VALUES ';
-foreach ($user as $key => $value) {
-//	dbreplace($handle, $key, $value['screen_name']);
-	$datetime = date('Y-m-d H:i:s', strtotime($value['created_at']));
-
-	$query .= "($key,'" . $value['user']['screen_name'] . "','" . SQLite3::escapeString ($value['user']['name']) . "','$datetime','$datetime'),";
-}
-
-$query = substr($query, 0, -1);
-//var_dump($query);
-
-$handle->query($query);
-
-
-
-if($count['friends']){
-	//var_dump($friends);
-	$query = 'INSERT OR IGNORE INTO user(id) VALUES';
-	foreach ($friends as $value) {
-		$query .= "($value),";
-	}
-	$query = substr($query, 0, -1);
-	//var_dump($query);
-
-	$handle->query($query);
-}
-
 
