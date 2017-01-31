@@ -28,13 +28,13 @@ $twitter = new TwitterOAuth($consumerKey, $consumerSecret, $accessToken, $access
 
 $following = $twitter->get("friends/ids", array("user_id" => $userid));
 foreach ($following->ids as $value) {
-	$followingids .= ','.$value;
+	$followingids .= ',' . $value;
 }
 $followingids = substr($followingids, 1);
 
 $followers = $twitter->get("followers/ids", array("user_id" => $userid));
 foreach ($followers->ids as $value) {
-	$followersids .= ','.$value;
+	$followersids .= ',' . $value;
 }
 $followersids = substr($followersids, 1);
 
@@ -43,8 +43,6 @@ $query = 'UPDATE user SET following = 0 , followed = 0;';
 $query .= 'UPDATE user SET following = 1 WHERE id IN (' . $followingids . ');';
 $query .= 'UPDATE user SET followed = 1 WHERE id IN (' . $followersids . ');';
 $handle->query($query);
-
-
 
 function getSitesetting($handle, $site) {
 
@@ -60,4 +58,3 @@ EOM;
 
 	return json_decode($row['value'], ture);
 }
-

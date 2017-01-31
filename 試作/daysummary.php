@@ -18,8 +18,6 @@ if (strpos($_SERVER['HTTP_HOST'], $ini_array['host']) > 0) {
 $arr = explode('/', substr($_SERVER["SCRIPT_NAME"], 1));
 $path = array_pop($arr); //リクエスト末尾から/の直後までを取得 ルーティングで末尾数字8文字判定済み前提
 //$site = substr(array_pop($arr), 1); 
-
-
 //前日以前取得 
 $query = <<< EOM
 
@@ -43,8 +41,6 @@ $row = $results->fetchArray(SQLITE3_ASSOC);
 $maenohi = substr($row['identifier'], 0, 8);
 
 // var_dump($maenohi);
-
-
 //翌日以後取得
 
 $query = <<< EOM
@@ -132,7 +128,7 @@ $content .= "\n\t\t\t</div>";
 		</div>
 
 		<div>
-			<?= $content ?>
+<?= $content ?>
 		</div>
 
 		<div class="navi">

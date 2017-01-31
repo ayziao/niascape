@@ -3,7 +3,7 @@
  *  マルチポスト
  * 
 
-exec("nohup php -c '' 'multipost.php' '$site' '$identifier' '$filename' '$gyazourl'  > /dev/null &");
+  exec("nohup php -c '' 'multipost.php' '$site' '$identifier' '$filename' '$gyazourl'  > /dev/null &");
 
  */
 
@@ -24,7 +24,6 @@ function console_var_dump($var) {
 	var_dump($var);
 	echo "\033[0;31m";
 }
-
 
 date_default_timezone_set('Asia/Tokyo');
 require "lib/twitteroauth/autoload.php";

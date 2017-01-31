@@ -63,7 +63,6 @@ $query = substr($query, 0, -1);
 
 $handle->query($query);
 
-
 function getSitesetting($handle, $site) {
 
 	$query = <<< EOM

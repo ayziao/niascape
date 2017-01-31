@@ -11,7 +11,6 @@ function vdump($obj) {
 	return $dump;
 }
 
-
 $now = \DateTime::createFromFormat('U.u', sprintf('%6F', microtime(true)));
 $now->setTimezone(new DateTimeZone('Asia/Tokyo'));
 

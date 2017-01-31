@@ -62,7 +62,7 @@ function is_site_static($path) {
 	} else {
 		$path = substr($path, 2);
 	}
-	return ( ! is_dir($ini_array['site_static'] . $path) and is_readable($ini_array['site_static'] . $path));
+	return (!is_dir($ini_array['site_static'] . $path) and is_readable($ini_array['site_static'] . $path));
 }
 
 //サイトタイムライン判定
@@ -135,7 +135,7 @@ if (is_kobetupage($path)) { //個別ページ判定
 	return include('kanri/' . $_GET['kanri'] . '.php');
 } elseif (isset($_GET['plugin'])) { //プラグイン
 	return include('plugin/' . $_GET['plugin'] . '.php');
-} if(file_exists(substr($path, 1) . '.php')) {
+} if (file_exists(substr($path, 1) . '.php')) {
 	return include(substr($path, 1) . '.php');
 }
 

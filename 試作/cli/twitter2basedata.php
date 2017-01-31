@@ -16,11 +16,11 @@ while (false !== ($filename = readdir($dh))) {
 
 foreach ($files as $value) {
 	if (strpos($value, '.js') > 1) {
-		hoge($argv[1] . '/' . $value, $handle ,$argv[2]);
+		hoge($argv[1] . '/' . $value, $handle, $argv[2]);
 	}
 }
 
-function hoge($path, $handle ,$site) {
+function hoge($path, $handle, $site) {
 
 	$aaa = file_get_contents($path, NULL, NULL, 32);
 	$bbb = json_decode($aaa, TRUE);
@@ -36,12 +36,12 @@ function hoge($path, $handle ,$site) {
 			$tags .= ' #' . $value2['text'];
 		}
 		$tags .= ' ';
-		$body =  SQLite3::escapeString($value['text']);
+		$body = SQLite3::escapeString($value['text']);
 		$query .= "\n('$site','$identifier','$datetime','$title','$tags','$body'),";
 	}
 
 	$query = substr($query, 0, -1);
 
 	var_dump($query);
-  $result = $handle->query($query);
+	$result = $handle->query($query);
 }

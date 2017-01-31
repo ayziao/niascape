@@ -30,7 +30,6 @@ while ($line = fgets($file)) {
 		$count['friends'] ++;
 		$friends = $twit['friends'];
 //		var_dump($twit);
-		
 	} elseif ($twit['retweeted_status']) {
 		$count['rt'] ++;
 	} elseif ($twit['text']) {
@@ -86,7 +85,7 @@ $query = 'select * from user WHERE id in(';
 foreach ($user as $key => $value) {
 	$names .= ",'$key'";
 }
-$query .=  substr($names, 1) .')';
+$query .= substr($names, 1) . ')';
 $results = $handle->query($query);
 
 while ($row = $results->fetchArray(SQLITE3_ASSOC)) {
@@ -97,29 +96,29 @@ $query = '';
 $insertquery = 'INSERT OR REPLACE INTO user (id, screen_name, name,lastdate,checkdate)VALUES ';
 foreach ($user as $key => $value) {
 	$datetime = date('Y-m-d H:i:s', strtotime($value['created_at']));
-	if(array_key_exists($key, $userinfo1)){
-		$query .= "UPDATE user SET screen_name = '" . $value['user']['screen_name'] ."',";
-		$query .= "name = '" . SQLite3::escapeString ($value['user']['name'])  ."',";
+	if (array_key_exists($key, $userinfo1)) {
+		$query .= "UPDATE user SET screen_name = '" . $value['user']['screen_name'] . "',";
+		$query .= "name = '" . SQLite3::escapeString($value['user']['name']) . "',";
 		$query .= "lastdate = '$datetime', checkdate = '$datetime'";
 		$query .= "WHERE id = $key;";
-	}else{
+	} else {
 		$isinsert = true;
 //	dbreplace($handle, $key, $value['screen_name']);
-	$insertquery .= "($key,'" . $value['user']['screen_name'] . "','" 
-					. SQLite3::escapeString ($value['user']['name']) . "','$datetime','$datetime'),";
+		$insertquery .= "($key,'" . $value['user']['screen_name'] . "','"
+						. SQLite3::escapeString($value['user']['name']) . "','$datetime','$datetime'),";
 	}
 }
 
 $insertquery = substr($insertquery, 0, -1) . ';';
 
 $handle->query($query);
-if($isinsert){
+if ($isinsert) {
 	$handle->query($insertquery);
 }
 
 
 
-if($count['friends']){
+if ($count['friends']) {
 	//var_dump($friends);
 	$query = 'INSERT OR IGNORE INTO user(id) VALUES';
 	foreach ($friends as $value) {
@@ -137,7 +136,7 @@ $query = 'select * from user WHERE screen_name in(';
 foreach ($favrare as $key => $value) {
 	$names .= ",'$key'";
 }
-$query .=  substr($names, 1) .')';
+$query .= substr($names, 1) . ')';
 $results = $handle->query($query);
 
 
@@ -149,8 +148,8 @@ while ($row = $results->fetchArray(SQLITE3_ASSOC)) {
 foreach ($favrare as $key => $value) {
 	$favrarelink .= '<a href="https://twitter.com/' . $key . '">' . "$key</a> ($value) ";
 	$favrarelink .= $userinfo[$key]['name'];
-	
-	if($userinfo[$key]['following'] == 1 && $userinfo[$key]['followed'] == 1){
+
+	if ($userinfo[$key]['following'] == 1 && $userinfo[$key]['followed'] == 1) {
 		$favrarelink .= ' 相互';
 	} elseif ($userinfo[$key]['following'] == 1 && $userinfo[$key]['followed'] == 0) {
 		$favrarelink .= ' 片思い';
@@ -159,7 +158,7 @@ foreach ($favrare as $key => $value) {
 	} else {
 		$favrarelink .= ' 無関係';
 	}
-	
+
 	$favrarelink .= "<br>\n";
 	$favraretotalcount += $value;
 }

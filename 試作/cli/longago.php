@@ -24,7 +24,7 @@ EOM;
 $results = $handle->query($query);
 
 while ($row = $results->fetchArray(SQLITE3_ASSOC)) {
-	$link .= '<a href="https://twitter.com/' . $row['screen_name'] . '">' . $row['screen_name'].' '.$row['name'] . "  </a><br>\n";
+	$link .= '<a href="https://twitter.com/' . $row['screen_name'] . '">' . $row['screen_name'] . ' ' . $row['name'] . "  </a><br>\n";
 	$count++;
 }
 
@@ -44,4 +44,4 @@ ob_start();
 $dump = ob_get_contents();
 ob_end_clean();
 
-file_put_contents($argv[2].'ever.html', $dump);
+file_put_contents($argv[2] . 'ever.html', $dump);
