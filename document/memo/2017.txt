@@ -93,3 +93,23 @@ fclose($file);
 
 echo "\n";
 var_dump($count);
+
+■2017/02/02 木 
+●02:41:13.140000 ツイート履歴取り込み リプライ削除
+
+DELETE FROM	basedata
+where basedata.site = 'rog' 
+and basedata.identifier like '2012%'
+and basedata.body like '@%' 
+and basedata.body not like '@rogu%' 
+and basedata.body not like '@R_K%' 
+and basedata.body not like '@M__P%' 
+
+select * from basedata 
+where basedata.site = 'rog' 
+and basedata.identifier like '2012%'
+and basedata.body like '@%' 
+and basedata.body not like '@rogu%' 
+and basedata.body not like '@R_K%' 
+and basedata.body not like '@M__P%' 
+
