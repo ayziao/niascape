@@ -29,6 +29,11 @@ function hoge($path, $handle, $site) {
 	foreach ($bbb as $value) {
 		$timestamp = strtotime($value['created_at']);
 		$identifier = date('YmdHis000000', $timestamp);
+		if ($identifierold == $identifier) {
+			$identifier++;
+		} else {
+			$identifierold = $identifier;
+		}
 		$title = $identifier;
 		$datetime = date('Y-m-d H:i:s', $timestamp);
 		$tags = ' twitter_posted:' . $value['id'];
@@ -37,7 +42,9 @@ function hoge($path, $handle, $site) {
 		}
 		$tags .= ' ';
 		$body = SQLite3::escapeString($value['text']);
-		$query .= "\n('$site','$identifier','$datetime','$title','$tags','$body'),";
+		if (strpos($body, 'RT @') !== 0) {
+			$query .= "\n('$site','$identifier','$datetime','$title','$tags','$body'),";
+		}
 	}
 
 	$query = substr($query, 0, -1);
