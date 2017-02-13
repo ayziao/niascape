@@ -20,3 +20,12 @@ CREATE TABLE `keyvalue`
 	,PRIMARY KEY(`key`)
 );
 
+
+--キュー PENDING ステータス(リトライ 中止とか) リトライ回数
+CREATE TABLE `queue` (
+	`serial_number`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+	`reservation_time`	TEXT NOT NULL,
+	`queue_type`	TEXT NOT NULL,
+	`content`	TEXT NOT NULL,
+	`add_time`	TEXT NOT NULL
+);

@@ -113,3 +113,14 @@ and basedata.body not like '@rogu%'
 and basedata.body not like '@R_K%' 
 and basedata.body not like '@M__P%' 
 
+■2017/02/14 火 
+●04:47:38.520000 キュー
+予約日時 内容 登録日時
+キュー実行結果
+
+queue
+
+serial_number reservation_time queue_type content add_time
+
+
+
