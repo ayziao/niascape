@@ -35,7 +35,7 @@ $handle = new SQLite3($location);
 $results = $handle->query($query);
 
 while ($row = $results->fetchArray()) {
-	$content .= '<tr>' . '<td nowrap>' . $row['Date'] . '</td>' . '<td align="right">' . $row['count'] . '</td>' . '<td>' . $row['graf'] . '</td>' . '</tr>';
+	$content .= '<tr>' . '<td nowrap>' . $row['Date'] . '</td>' . '<td align="right">' . $row['count'] . '</td>' . '<td><div style="background-color: blue;  width: ' . $row['count'] /2 . 'px; font-size: 10px;">&nbsp;</div></td>' . '<td>' . $row['graf'] . '</td>' . '</tr>';
 }
 
 //タグ利用頻度順リンク

@@ -57,10 +57,10 @@ $results = $handle->query($query);
 
 $sun = $results->fetchArray();
 while ($row = $results->fetchArray()) {
-	$konsyu .= "\n			" . '<tr>' . '<td nowrap>' . $week[$row['Date']] . '</td>' . '<td align="right">' . $row['count'] . '</td>' . '<td>' . $row['graf'] . '</td>' . '</tr>';
+	$konsyu .= "\n			" . '<tr>' . '<td nowrap>' . $week[$row['Date']] . '</td>' . '<td align="right">' . $row['count'] . '</td>' . '<td><div style="background-color: blue;  width: ' . (int)$row['count'] . 'px; font-size: 10px;">&nbsp;</div></td>' . '<td>' . $row['graf'] . '</td>' . '</tr>';
 }
 $row = $sun;
-$konsyu .= "\n			" . '<tr>' . '<td nowrap>' . $week[$row['Date']] . '</td>' . '<td align="right">' . $row['count'] . '</td>' . '<td>' . $row['graf'] . '</td>' . '</tr>' . "\n\n";
+$konsyu .= "\n			" . '<tr>' . '<td nowrap>' . $week[$row['Date']] . '</td>' . '<td align="right">' . $row['count'] . '<td><div style="background-color: blue;  width: ' . (int)$row['count'] . 'px; font-size: 10px;">&nbsp;</div></td>' . '</td>' . '<td>' . $row['graf'] . '</td>' . '</tr>' . "\n\n";
 
 
 //今月
@@ -80,10 +80,10 @@ $results = $handle->query($query);
 
 $sun = $results->fetchArray();
 while ($row = $results->fetchArray()) {
-	$kongetu .= "\n			" . '<tr>' . '<td nowrap>' . $week[$row['Date']] . '</td>' . '<td align="right">' . $row['count'] . '</td>' . '<td>' . $row['graf'] . '</td>' . '</tr>';
+	$kongetu .= "\n			" . '<tr>' . '<td nowrap>' . $week[$row['Date']] . '</td>' . '<td align="right">' . $row['count'] . '</td>' . '<td><div style="background-color: blue;  width: ' . $row['count'] . 'px; font-size: 10px;">&nbsp;</div></td>' . '<td>' . $row['graf'] . '</td>' . '</tr>';
 }
 $row = $sun;
-$kongetu .= "\n			" . '<tr>' . '<td nowrap>' . $week[$row['Date']] . '</td>' . '<td align="right">' . $row['count'] . '</td>' . '<td>' . $row['graf'] . '</td>' . '</tr>' . "\n\n";
+$kongetu .= "\n			" . '<tr>' . '<td nowrap>' . $week[$row['Date']] . '</td>' . '<td align="right">' . $row['count'] . '</td>' . '<td><div style="background-color: blue;  width: ' . $row['count'] . 'px; font-size: 10px;">&nbsp;</div></td>' . '<td>' . $row['graf'] . '</td>' . '</tr>' . "\n\n";
 
 
 //今年
@@ -103,10 +103,10 @@ $results = $handle->query($query);
 
 $sun = $results->fetchArray();
 while ($row = $results->fetchArray()) {
-	$kotosi .= "\n			" . '<tr>' . '<td nowrap>' . $week[$row['Date']] . '</td>' . '<td align="right">' . $row['count'] . '</td>' . '<td>' . $row['graf'] . '</td>' . '</tr>';
+	$kotosi .= "\n			" . '<tr>' . '<td nowrap>' . $week[$row['Date']] . '</td>' . '<td align="right">' . $row['count'] . '</td>' . '<td><div style="background-color: blue;  width: ' . $row['count'] . 'px; font-size: 10px;">&nbsp;</div></td>' . '<td>' . $row['graf'] . '</td>' . '</tr>';
 }
 $row = $sun;
-$kotosi .= "\n			" . '<tr>' . '<td nowrap>' . $week[$row['Date']] . '</td>' . '<td align="right">' . $row['count'] . '</td>' . '<td>' . $row['graf'] . '</td>' . '</tr>' . "\n\n";
+$kotosi .= "\n			" . '<tr>' . '<td nowrap>' . $week[$row['Date']] . '</td>' . '<td align="right">' . $row['count'] . '</td>' . '<td><div style="background-color: blue;  width: ' . $row['count'] . 'px; font-size: 10px;">&nbsp;</div></td>' . '<td>' . $row['graf'] . '</td>' . '</tr>' . "\n\n";
 
 
 
@@ -127,10 +127,10 @@ $results = $handle->query($query);
 
 $sun = $results->fetchArray();
 while ($row = $results->fetchArray()) {
-	$zenkikan .= "\n			" . '<tr>' . '<td nowrap>' . $week[$row['Date']] . '</td>' . '<td align="right">' . $row['count'] . '</td>' . '<td>' . $row['graf'] . '</td>' . '</tr>';
+	$zenkikan .= "\n			" . '<tr>' . '<td nowrap>' . $week[$row['Date']] . '</td>' . '<td align="right">' . $row['count'] . '</td>' . '<td><div style="background-color: blue;  width: ' . $row['count'] /20 . 'px; font-size: 10px;">&nbsp;</div></td>' . '<td>' . $row['graf'] . '</td>' . '</tr>';
 }
 $row = $sun;
-$zenkikan .= "\n			" . '<tr>' . '<td nowrap>' . $week[$row['Date']] . '</td>' . '<td align="right">' . $row['count'] . '</td>' . '<td>' . $row['graf'] . '</td>' . '</tr>' . "\n\n";
+$zenkikan .= "\n			" . '<tr>' . '<td nowrap>' . $week[$row['Date']] . '</td>' . '<td align="right">' . $row['count'] . '</td>' . '<td><div style="background-color: blue;  width: ' . $row['count'] /20 . 'px; font-size: 10px;">&nbsp;</div></td>' . '<td>' . $row['graf'] . '</td>' . '</tr>' . "\n\n";
 
 //タグ利用頻度順リンク
 //タグ件数取得

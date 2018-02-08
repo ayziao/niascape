@@ -44,7 +44,7 @@ EOM;
 $results = $handle->query($query);
 
 while ($row = $results->fetchArray()) {
-	$today .= '<tr>' . '<td nowrap>' . $row['Date'] . '</td>' . '<td align="right">' . $row['count'] . '</td>' . '<td>' . $row['graf'] . '</td>' . '</tr>';
+	$today .= '<tr>' . '<td nowrap>' . $row['Date'] . '</td>' . '<td align="right">' . $row['count'] . '</td>' . '<td><div style="background-color: blue;  width: ' . $row['count'] . 'px; font-size: 10px;">&nbsp;</div></td>' . '<td>' . $row['graf'] . '</td>' . '</tr>';
 }
 
 //今週
@@ -77,7 +77,7 @@ EOM;
 
 $results = $handle->query($query);
 while ($row = $results->fetchArray()) {
-	$konsyu .= '<tr>' . '<td nowrap>' . $row['Date'] . '</td>' . '<td align="right">' . $row['count'] . '</td>' . '<td>' . $row['graf'] . '</td>' . '</tr>';
+	$konsyu .= '<tr>' . '<td nowrap>' . $row['Date'] . '</td>' . '<td align="right">' . $row['count'] . '</td>' . '<td><div style="background-color: blue;  width: ' . (int)$row['count'] . 'px; font-size: 10px;">&nbsp;</div></td>' . '<td>' . $row['graf'] . '</td>' . '</tr>';
 }
 
 
@@ -98,7 +98,7 @@ EOM;
 $results = $handle->query($query);
 
 while ($row = $results->fetchArray()) {
-	$kongetu .= '<tr>' . '<td nowrap>' . $row['Date'] . '</td>' . '<td align="right">' . $row['count'] . '</td>' . '<td>' . $row['graf'] . '</td>' . '</tr>';
+	$kongetu .= '<tr>' . '<td nowrap>' . $row['Date'] . '</td>' . '<td align="right">' . $row['count'] . '</td>' . '<td><div style="background-color: blue;  width: ' . $row['count'] . 'px; font-size: 10px;">&nbsp;</div></td>' . '<td>' . $row['graf'] . '</td>' . '</tr>';
 }
 
 //今年
@@ -118,7 +118,7 @@ EOM;
 $results = $handle->query($query);
 
 while ($row = $results->fetchArray()) {
-	$kotosi .= '<tr>' . '<td nowrap>' . $row['Date'] . '</td>' . '<td align="right">' . $row['count'] . '</td>' . '<td>' . $row['graf'] . '</td>' . '</tr>';
+	$kotosi .= '<tr>' . '<td nowrap>' . $row['Date'] . '</td>' . '<td align="right">' . $row['count'] . '</td>' . '<td><div style="background-color: blue;  width: ' . $row['count'] . 'px; font-size: 10px;">&nbsp;</div></td>' . '<td>' . $row['graf'] . '</td>' . '</tr>';
 }
 
 
@@ -137,7 +137,8 @@ EOM;
 $results = $handle->query($query);
 
 while ($row = $results->fetchArray()) {
-	$zenkikan .= '<tr>' . '<td nowrap>' . $row['Date'] . '</td>' . '<td align="right">' . $row['count'] . '</td>' . '<td>' . $row['graf'] . '</td>' . '</tr>';
+	
+	$zenkikan .= '<tr>' . '<td nowrap>' . $row['Date'] . '</td>' . '<td align="right">' . $row['count'] . '</td>' . '<td><div style="background-color: blue;  width: ' . $row['count'] /10 . 'px; font-size: 10px;">&nbsp;</div></td>' . '<td>' . $row['graf'] . '</td>' . '</tr>';
 }
 
 //タグ利用頻度順リンク
