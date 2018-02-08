@@ -338,3 +338,8 @@ twitter履歴古いのdだけ控えて古いの拾ってくキュー作る
 キュー
 
 ■inboxタスク■■■■■■■■■■■■■■■■■■
+
+
+queue
+
+serial_number reservation_time queue_type content add_time

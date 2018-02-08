@@ -77,6 +77,9 @@ foreach ($tagarr as $key => $value) {
 //Twitter投稿
 if ($body) {
 	twitterpost($sitesetting, $site, $body . $tagstr, $filename, $gyazourl);
+	if($site == 'rog'){
+		mastodonpost($body . $tagstr);
+	}
 }
 
 consoleLog("done");
@@ -172,6 +175,17 @@ function twitterpost($sitesetting, $site, $body, $filename, $gyazourl) {
 	return $result;
 }
 
+
+function mastodonpost($body){
+//	require_once("autoload.php");
+	
+	require "lib/theCodingCompany/Mastodon.php";
+	$t = new \theCodingCompany\Mastodon();
+	//Toot Test
+	$statusses = $t->PostStatuses($body);
+	var_dump($statusses);
+}
+				
 function getSitesetting($handle, $site) {
 
 	$query = <<< EOM

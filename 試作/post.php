@@ -14,9 +14,6 @@ function vdump($obj) {
 $now = \DateTime::createFromFormat('U.u', sprintf('%6F', microtime(true)));
 $now->setTimezone(new DateTimeZone('Asia/Tokyo'));
 
-require "lib/twitteroauth/autoload.php";
-use Abraham\TwitterOAuth\TwitterOAuth;
-
 $ini_array = parse_ini_file(dirname(__FILE__) . "/setting.ini");
 $handle = new SQLite3($ini_array['sqlite_file']);
 
@@ -39,7 +36,7 @@ if (strpos($_FILES['file']['type'], 'image') !== false) { //画像投稿
 		$datetime = $now->format('Y-m-d H:i:s');
 		$identifier = $now->format('YmdHisu');
 
-		$results = dbinsert($handle, $site, $identifier, $datetime, $identifier, ' gyazo_posted ', $gyazoresults); //gyazo投稿情報
+		$results = basedatainsert($handle, $site, $identifier, $datetime, $identifier, ' gyazo_posted ', $gyazoresults); //gyazo投稿情報
 
 		$now = \DateTime::createFromFormat('U.u', sprintf('%6F', microtime(true)));
 		$now->setTimezone(new DateTimeZone('Asia/Tokyo'));
@@ -66,10 +63,14 @@ if (strlen($tagstring) > 0) {
 if ($body) {
 	$datetime = $now->format('Y-m-d H:i:s');
 	$identifier = $now->format('YmdHisu');
-	$results = dbinsert($handle, $site, $identifier, $datetime, $identifier, $tagstring, $body);
+	$results = basedatainsert($handle, $site, $identifier, $datetime, $identifier, $tagstring, $body);
 	$path = dirname(__FILE__);
 //	exec("nohup php -c '' '$path/multipost.php' '$site' '$identifier' '$filename' '$gyazourl'  > /dev/null 2>&1 &");
-	exec("nohup php -c '' '$path/multipost.php' '$site' '$identifier' '$filename' '$gyazourl'  > /var/tmp/multipost.log 2>&1 &");
+	$sh = "nohup php -c '' '$path/multipost.php' '$site' '$identifier' '$filename' '$gyazourl'  > /var/tmp/multipost.log 2>&1 &";
+//	exec($sh);
+	consoleLog(vdump($sh));
+	
+	queueinsert($handle, $datetime, 'shell_command', $sh, $datetime);
 }
 
 if ($_POST['tagiji']) {
@@ -93,13 +94,35 @@ header('Location: http://' . $_SERVER["HTTP_HOST"] . $_SERVER["REQUEST_URI"] . $
 /**
  * DB insert
  */
-function dbinsert($handle, $site, $identifier, $datetime, $title, $tags, $body) {
+function basedatainsert($handle, $site, $identifier, $datetime, $title, $tags, $body) {
+	
+	$bbb = SQLite3::escapeString($body);
+	$ttt = SQLite3::escapeString($tags);
 	$query = <<< EOM
 
 INSERT INTO basedata
 (site,identifier,datetime,title,tags,body)
 VALUES 
-('$site','$identifier','$datetime','$title','$tags','$body')
+('$site','$identifier','$datetime','$title','$ttt','$bbb')
+
+EOM;
+	// var_dump($query);
+	return $handle->query($query);
+}
+
+
+/**
+ * queue insert
+ */
+function queueinsert($handle, $reservation_time, $queue_type, $content, $add_time) {
+	
+	$ccc = SQLite3::escapeString($content);
+	$query = <<< EOM
+
+INSERT INTO queue
+(reservation_time,queue_type,content,add_time)
+VALUES 
+('$reservation_time','$queue_type','$ccc','$add_time')
 
 EOM;
 	// var_dump($query);
