@@ -42,7 +42,6 @@ HTML組み立て node (将来的にブラウザ側にも機能を持たせる？
 
 ■ユースケース試作済 ■■■■■■■■■■■■■■
 
-
 日サマリー daysummary.php
 個別 kobetu.php
 本文検索 search.php
@@ -164,6 +163,7 @@ Webで見たのの評価 ☆任意の数 いらない(ネガティブ評価任�
 ログインしてないアクセスのライフサイクル２ 外部サイトからのリンクによる個別ページ閲覧
 削除
 
+
 ■ドメイン ■■■■■■■■■■■■■■■■■■■
 
 ●ニアスケイプ本体
@@ -176,6 +176,7 @@ Webで見たのの評価 ☆任意の数 いらない(ネガティブ評価任�
 ●サイト
 ●システム
 ●
+
 
 
 ■仕様 ■■■■■■■■■■■■■■■■■■■■■
@@ -202,6 +203,7 @@ webテストに試作とnodeを比較してやる
 ■スクリプト ■■■■■■■■■■■■■■■■■■
 TwitterストリームJSONそのまま保存したファイルを読む(URLデコード 改行2個化)
 tail -f tw_20161231.txt | perl -MEncode -ple 'BEGIN { my $X = qr/[[:xdigit:]]{4}/; $U = qr/\\u$X/; $UC = qr/\\u($X)/; } $_ = encode_utf8 join q{}, map { /^$U/ ? decode "utf-16-be", pack "n*", map { hex } m/$UC/g : $_ } split qr/($U*)/' | perl -pe 's/\n/\n\n/g' 
+
 
 ■タスク★☆☆ ■■■■■■■■■■■■■■■■■
 setup.pyの書き方調べる http://diveintopython3-ja.rdy.jp/packaging.html
@@ -241,6 +243,7 @@ CSSどうするか
 	Bottle - １ファイル
 	Django - 実績ナンバーワン
 	Flask - 軽量で人気
+
 
 ■タスク★★☆ ■■■■■■■■■■■■■■■■■
 
@@ -296,6 +299,14 @@ basedataでのタグの扱いをどうするか 現状 #付きがユーザタグ
 個別ページレート設定タグ付け 外部ページと自分のサイトの区別をどのようにするか？操作に違いをもたせるか？
 
 APIエラー仕様 https://www.eisbahn.jp/yoichiro/2017/01/rfc_7807.html
+
+
+キュー 
+    番号 予約日時 タイプ 内容 追加日時
+    queue
+    serial_number reservation_time queue_type content add_time
+
+
 ●計画考
 ユースケース洗い出し
 ドメイン分析
@@ -324,6 +335,7 @@ docstring の書式
 	評価は別テーブル
 		ID 評価対象(自分のであればID 他URI) 評価値
 
+
 ■タスク★★★ ■■■■■■■■■■■■■■■■■
 画像関連
 	画像投稿をどのくらいやってるか調査 月60〜200
@@ -334,12 +346,15 @@ docstring の書式
 	試作済みユースケース ファイル別になってるのをケース別に整理
 twitter履歴古いのdだけ控えて古いの拾ってくキュー作る
 
+
 ■対応中タスク ■■■■■■■■■■■■■■■■■
-キュー
+
+
 
 ■inboxタスク■■■■■■■■■■■■■■■■■■
 
+postgresql レプリケーションについて考える
+とりあえず読み取り専用接続と書き込み接続を分ける
 
-queue
+PSequelどうにか http://akiyoko.hatenablog.jp/entry/2016/07/29/230931
 
-serial_number reservation_time queue_type content add_time
