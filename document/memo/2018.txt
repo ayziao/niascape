@@ -1,0 +1,8 @@
+■2018/02/14 水 
+●13:50:34.397000 postgresql システムカタログ
+pg_user
+pg_stat_user_tables
+pg_stat_sys_tables
+pg_roles
+
+

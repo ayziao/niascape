@@ -5,11 +5,11 @@
 import sys
 import os
 from wsgiref import simple_server
+import niascape
+
 
 path = os.path.dirname(os.path.abspath(__file__))
 sys.path.append(path.rstrip('tests'))
-
-import niascape
 
 
 def make_server():
