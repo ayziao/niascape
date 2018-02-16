@@ -1,10 +1,11 @@
 import unittest
 import sys
 import os
-import niascape
 
 path = os.path.dirname(os.path.abspath(__file__))
 sys.path.append(path.rstrip('tests'))
+
+import niascape
 
 
 class TestMyapp(unittest.TestCase):
@@ -43,4 +44,3 @@ class TestMyapp(unittest.TestCase):
 
 		self.assertEqual(ret, '404 Not Found')
 		self.assertEqual(rethed, [('Content-Type', 'text/html; charset=utf-8')])
-
