@@ -45,7 +45,7 @@ def application(environ: dict, start_response: FunctionType):
 		body = run()
 		html = html.strip().format(body=body)
 		start_response('200 OK', [('Content-Type', 'text/html; charset=utf-8')])
-		return [html.encode('utf-8')]
+		return [html.encode()]
 
 
 if __name__ == '__main__':
