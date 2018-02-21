@@ -6,3 +6,49 @@ pg_stat_sys_tables
 pg_roles
 
 
+■2018/02/17 土 
+●23:12:03.733000 postgresql localhost以外から接続
+/usr/local/var/postgres/postgresql.conf
+listen_addresses = '*'
+
+/usr/local/var/postgres/pg_hba.conf
+host    all             all             192.168.1.0/24            trust
+
+brew services restart postgresql
+
+
+参考
+http://ymotongpoo.hatenablog.com/entry/20080111/1200052770
+https://qiita.com/ty-edelweiss/items/1444fb587181679ea438
+
+
+■2018/02/20 火 
+●10:41:32.696000 メモ
+brew services restart postgresql
+
+psql -f dump.sql -d データベース名
+https://qiita.com/Takashi_Nishimura/items/da5551e6a4cb4b64f055
+
+
+●13:06:35.125000 sqlite3のダンプデータからINSERT文だけって設定がわからんので上下雑に削除
+sqlite3 db.sqlite3 ".dump keyvalue" | tail -n +8 | sed '$d' > dump.sql
+sqlite3 db.sqlite3 ".dump basedata" | tail -n +12 | sed '$d' >> dump.sql
+
+
+●16:10:39.341000 postgresql用テーブル定義
+CREATE TABLE "keyvalue" (
+	"key"	TEXT NOT NULL,
+	"value"	TEXT NOT NULL,
+	PRIMARY KEY("key")
+);
+
+CREATE TABLE "basedata" (
+	"site"	varchar(63),
+	"identifier"	varchar(20),
+	"datetime"	timestamp NOT NULL,
+	"title"	TEXT NOT NULL DEFAULT '',
+	"tags"	TEXT NOT NULL DEFAULT '',
+	"body"	TEXT NOT NULL DEFAULT '',
+	PRIMARY KEY("site","identifier")
+);
+
