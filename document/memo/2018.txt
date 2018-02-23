@@ -52,3 +52,5 @@ CREATE TABLE "basedata" (
 	PRIMARY KEY("site","identifier")
 );
 
+■2018/02/24 土 
+●08:30:00.837000 設定ファイルどうにか
