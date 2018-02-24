@@ -4,7 +4,7 @@
 testsディレクトリ内(サブディレクトリも)のtest_*.pyを実行
 
 主に coverage 向け
-  - coverage run --branch --source=niascape tests/all_test.py
+  - coverage run --branch --source=niascape tests
 
 """
 import os
@@ -13,13 +13,14 @@ import types
 import unittest
 from importlib.machinery import SourceFileLoader
 
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))  # coverage 通すと__file__が__main__.pyにならない対策
 
 
 def call_recursive_directory(func: types.FunctionType, directory_name: str) -> None:
 	"""
 	再帰的にディレクトリ内のファイルに処理を行う
-	
+
 	@param func: function(file_path: str) ファイルに対して何らかの処理を行うファイルパス文字列を引数に持つ関数オブジェクト
 	@param directory_name: ディレクトリパス文字列
 	"""

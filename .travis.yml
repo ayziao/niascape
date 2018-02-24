@@ -5,7 +5,7 @@ python:
 install:
   - pip install coveralls 
 script:
-  - coverage run --branch --source=niascape tests/all_test.py
+  - coverage run --branch --source=niascape tests
   - coverage report -m
 after_success:
   coveralls --verbose
