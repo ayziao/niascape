@@ -5,8 +5,6 @@ packageの__init__.pyで読み込んでるのでコマンドラインから直�
 """
 
 # TODO メインモジュールの説明書く
-from configparser import ConfigParser
-
 
 def run() -> str:
 	"""
@@ -14,13 +12,6 @@ def run() -> str:
 	@return:
 	"""
 	return 'main'
-
-
-
-def readini(path='config.ini'):
-	ini = ConfigParser()
-	ini.read(path)
-	return ini
 
 
 if __name__ == '__main__':

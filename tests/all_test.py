@@ -7,23 +7,22 @@ testsディレクトリ内(サブディレクトリも)のtest_*.pyを実行
   - coverage run --branch --source=niascape tests/all_test.py
 
 """
-
 import os
 import sys
 import types
 import unittest
 from importlib.machinery import SourceFileLoader
 
-path = os.path.dirname(os.path.abspath(__file__))
-sys.path.append(path.rstrip('tests'))
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
 
 def call_recursive_directory(func: types.FunctionType, directory_name: str) -> None:
 	"""
 	再帰的にディレクトリ内のファイルに処理を行う
+	
 	@param func: function(file_path: str) ファイルに対して何らかの処理を行うファイルパス文字列を引数に持つ関数オブジェクト
 	@param directory_name: ディレクトリパス文字列
 	"""
-	# translationME クラス説明英語化
 	for basename in os.listdir(directory_name):
 		path = os.path.join(directory_name, basename)
 		if not basename.startswith('_'):  # PENDING 処理対象外ファイル、ディレクトリ名のチェック関数も受け取るか
@@ -34,9 +33,6 @@ def call_recursive_directory(func: types.FunctionType, directory_name: str) -> N
 
 
 def run() -> None:
-	"""
-	実行
-	"""
 	suite = unittest.TestSuite()
 	test_loader = unittest.TestLoader()
 

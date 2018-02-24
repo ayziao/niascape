@@ -1,5 +1,5 @@
 import unittest
-import os
+
 import niascape
 
 
@@ -9,13 +9,7 @@ class TestMyapp(unittest.TestCase):
 		ref = niascape.run()
 		self.assertEqual(ref, 'main')
 
-
 	def test_loadini(self):
-		cwd = os.getcwd()
-
-		if 'tests' in cwd: os.chdir(cwd.rstrip('tests'))
-
-		ini = niascape.main.readini('config.ini.sample')
+		ini = niascape._readini('config.ini.sample')
 		self.assertEqual(['postgresql'], ini.sections())
-
-		if 'tests' in cwd: os.chdir(cwd)
+	# self.assertEqual(ini.sections(), niascape.ini.sections())
