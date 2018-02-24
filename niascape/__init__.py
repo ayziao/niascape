@@ -18,9 +18,11 @@ niascape パッケージ
 import sys
 import os
 from datetime import datetime
-from niascape import main
 
-now = datetime.utcnow()
+from niascape import main
+from niascape import wsgiapplication
+
+init_time = datetime.utcnow()
 
 run = main.run
-application = main.application
+application = wsgiapplication.application
