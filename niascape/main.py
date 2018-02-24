@@ -6,6 +6,7 @@ packageの__init__.pyで読み込んでるのでコマンドラインから直�
 
 # TODO メインモジュールの説明書く
 from types import FunctionType
+from configparser import ConfigParser
 
 
 def run() -> str:
@@ -13,7 +14,6 @@ def run() -> str:
 	# コマンドライン向け
 	@return:
 	"""
-	#
 	return 'main'
 
 
@@ -46,6 +46,12 @@ def application(environ: dict, start_response: FunctionType):
 		html = html.strip().format(body=body)
 		start_response('200 OK', [('Content-Type', 'text/html; charset=utf-8')])
 		return [html.encode()]
+
+
+def readini(path='config.ini'):
+	ini = ConfigParser()
+	ini.read(path)
+	return ini
 
 
 if __name__ == '__main__':

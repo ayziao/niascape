@@ -1,0 +1,2 @@
+[postgresql]
+connect = host=localhost dbname=postgres

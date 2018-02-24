@@ -44,3 +44,15 @@ class TestMyapp(unittest.TestCase):
 
 		self.assertEqual(ret, '404 Not Found')
 		self.assertEqual(rethed, [('Content-Type', 'text/html; charset=utf-8')])
+
+	def test_loadini(self):
+		cwd = os.getcwd()
+
+		if 'tests' in cwd:os.chdir(cwd.rstrip('tests'))
+
+		ini = niascape.main.readini('config.ini.sample')
+		self.assertEqual(['postgresql'], ini.sections())
+
+		if 'tests' in cwd:os.chdir(cwd)
+
+
