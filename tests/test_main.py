@@ -1,10 +1,5 @@
 import unittest
-import sys
 import os
-
-path = os.path.dirname(os.path.abspath(__file__))
-sys.path.append(path.rstrip('tests'))
-
 import niascape
 
 
@@ -48,11 +43,9 @@ class TestMyapp(unittest.TestCase):
 	def test_loadini(self):
 		cwd = os.getcwd()
 
-		if 'tests' in cwd:os.chdir(cwd.rstrip('tests'))
+		if 'tests' in cwd: os.chdir(cwd.rstrip('tests'))
 
 		ini = niascape.main.readini('config.ini.sample')
 		self.assertEqual(['postgresql'], ini.sections())
 
-		if 'tests' in cwd:os.chdir(cwd)
-
-
+		if 'tests' in cwd: os.chdir(cwd)

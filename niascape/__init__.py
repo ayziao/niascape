@@ -18,14 +18,9 @@ niascape パッケージ
 import sys
 import os
 from datetime import datetime
+from niascape import main
 
 now = datetime.utcnow()
-
-# Pythonスクリプトパス解決
-path = os.path.dirname(os.path.abspath(__file__)).rstrip('niascape')
-sys.path.append(path)
-
-from niascape import main
 
 run = main.run
 application = main.application

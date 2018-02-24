@@ -9,10 +9,13 @@ testsディレクトリ内(サブディレクトリも)のtest_*.pyを実行
 """
 
 import os
+import sys
 import types
 import unittest
 from importlib.machinery import SourceFileLoader
 
+path = os.path.dirname(os.path.abspath(__file__))
+sys.path.append(path.rstrip('tests'))
 
 def call_recursive_directory(func: types.FunctionType, directory_name: str) -> None:
 	"""
