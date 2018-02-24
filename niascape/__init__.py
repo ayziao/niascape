@@ -19,7 +19,7 @@ import os
 from datetime import datetime
 from configparser import ConfigParser
 
-from niascape import main
+from niascape import __main__
 from niascape import wsgiapplication
 
 init_time = datetime.utcnow()
@@ -36,5 +36,5 @@ def _readini(file_name='config.ini'):
 
 ini = _readini()
 
-run = main.run
+run = __main__.run
 application = wsgiapplication.application
