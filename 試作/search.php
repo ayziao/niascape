@@ -59,7 +59,7 @@ while ($row = $results->fetchArray()) {
 		}
 	}
 
-	$content .= '<div class="line"><span class="time"><a href="./' . $row['identifier'] . '">18:28:18</a></span>&thinsp;' . $row['body'] . $tagstr . '</div>' . "\n";
+	$content .= '<div class="line"><span class="time"><a href="./' . $row['identifier'] . '">'. substr($row['datetime'], 11, 10) . '</a></span>&thinsp;' . $row['body'] . $tagstr . '</div>' . "\n";
 }
 $content .= '</div>';
 ?>
