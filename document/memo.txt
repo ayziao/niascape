@@ -191,7 +191,7 @@ UI上では空白を区切り文字とする制御文字は空白に置き換え
 キーバリューストア
 sitesetting_サイト名 JSON
 
-//PENDING サイト設定用のテーブルを別途作る？
+# PENDING サイト設定用のテーブルを別途作る？
 
 
 ■試作について ■■■■■■■■■■■■■■■■■
@@ -204,6 +204,8 @@ webテストに試作とnodeを比較してやる
 TwitterストリームJSONそのまま保存したファイルを読む(URLデコード 改行2個化)
 tail -f tw_20161231.txt | perl -MEncode -ple 'BEGIN { my $X = qr/[[:xdigit:]]{4}/; $U = qr/\\u$X/; $UC = qr/\\u($X)/; } $_ = encode_utf8 join q{}, map { /^$U/ ? decode "utf-16-be", pack "n*", map { hex } m/$UC/g : $_ } split qr/($U*)/' | perl -pe 's/\n/\n\n/g' 
 
+カバレッジ
+coverage run --branch --source=niascape tests && coverage report -m
 
 ■タスク★☆☆ ■■■■■■■■■■■■■■■■■
 setup.pyの書き方調べる http://diveintopython3-ja.rdy.jp/packaging.html
@@ -348,7 +350,6 @@ twitter履歴古いのdだけ控えて古いの拾ってくキュー作る
 
 
 ■対応中タスク ■■■■■■■■■■■■■■■■■
-リファクタリング
 
 
 ■inboxタスク■■■■■■■■■■■■■■■■■■

@@ -3,7 +3,7 @@ niascape.wsgiapplication
 """
 from types import FunctionType
 
-from . import __main__
+import niascape
 
 
 def application(environ: dict, start_response: FunctionType):
@@ -31,7 +31,7 @@ def application(environ: dict, start_response: FunctionType):
 	</body>
 </html>
 """
-		body = __main__.run()
+		body = niascape.run()
 		html = html.strip().format(body=body)
 		start_response('200 OK', [('Content-Type', 'text/html; charset=utf-8')])
 		return [html.encode()]
