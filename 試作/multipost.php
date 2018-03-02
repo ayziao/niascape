@@ -78,7 +78,7 @@ foreach ($tagarr as $key => $value) {
 if ($body) {
 	twitterpost($sitesetting, $site, $body . $tagstr, $filename, $gyazourl);
 	if($site == 'rog'){
-		mastodonpost($body . $tagstr);
+		mastodonpost($body . $tagstr . ' ' . $gyazourl);
 	}
 }
 
