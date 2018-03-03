@@ -1,9 +1,9 @@
-import unittest
+from unittest import TestCase
 
 import niascape
 
 
-class TestMyapp(unittest.TestCase):
+class TestMyapp(TestCase):
 	def test_main(self):
 		# print(niascape.init_time)
 		ref = niascape.run()

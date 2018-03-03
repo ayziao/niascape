@@ -206,6 +206,8 @@ tail -f tw_20161231.txt | perl -MEncode -ple 'BEGIN { my $X = qr/[[:xdigit:]]{4}
 
 カバレッジ
 coverage run --branch --source=niascape tests && coverage report -m
+coverage report --include=niascape/*
+coverage html --include=niascape/*
 
 ■タスク★☆☆ ■■■■■■■■■■■■■■■■■
 setup.pyの書き方調べる http://diveintopython3-ja.rdy.jp/packaging.html
