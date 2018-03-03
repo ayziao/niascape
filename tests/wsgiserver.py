@@ -6,8 +6,7 @@ import sys
 import os
 from wsgiref import simple_server
 
-path = os.path.dirname(os.path.abspath(__file__))
-sys.path.append(path.rstrip('tests'))
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 import niascape
 
