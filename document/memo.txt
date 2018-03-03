@@ -206,6 +206,7 @@ tail -f tw_20161231.txt | perl -MEncode -ple 'BEGIN { my $X = qr/[[:xdigit:]]{4}
 
 カバレッジ
 coverage run --branch --source=niascape tests && coverage report -m
+coverage run --branch --source=niascape tests && coverage report -m && coverage html
 coverage report --include=niascape/*
 coverage html --include=niascape/*
 
