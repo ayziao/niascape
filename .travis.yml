@@ -9,3 +9,5 @@ script:
   - coverage report -m
 after_success:
   coveralls --verbose
+notifications:
+    slack: ayziao:XBzPkkUkRCa4pU2b9yQSFsW3
