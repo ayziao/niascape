@@ -10,10 +10,10 @@ def cli():
 	return niascape.run()
 
 
-if __name__ == '__main__':
-	import os  # pragma: no cover
-	import sys # pragma: no cover
+if __name__ == '__main__': # pragma: no cover
+	import os 
+	import sys
 
-	# PENDING 実行環境へパッケージとしてインストールすればsys.path.append必要なくなるくさいがどうするか
-	sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))  # pragma: no cover
-	print(cli())  # pragma: no cover
+	sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))) # PENDING 実行環境へパッケージとしてインストールすればsys.path.append必要なくなるくさいがどうするか
+
+	print(cli())
