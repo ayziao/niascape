@@ -1,8 +1,10 @@
 language: python
 python:
+  - "3.4"
+  - "3.5"
   - "3.6"
-#  - pypy3
-install:
+install: # TODO coveralls以外 setup.pyへ？
+  - pip install psycopg2
   - pip install coveralls 
 script:
   - coverage run --branch --source=niascape tests
@@ -10,4 +12,4 @@ script:
 after_success:
   coveralls --verbose
 notifications:
-    slack: ayziao:XBzPkkUkRCa4pU2b9yQSFsW3
+  slack: ayziao:XBzPkkUkRCa4pU2b9yQSFsW3
