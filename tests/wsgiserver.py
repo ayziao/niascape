@@ -1,6 +1,6 @@
 """
 # WSGIサーバ 開発用
-# 本番環境ではApacheとかnginxとか使いましょう
+# 本番環境ではuWSGIとか使ってApacheとかnginxでやりましょう
 """
 import sys
 import os

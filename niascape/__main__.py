@@ -15,16 +15,14 @@ def _daycount():
 	from niascape import ini
 	con = ini['postgresql'].get('connect')
 
-	sql = """
-	SELECT
-		to_char(DATE("datetime"),'YYYY-MM-DD') as "Date" ,
-		COUNT(*) as "count"
-	FROM basedata
-	WHERE site = 'test'
-	GROUP BY DATE("datetime")
-	ORDER BY DATE("datetime")  DESC 
-	LIMIT 400
-	"""
+	sql = """SELECT
+  to_char(DATE("datetime"),'YYYY-MM-DD') as "Date" ,
+  COUNT(*) as "count"
+FROM basedata
+WHERE site = 'test'
+GROUP BY DATE("datetime")
+ORDER BY DATE("datetime") DESC
+LIMIT 400"""
 
 	with psycopg2.connect(con) as conn:
 		with conn.cursor(cursor_factory=DictCursor) as cur:

@@ -13,8 +13,7 @@ class TestMyapp(TestCase):
 		ini = niascape._readini('config.ini.sample')
 		self.assertEqual(['postgresql'], ini.sections())
 
-	# TODO データベースに接続してのテストについて考える
-	@unittest.skip("データベース関連のテストを保留")
+	@unittest.skip("データベース関連のテストを保留")  # TODO データベースに接続してのテストについて考える
 	def test_daycount(self):
 		ini = niascape._readini('config.ini.sample')
 		niascape.ini = ini
