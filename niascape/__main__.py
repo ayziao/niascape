@@ -4,6 +4,7 @@
 # TODO メインモジュールの説明書く
 """
 import psycopg2
+import logging
 
 
 def run() -> str:
@@ -21,22 +22,23 @@ def _daycount(site='test', tag='', searchbody=''):
 	# fixme プレースホルダ使う
 
 	if tag != '':
-		tagwhere = f" AND (tags like '% {tag} %' or tags like '% {tag}:%') "
+		tagwhere = f"AND (tags like '% {tag} %' or tags like '% {tag}:%')"
 	elif searchbody != '':
-		bodywhere = f" AND body LIKE '%{searchbody}%' "
+		bodywhere = f"AND body LIKE '%{searchbody}%'"
 
-	sql = f"""SELECT
-  to_char(DATE("datetime"),'YYYY-MM-DD') as "Date" ,
-  COUNT(*) as "count"
-FROM basedata
-WHERE site = '{site}'
-{tagwhere}
-{bodywhere}
-GROUP BY DATE("datetime")
-ORDER BY DATE("datetime") DESC
-LIMIT 400"""
-
-	# print(sql)
+	sql = f"""
+	SELECT
+		to_char(DATE("datetime"),'YYYY-MM-DD') as "Date" ,
+		COUNT(*)                               as "count"
+	FROM basedata
+	WHERE site = '{site}'
+		{tagwhere}
+		{bodywhere}
+	GROUP BY DATE("datetime")
+	ORDER BY DATE("datetime") DESC
+	LIMIT 400
+"""
+	logging.debug(sql)
 
 	with psycopg2.connect(con) as conn:
 		with conn.cursor(cursor_factory=DictCursor) as cur:
@@ -51,7 +53,8 @@ LIMIT 400"""
 
 
 if __name__ == '__main__':  # pragma: no cover
-	# print(_daycount('test','#test'))
+	logging.basicConfig(level=logging.DEBUG)  # PENDING リリースとデバッグ切り替えどうしようか logging.conf調べる
+	# print(_daycount('test', '#test'))
 
 	import os
 	import sys
