@@ -19,8 +19,7 @@ import os
 from datetime import datetime
 from configparser import ConfigParser
 
-from niascape import __main__
-from niascape import wsgiapplication
+from niascape import __main__, wsgiapplication
 
 init_time = datetime.utcnow()
 
