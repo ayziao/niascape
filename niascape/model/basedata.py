@@ -32,7 +32,7 @@ def _daycount(site='test', tag='', searchbody=''):
 		{bodywhere}
 	GROUP BY DATE("datetime")
 	ORDER BY DATE("datetime") DESC
-	LIMIT 400
+	LIMIT 10
 """
 	logger.debug(sql)
 
@@ -49,5 +49,6 @@ def _daycount(site='test', tag='', searchbody=''):
 
 
 if __name__ == '__main__':  # pragma: no cover
+	from pprint import pformat
 	logging.basicConfig(level=logging.DEBUG)  # PENDING リリースとデバッグ切り替えどうしようか logging.conf調べる
-	print(_daycount('test', '#test'))
+	print(pformat(_daycount('test', '#test')))

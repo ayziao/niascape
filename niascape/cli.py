@@ -2,8 +2,8 @@
 """
 コマンドラインインターフェース
 """
-import sys
 import logging
+import sys
 
 logger = logging.getLogger(__name__)
 
@@ -29,5 +29,7 @@ if __name__ == '__main__':  # pragma: no cover
 	sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))  # PENDING 実行環境へパッケージとしてインストールすればsys.path.append必要なくなるくさいがどうするか
 
 	logging.basicConfig(level=logging.DEBUG)  # PENDING リリースとデバッグ切り替えどうしようか logging.conf調べる
+
+	# sys.argv.append('daycount')
 
 	print(cli())
