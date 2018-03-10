@@ -1,5 +1,6 @@
-import sys
 from unittest import TestCase
+
+import sys
 
 from niascape import cli
 

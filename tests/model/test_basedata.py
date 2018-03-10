@@ -1,11 +1,12 @@
-import logging
 import unittest
+
+import logging
 from pprint import pformat
+
+logger = logging.getLogger(__name__)
 
 import niascape
 from niascape.model import basedata
-
-logger = logging.getLogger(__name__)
 
 
 class TestBasedata(unittest.TestCase):

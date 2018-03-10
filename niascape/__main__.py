@@ -3,10 +3,11 @@
 
 # TODO メインモジュールの説明書く
 """
-import json
-import logging
 import os
 import sys
+import json
+
+import logging
 
 logger = logging.getLogger(__name__)
 

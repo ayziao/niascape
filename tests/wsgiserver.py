@@ -2,11 +2,11 @@
 # WSGIサーバ 開発用
 # 本番環境ではuWSGIとか使ってApacheとかnginxでやりましょう
 """
-import sys
 import os
+import sys
 from wsgiref import simple_server
 
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))) # PENDING 実行環境へパッケージとしてインストールすればsys.path.append必要なくなるくさいがどうするか
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))  # PENDING 実行環境へパッケージとしてインストールすればsys.path.append必要なくなるくさいがどうするか
 
 import niascape
 

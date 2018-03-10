@@ -6,10 +6,12 @@ testsディレクトリ内(サブディレクトリも)のtest*.pyを実行
 主に coverage 向け
 coverage run --branch --source=niascape tests
 """
-import logging
+import unittest
+
 import os
 import sys
-import unittest
+
+import logging
 from pprint import pformat
 
 logger = logging.getLogger(__name__)
