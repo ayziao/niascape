@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 PROJECT_DIR=$(cd $(dirname $0)/..;pwd)
 cd $PROJECT_DIR
 coverage run --branch --source=niascape tests
