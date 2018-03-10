@@ -6,4 +6,4 @@ from niascape import cli
 class TestCli(TestCase):
 	def test_cli(self):
 		ret = cli.cli()
-		self.assertEqual('main', ret)
+		self.assertEqual('top', ret)

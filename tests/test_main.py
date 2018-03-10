@@ -7,7 +7,7 @@ import niascape
 class TestMyapp(TestCase):
 	def test_main(self):
 		ref = niascape.run()
-		self.assertEqual('main', ref)
+		self.assertEqual('top', ref)
 
 	def test_loadini(self):
 		ini = niascape._readini('config.ini.sample')
