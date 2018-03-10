@@ -1,4 +1,5 @@
 import logging
+
 import psycopg2
 
 logger = logging.getLogger(__name__)
@@ -9,6 +10,8 @@ def _daycount(site='test', tag='', searchbody=''):
 	from niascape import ini
 	con = ini['postgresql'].get('connect')
 
+	logger.debug(con)
+	
 	tagwhere = ''
 	bodywhere = ''
 
