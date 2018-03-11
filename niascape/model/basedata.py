@@ -33,7 +33,7 @@ def _daycount(site='test', tag='', searchbody=''):
 	GROUP BY DATE("datetime")
 	ORDER BY DATE("datetime") DESC
 	LIMIT 10
-"""
+	"""
 	logger.debug(sql)
 
 	with psycopg2.connect(con) as conn:

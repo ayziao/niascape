@@ -4,3 +4,5 @@ cd $PROJECT_DIR
 coverage run --branch --source=niascape tests
 coverage report -m 
 coverage html && open -a "Google Chrome" file://$PROJECT_DIR/htmlcov/index.html
+cd htmlcov
+find . -type f -name "*.html" -print0 | xargs -0 sed -i -e "s/        /\&nbsp;\&nbsp;/g"

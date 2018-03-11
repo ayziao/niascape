@@ -22,12 +22,11 @@ if __name__ == "__main__":
 		path = os.path.abspath(__file__)
 	else:
 		path = os.path.dirname(os.path.abspath(__file__))
-		logging.basicConfig(level=logging.DEBUG)  # coverage通してない時デバッグ情報出す
+		logging.basicConfig(format='%(asctime)s %(name)s\n[%(levelname)s] %(message)s', level=logging.DEBUG)  # coverage通してない時デバッグ情報出す
 		if __file__ == "tests/__main__.py":
 			verbosity = 2
 
 	logger.debug("カレントディレクトリ:%s", os.getcwd())
-
 	logger.debug("実行中のスクリプトへの相対パス:%s", __file__)
 	logger.debug("実行中のスクリプトへの絶対パス:%s", os.path.abspath(__file__))
 	logger.debug("Python検索パス:\n%s", pformat(sys.path))
