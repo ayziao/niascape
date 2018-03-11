@@ -6,10 +6,11 @@ import os
 import datetime
 import configparser
 
-from niascape.__main__ import run
-from niascape.wsgiapplication import application
-
 init_time = datetime.datetime.utcnow()
+
+from niascape.__main__ import run  # PENDING __ini__で定義すべきか
+from niascape.cli import cli
+from niascape.wsgiapplication import application
 
 
 def _readini(file_name='config.ini'):
@@ -21,4 +22,4 @@ def _readini(file_name='config.ini'):
 	return ini
 
 
-ini = _readini()
+ini = _readini()  # PENDING __ini__での定義以外をやめるかどうか
