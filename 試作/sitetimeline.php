@@ -135,15 +135,34 @@ $content .= "\n\t\t\t</div>";
 						false
 						);
 
-				function showmojilen() {
-					var taglen = tag.value.trim().length;
-					if (taglen > 0) {
-						taglen += 2;
+				var charcount = function (str) {
+				  len = 0;
+				  str = escape(str);
+				  for (i=0;i<str.length;i++,len++) {
+					if (str.charAt(i) == "%") {
+					  if (str.charAt(++i) == "u") {
+						i += 3;
+						len++;
+					  }
+					  i++;
 					}
-					var bodylen = textbox.value.trim().length;
+				  }
+				  return len;
+				}
+				
+				var counter = function(str,seq){
+					return str.split(seq).length - 1;
+				}
+
+				function showmojilen() {
+					var taglen = charcount(tag.value.trim());
+					if (taglen > 0) {
+						taglen += 2 + counter(tag.value.trim(),' ') * 2;
+					}
+					var bodylen = charcount(textbox.value.trim());
 					var strlen = bodylen + taglen;
 					if (sbmit === false) {
-						if (bodylen === 0 || strlen > 140) {
+						if (bodylen === 0 || strlen > 280) {
 							submitButton.disabled = true;
 							submitButton.value = 'post';
 						} else {
