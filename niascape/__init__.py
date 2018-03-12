@@ -17,9 +17,9 @@ def _readini(file_name='config.ini'):
 	# PENDING フルパス受け付けるか検討
 	# PENDING config.ini が無い時 config.ini.sample を読むか検討
 	path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-	ini = configparser.ConfigParser()
-	ini.read(path + '/' + file_name)
-	return ini
+	_ini = configparser.ConfigParser()
+	_ini.read(path + '/' + file_name)
+	return _ini
 
 
 ini = _readini()  # PENDING __ini__での定義以外をやめるかどうか
