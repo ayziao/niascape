@@ -5,22 +5,22 @@ import psycopg2
 logger = logging.getLogger(__name__)
 
 
-def _daycount(site='test', tag='', searchbody=''):
+def _daycount(site='test', tag='', search_body=''):
 	from psycopg2.extras import DictCursor
 	from niascape import ini
 	con = ini['postgresql'].get('connect')
 
 	logger.debug(con)
-	
-	tagwhere = ''
-	bodywhere = ''
+
+	tag_where = ''
+	body_where = ''
 
 	# fixme プレースホルダ使う
 
 	if tag != '':
-		tagwhere = f"AND (tags like '% {tag} %' or tags like '% {tag}:%')"
-	elif searchbody != '':
-		bodywhere = f"AND body LIKE '%{searchbody}%'"
+		tag_where = f"AND (tags like '% {tag} %' or tags like '% {tag}:%')"
+	elif search_body != '':
+		body_where = f"AND body LIKE '%{search_body}%'"
 
 	sql = f"""
 	SELECT
@@ -28,8 +28,8 @@ def _daycount(site='test', tag='', searchbody=''):
 		COUNT(*)                               as "count"
 	FROM basedata
 	WHERE site = '{site}'
-		{tagwhere}
-		{bodywhere}
+		{tag_where}
+		{body_where}
 	GROUP BY DATE("datetime")
 	ORDER BY DATE("datetime") DESC
 	LIMIT 10
@@ -50,5 +50,6 @@ def _daycount(site='test', tag='', searchbody=''):
 
 if __name__ == '__main__':  # pragma: no cover
 	from pprint import pformat
+
 	logging.basicConfig(level=logging.DEBUG)  # PENDING リリースとデバッグ切り替えどうしようか logging.conf調べる
 	print(pformat(_daycount('test', '#test')))

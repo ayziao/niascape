@@ -3,35 +3,35 @@ from unittest import TestCase
 import niascape
 
 
-class TestWsgipplication(TestCase):
+class TestWsgiapplication(TestCase):
 	# noinspection PyTypeChecker
 	def test_wsgiclient_root(self):
 		ret = ''
 		env = {'PATH_INFO': '/'}
-		rethed = ''
+		ret_hed = ''
 
 		def wsgi(status: str, header: list):
-			nonlocal ret, rethed
+			nonlocal ret, ret_hed
 			ret = status
-			rethed = header
+			ret_hed = header
 
 		niascape.application(env, wsgi)
 
 		self.assertEqual(ret, '200 OK')
-		self.assertEqual(rethed, [('Content-Type', 'text/html; charset=utf-8')])
+		self.assertEqual(ret_hed, [('Content-Type', 'text/html; charset=utf-8')])
 
 	# noinspection PyTypeChecker
 	def test_wsgiclient_favicon(self):
 		ret = ''
 		env = {'PATH_INFO': '/favicon.ico'}
-		rethed = ''
+		ret_hed = ''
 
 		def wsgi(status: str, header: list):
-			nonlocal ret, rethed
+			nonlocal ret, ret_hed
 			ret = status
-			rethed = header
+			ret_hed = header
 
 		niascape.application(env, wsgi)
 
 		self.assertEqual(ret, '404 Not Found')
-		self.assertEqual(rethed, [('Content-Type', 'text/html; charset=utf-8')])
+		self.assertEqual(ret_hed, [('Content-Type', 'text/html; charset=utf-8')])
