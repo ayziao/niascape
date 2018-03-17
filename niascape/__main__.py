@@ -15,23 +15,31 @@ logger = logging.getLogger(__name__)
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))  # PENDING 実行環境へパッケージとしてインストールすればsys.path.append必要なくなるくさいがどうするか
 
 import niascape
-from niascape.entity import basedata
+from niascape import action
 
 
-def run(action='top', option={}) -> str:  # PENDING __ini__に移動するか
-	logger.debug("アクション: %s", action)
-	# TODO elif連打やめる
-	if action == 'top':
-		return 'top'
-	elif action == 'daycount':
-		return json.dumps(basedata._daycount())  # PENDING どこでJSON化すべきか
+def run(action_name='top', option=None) -> str:  # PENDING __ini__に移動するか
+	logger.debug("アクション: %s", action_name)
+
+	try:
+		m = getattr(action, action_name)
+	except AttributeError:
+		return _no_action(action_name)
+
+	if callable(m):
+		return m(option)
 	else:
-		# TODO 例外を投げる
-		return 'No Action'
+		return _no_action(action_name)
+
+
+def _no_action(action_name):
+	# TODO 例外を投げる
+	logger.info("アクションなし: %s", action_name)  # PENDING インフォかワーニングか設定で変えられるようにすべきか
+	return 'No Action'
 
 
 if __name__ == '__main__':  # pragma: no cover
-	logging.basicConfig(format='%(asctime)s %(name)s\n[%(levelname)s] %(message)s', level=logging.DEBUG)  # PENDING リリースとデバッグ切り替えどうしようか logging.conf調べる
+	logging.basicConfig(format='\033[0;31m%(asctime)s %(name)s\n[%(levelname)s] %(message)s\033[0m', level=logging.DEBUG)  # PENDING リリースとデバッグ切り替えどうしようか logging.conf調べる
 
 	logger.debug("開始時刻(UTC): %s", niascape.init_time)
 

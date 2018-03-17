@@ -22,7 +22,7 @@ def cli():
 
 	# PENDING アクションなし例外きたらエラーコード終了？
 	import niascape
-	return niascape.run(action)
+	return niascape.run(action,sys.argv[2:])
 
 
 if __name__ == '__main__':  # pragma: no cover
@@ -30,6 +30,9 @@ if __name__ == '__main__':  # pragma: no cover
 
 	logging.basicConfig(level=logging.DEBUG)  # PENDING リリースとデバッグ切り替えどうしようか logging.conf調べる
 
-	# sys.argv.append('daycount')
+	sys.argv.append('daycount')
+	sys.argv.append('hoge')
+	sys.argv.append('piyo')
+	sys.argv.append('fuga')
 
 	print(cli())
