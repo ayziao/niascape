@@ -15,7 +15,7 @@ logger = logging.getLogger(__name__)
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))  # PENDING 実行環境へパッケージとしてインストールすればsys.path.append必要なくなるくさいがどうするか
 
 import niascape
-from niascape.model import basedata
+from niascape.entity import basedata
 
 
 def run(action='top', option={}) -> str:  # PENDING __ini__に移動するか

@@ -6,7 +6,7 @@ from pprint import pformat
 logger = logging.getLogger(__name__)
 
 import niascape
-from niascape.model import basedata
+from niascape.entity import basedata
 
 
 class TestBasedata(unittest.TestCase):
