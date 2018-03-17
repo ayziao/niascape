@@ -19,6 +19,7 @@ from niascape import action
 
 def run(action_name='top', option=None) -> str:  # PENDING __ini__に移動するか
 	logger.debug("アクション: %s", action_name)
+	logger.debug("オプション: %s", option)
 
 	try:
 		m = getattr(action, action_name)

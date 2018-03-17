@@ -8,5 +8,9 @@ def top(option):
 
 
 def daycount(option):
-	return json.dumps(basedata._daycount(option[0], option[1], option[2]))  # PENDING どこでJSON化すべきか
+	site = option[0] if len(option) > 0 else 'test'
+	tag = option[1] if len(option) > 1 else ''
+	search_body =  option[2] if len(option) > 2 else ''
+	
+	return json.dumps(basedata._daycount(site, tag, search_body))  # PENDING どこでJSON化すべきか
 	# return 'daycount'

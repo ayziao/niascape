@@ -30,9 +30,6 @@ if __name__ == '__main__':  # pragma: no cover
 
 	logging.basicConfig(level=logging.DEBUG)  # PENDING リリースとデバッグ切り替えどうしようか logging.conf調べる
 
-	sys.argv.append('daycount')
-	sys.argv.append('hoge')
-	sys.argv.append('piyo')
-	sys.argv.append('fuga')
+	# sys.argv.extend("daycount test #test test".split())
 
 	print(cli())
