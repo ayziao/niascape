@@ -6,6 +6,9 @@ logger = logging.getLogger(__name__)
 
 
 def _daycount(site='test', tag='', search_body=''):
+
+	logger.debug(search_body)
+	
 	from psycopg2.extras import DictCursor
 	from niascape import ini
 	con = ini['postgresql'].get('connect')
@@ -19,7 +22,7 @@ def _daycount(site='test', tag='', search_body=''):
 
 	if tag != '':
 		tag_where = f"AND (tags like '% {tag} %' or tags like '% {tag}:%')"
-	elif search_body != '':
+	if search_body != '':
 		body_where = f"AND body LIKE '%{search_body}%'"
 
 	sql = f"""
@@ -32,7 +35,7 @@ def _daycount(site='test', tag='', search_body=''):
 		{body_where}
 	GROUP BY DATE("datetime")
 	ORDER BY DATE("datetime") DESC
-	LIMIT 10
+	LIMIT 1000
 	"""
 	logger.debug(sql)
 
@@ -47,6 +50,9 @@ def _daycount(site='test', tag='', search_body=''):
 
 	return dict_result
 
+
+def tag_count():
+	pass
 
 if __name__ == '__main__':  # pragma: no cover
 	from pprint import pformat
