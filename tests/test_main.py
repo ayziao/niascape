@@ -15,9 +15,9 @@ class TestMyapp(TestCase):
 		ref = niascape.run('hoge')
 		self.assertEqual('No Action', ref)
 
+		# モジュール変数をうっかり呼ばないか
 		ref = niascape.run('basedata')
 		self.assertEqual('No Action', ref)
-
 		ref = niascape.run('json')
 		self.assertEqual('No Action', ref)
 
