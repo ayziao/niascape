@@ -12,7 +12,7 @@ from niascape.__main__ import run  # PENDING __ini__で定義すべきか
 from niascape.wsgiapplication import application
 
 
-def _readini(file_name='config.ini'):
+def _read_ini(file_name: str = 'config.ini') -> configparser.ConfigParser:
 	# PENDING フルパス受け付けるか検討
 	# PENDING config.ini が無い時 config.ini.sample を読むか検討
 	path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -21,4 +21,4 @@ def _readini(file_name='config.ini'):
 	return _ini
 
 
-ini = _readini()  # PENDING __ini__での定義以外をやめるかどうか
+ini = _read_ini()  # PENDING __ini__での定義以外をやめるかどうか

@@ -1,5 +1,4 @@
 from unittest import TestCase
-from unittest import mock
 
 import niascape
 
@@ -21,6 +20,6 @@ class TestMyapp(TestCase):
 		ref = niascape.run('json')
 		self.assertEqual('No Action', ref)
 
-	def test_loadini(self):
-		ini = niascape._readini('config.ini.sample')
+	def test_read_ini(self):
+		ini = niascape._read_ini('config.ini.sample')
 		self.assertEqual(['postgresql'], ini.sections())

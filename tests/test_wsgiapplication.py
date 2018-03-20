@@ -4,7 +4,7 @@ import niascape
 
 
 class TestWsgiapplication(TestCase):
-	# noinspection PyTypeChecker
+
 	def test_wsgiclient_root(self):
 		ret = ''
 		env = {'PATH_INFO': '/'}
@@ -20,7 +20,6 @@ class TestWsgiapplication(TestCase):
 		self.assertEqual(ret, '200 OK')
 		self.assertEqual(ret_hed, [('Content-Type', 'text/html; charset=utf-8')])
 
-	# noinspection PyTypeChecker
 	def test_wsgiclient_favicon(self):
 		ret = ''
 		env = {'PATH_INFO': '/favicon.ico'}

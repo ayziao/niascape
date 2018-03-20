@@ -18,7 +18,7 @@ from niascape import action
 from niascape import cli
 
 
-def run(action_name='top', option=None) -> str:  # PENDING __ini__に移動するか
+def run(action_name: str = 'top', option: dict = None) -> str:  # PENDING __ini__に移動するか
 	logger.debug("アクション: %s", action_name)
 	logger.debug("オプション: %s", option)
 

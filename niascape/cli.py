@@ -10,7 +10,7 @@ import logging
 logger = logging.getLogger(__name__)
 
 
-def run(argv):
+def run(argv: list) -> str:
 	# TODO コマンドライン引数を解決してニアスケイプRUNを実行して結果をよしなに出力
 	logger.debug("コマンドライン引数: %s", argv)
 
@@ -30,7 +30,7 @@ def run(argv):
 	return niascape.run(action_name, option_dict)  # PENDING オプション間違って unexpected keyword argument 出たらactionのhelp出す？
 
 
-def parse(argv: list):
+def parse(argv: list) -> list:
 	arguments = []
 	option_dict = {}
 	short_options = []

@@ -5,7 +5,7 @@ import logging
 logger = logging.getLogger(__name__)
 
 
-def _daycount(site='test', tag='', search_body=''):
+def _daycount(site: str = 'test', tag: str = '', search_body: str = '') -> list:
 	logger.debug(search_body)
 
 	from psycopg2.extras import DictCursor

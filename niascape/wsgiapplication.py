@@ -1,7 +1,7 @@
 """
 niascape.wsgiapplication
 """
-from types import FunctionType
+from typing import Callable
 
 import logging
 from pprint import pformat
@@ -11,7 +11,7 @@ logger = logging.getLogger(__name__)
 import niascape
 
 
-def application(environ: dict, start_response: FunctionType):
+def application(environ: dict, start_response: Callable[[str, list], None]):
 	"""
 	# WSGI application
 	#

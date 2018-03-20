@@ -1,15 +1,13 @@
 import unittest
 from unittest import mock
 
-import sys
-
 from niascape import action
 from niascape.entity import basedata
 
 
 class TestAction(unittest.TestCase):
 	def test_top(self):
-		ret = action.top(None)
+		ret = action.top({})
 		self.assertEqual('top', ret)
 
 	@mock.patch('niascape.action.basedata')

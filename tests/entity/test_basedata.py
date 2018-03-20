@@ -13,7 +13,7 @@ class TestBasedata(unittest.TestCase):
 
 	@unittest.skip("データベース関連のテストを保留")  # TODO データベースに接続してのテストについて考える
 	def test_daycount(self):
-		ini = niascape._readini('config.ini.sample')
+		ini = niascape._read_ini('config.ini.sample')
 		niascape.ini = ini
 		ref = basedata._daycount()
 
