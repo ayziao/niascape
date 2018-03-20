@@ -24,8 +24,8 @@ def application(environ: dict, start_response: Callable[[str, list], None]):
 	if environ['PATH_INFO'] == '/favicon.ico':
 		# PENDING 拒否リスト作る
 		# PENDING ファビコンどうするか
-		start_response('404 Not Found', [('Content-Type', 'text/html; charset=utf-8')])
-		return ['Not Found'.encode()]
+		start_response('404 Not Found', [('Content-Type', 'text/plain; charset=utf-8')])
+		yield 'Not Found'.encode()
 
 	else:
 		html = """
@@ -44,4 +44,4 @@ def application(environ: dict, start_response: Callable[[str, list], None]):
 		html = html.replace('\n', '').replace('\t', '').format(body=body)
 
 		start_response('200 OK', [('Content-Type', 'text/html; charset=utf-8')])
-		return [html.encode()]
+		yield html.encode()
