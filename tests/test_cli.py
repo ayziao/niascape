@@ -2,27 +2,26 @@ from unittest import TestCase
 
 import sys
 
-import niascape
-from niascape.cli import parse
+from niascape import cli
 
 
 class TestCli(TestCase):
 	def test_cli(self):
-		ret = niascape.cli(['script'])
+		ret = cli.run(['script'])
 		self.assertEqual('top', ret)
 
-		ret = niascape.cli(['script','hoge'])
+		ret = cli.run(['script','hoge'])
 		self.assertEqual('No Action', ret)
 
 	def test_parse(self):
-		ret = parse(['script'])
+		ret = cli.parse(['script'])
 		self.assertEqual([['script'], {}, []], ret)
 
-		ret = parse(['script', '--option'])
+		ret = cli.parse(['script', '--option'])
 		self.assertEqual([['script'], {'option': True}, []], ret)
 
 		argv = ['script', 'sub_command', 'path', '--option1', '--option2', 'hoge', '--option3=piyo', '-als', '-u']
-		ret = parse(argv)
+		ret = cli.parse(argv)
 		self.assertEqual([['script', 'sub_command', 'path'], {'option1': True, 'option2': 'hoge', 'option3': 'piyo'}, ['als', 'u']], ret)
 
 # ret = parse(sys.argv)

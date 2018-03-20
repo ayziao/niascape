@@ -10,7 +10,7 @@ import logging
 logger = logging.getLogger(__name__)
 
 
-def cli(argv):
+def run(argv):
 	# TODO コマンドライン引数を解決してニアスケイプRUNを実行して結果をよしなに出力
 	logger.debug("コマンドライン引数: %s", argv)
 	
@@ -69,7 +69,7 @@ if __name__ == '__main__':  # pragma: no cover
 	# sys.argv.extend("daycount test #test test".split())
 	# sys.argv.extend("action test #test test".split())
 
-	print(cli(sys.argv))
+	print(run(sys.argv))
 	
 	# print(sys.argv)
 	# 

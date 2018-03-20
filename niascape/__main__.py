@@ -15,6 +15,7 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))  # 
 
 import niascape
 from niascape import action
+from niascape import cli
 
 
 def run(action_name='top', option=None) -> str:  # PENDING __ini__に移動するか
@@ -48,6 +49,6 @@ if __name__ == '__main__':  # pragma: no cover
 
 	# sys.argv.append('daycount')
 
-	print(niascape.cli(sys.argv))
+	print(cli.run(sys.argv))
 
 	logger.debug("終了時刻(UTC): %s", datetime.datetime.utcnow())
