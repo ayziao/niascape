@@ -1,14 +1,13 @@
-import logging
-
 import psycopg2
+
+import logging
 
 logger = logging.getLogger(__name__)
 
 
 def _daycount(site='test', tag='', search_body=''):
-
 	logger.debug(search_body)
-	
+
 	from psycopg2.extras import DictCursor
 	from niascape import ini
 	con = ini['postgresql'].get('connect')
@@ -54,8 +53,12 @@ def _daycount(site='test', tag='', search_body=''):
 def tag_count():
 	pass
 
+
 if __name__ == '__main__':  # pragma: no cover
 	from pprint import pformat
 
 	logging.basicConfig(level=logging.DEBUG)  # PENDING リリースとデバッグ切り替えどうしようか logging.conf調べる
-	print(pformat(_daycount('test', '#test')))
+	# print(pformat(_daycount('test', '#test')))
+
+	# print(pformat(_daycount(**{'site':'test','tag':'#test','search_body':'test'})))
+	print(pformat(_daycount('test', **{'tag': '#test', 'search_body': 'test'})))

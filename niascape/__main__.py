@@ -22,21 +22,19 @@ def run(action_name='top', option=None) -> str:  # PENDING __ini__に移動す�
 	logger.debug("アクション: %s", action_name)
 	logger.debug("オプション: %s", option)
 
+	# PENDING アクションのサブパッケージ化
 	try:
 		m = getattr(action, action_name)
 	except AttributeError:
-		return _no_action(action_name)
+		logger.debug("AttributeError: %s", action_name)
+		m = None
 
 	if callable(m):
 		return m(option)
 	else:
-		return _no_action(action_name)
-
-
-def _no_action(action_name):
-	# TODO 例外を投げる
-	logger.info("アクションなし: %s", action_name)  # PENDING インフォかワーニングか設定で変えられるようにすべきか
-	return 'No Action'
+		# TODO 例外を投げる
+		logger.info("アクションなし: %s", action_name)  # PENDING インフォかワーニングか設定で変えられるようにすべきか
+		return 'No Action'
 
 
 if __name__ == '__main__':  # pragma: no cover
@@ -47,7 +45,7 @@ if __name__ == '__main__':  # pragma: no cover
 	logger.debug("実行中のスクリプトへの相対パス: %s", __file__)
 	logger.debug("実行中のスクリプトへの絶対パス: %s", os.path.abspath(__file__))
 
-	# sys.argv.append('daycount')
+	# sys.argv.extend("hoge test #test test".split())
 
 	print(cli.run(sys.argv))
 
