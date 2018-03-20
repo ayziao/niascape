@@ -48,6 +48,6 @@ if __name__ == '__main__':  # pragma: no cover
 
 	# sys.argv.append('daycount')
 
-	print(niascape.cli())
+	print(niascape.cli(sys.argv))
 
 	logger.debug("終了時刻(UTC): %s", datetime.datetime.utcnow())

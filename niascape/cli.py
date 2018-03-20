@@ -10,19 +10,19 @@ import logging
 logger = logging.getLogger(__name__)
 
 
-def cli():
+def cli(argv):
 	# TODO コマンドライン引数を解決してニアスケイプRUNを実行して結果をよしなに出力
-	logger.debug("コマンドライン引数: %s", sys.argv)
+	logger.debug("コマンドライン引数: %s", argv)
 	
-	if len(sys.argv) > 1:
-		action = sys.argv[1]
+	if len(argv) > 1:
+		action = argv[1]
 	else:
 		# PENDING -help しろよメッセージ出すか
 		action = 'top'
 
 	# PENDING アクションなし例外きたらエラーコード終了？
 	import niascape
-	return niascape.run(action, sys.argv[2:])
+	return niascape.run(action, argv[2:])
 
 
 def parse(argv: list):
@@ -69,15 +69,15 @@ if __name__ == '__main__':  # pragma: no cover
 	# sys.argv.extend("daycount test #test test".split())
 	# sys.argv.extend("action test #test test".split())
 
-	# print(cli())
-
-	print(sys.argv)
-
-	print(parse(sys.argv))
-
-
-
-	parsed = parse(sys.argv)
-	arguments = parsed[0]
-	option_dict = parsed[1]
-	short_options = parsed[2]
+	print(cli(sys.argv))
+	
+	# print(sys.argv)
+	# 
+	# print(parse(sys.argv))
+	# 
+	# 
+	# 
+	# parsed = parse(sys.argv)
+	# arguments = parsed[0]
+	# option_dict = parsed[1]
+	# short_options = parsed[2]
