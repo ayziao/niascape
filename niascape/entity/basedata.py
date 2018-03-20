@@ -1,3 +1,5 @@
+from typing import List
+
 import psycopg2
 
 import logging
@@ -5,7 +7,7 @@ import logging
 logger = logging.getLogger(__name__)
 
 
-def _daycount(site: str = 'test', tag: str = '', search_body: str = '') -> list:
+def _daycount(site: str = 'test', tag: str = '', search_body: str = '') -> List[dict]:
 	logger.debug(search_body)
 
 	from psycopg2.extras import DictCursor

@@ -18,9 +18,9 @@ class TestCli(TestCase):
 		ret = cli.parse(['script', '--option'])
 		self.assertEqual([['script'], {'option': True}, []], ret)
 
-		argv = ['script', 'sub_command', 'path', '--option1', '--option2', 'foo', '--option3=baa', '-als', '-u']
+		argv = ['script', 'sub_command', 'path', '--option1', '--option2', 'foo', '--option3=bar', '-als', '-u']
 		ret = cli.parse(argv)
-		self.assertEqual([['script', 'sub_command', 'path'], {'option1': True, 'option2': 'foo', 'option3': 'baa'}, ['als', 'u']], ret)
+		self.assertEqual([['script', 'sub_command', 'path'], {'option1': True, 'option2': 'foo', 'option3': 'bar'}, ['als', 'u']], ret)
 
 # ret = parse(sys.argv)
 # self.assertEqual(sys.argv,ret)
