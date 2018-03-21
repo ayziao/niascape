@@ -24,7 +24,7 @@ def make_server():
 
 
 if __name__ == '__main__':
-	logging.basicConfig(format='%(asctime)s %(name)s\n[%(levelname)s] %(message)s', level=logging.DEBUG)  # PENDING リリースとデバッグ切り替えどうしようか logging.conf調べる
+	logging.basicConfig(format='\033[0;32m%(asctime)s %(name)s %(funcName)s\033[0;34m\n[%(levelname)s] %(message)s\033[0m', level=logging.DEBUG)  # PENDING リリースとデバッグ切り替えどうしようか logging.conf調べる
 	logger.debug("開始時刻(UTC): %s", niascape.init_time)
 
 	make_server()
