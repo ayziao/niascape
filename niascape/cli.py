@@ -14,7 +14,7 @@ def run(argv: list) -> str:
 	# TODO コマンドライン引数を解決してニアスケイプRUNを実行して結果をよしなに出力
 	logger.debug("コマンドライン引数: %s", argv)
 
-	parsed = parse(argv)
+	parsed = parse_argument_vector(argv)
 	arguments = parsed[0]
 	option_dict = parsed[1]
 	# short_options = parsed[2]  # PENDING ショートオプションの解析をどこでやるか
@@ -30,7 +30,7 @@ def run(argv: list) -> str:
 	return niascape.run(action_name, option_dict)  # PENDING オプション間違って unexpected keyword argument 出たらactionのhelp出す？
 
 
-def parse(argv: list) -> list:
+def parse_argument_vector(argv: list) -> list:
 	arguments = []
 	option_dict = {}
 	short_options = []
