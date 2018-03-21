@@ -52,12 +52,15 @@ coverage.xml
 # Sphinx documentation
 docs/_build/
 
+# mypy
+.mypy_cache
 
-＃
+# IDE
 .idea/
 .idea/dictionaries/
 *.ini
 
+#
 twitteroauth/
 db.sqlite3
 /試作/nbproject/private/
