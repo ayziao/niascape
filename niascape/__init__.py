@@ -6,7 +6,7 @@ import os
 import datetime
 import configparser
 
-init_time = datetime.datetime.utcnow()
+init_time = datetime.datetime.utcnow()  # type: datetime.datetime
 
 from niascape.__main__ import run  # PENDING __ini__で定義すべきか
 from niascape.wsgiapplication import application

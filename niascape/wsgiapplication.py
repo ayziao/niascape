@@ -1,7 +1,7 @@
 """
 niascape.wsgiapplication
 """
-from typing import Callable
+from typing import Callable, List, Tuple, Generator, Dict, Union ,Any
 from urllib.parse import parse_qsl
 
 import logging
@@ -12,7 +12,7 @@ logger = logging.getLogger(__name__)
 import niascape
 
 
-def application(environ: dict, start_response: Callable[[str, list], None]):
+def application(environ: dict, start_response: Callable[[str, List[Tuple[str, str]]], None]) -> Generator:
 	"""
 	# WSGI application
 	#
@@ -62,12 +62,13 @@ def application(environ: dict, start_response: Callable[[str, list], None]):
 		yield content.encode()
 
 
-def parse_query_string(query_string, keep_blank_values=False):
+def parse_query_string(query_string: str, keep_blank_values: bool = False) -> Dict[str,Union[str,List[str]]]:
 	"""
 	urllib.parse.parse_qs が全部リストで値を返すので[]だけリストになるよう自作
+	# PENDING 逆にCLIパーサーをオプション値を全部リストにすべき？
 	"""
 	query_list = parse_qsl(query_string, keep_blank_values=keep_blank_values)
-	query_dict = {}
+	query_dict = {}  # type: Dict[str,Any]  # XXX Dict[str,Union[str,List[str]]] にしたい 文字列にアペンドなんてねーよってマイパイさんにいわれる
 
 	for key, query in query_list:
 		if '[]' in key:
@@ -86,7 +87,7 @@ def parse_query_string(query_string, keep_blank_values=False):
 	return query_dict
 
 
-def _parse(environ):
+def _parse(environ: dict) -> Tuple[List[str], dict]:
 	arguments = []
 	option_dict = {}
 
@@ -107,12 +108,12 @@ def _parse(environ):
 	else:
 		option_dict['site'] = ''
 
-	return [arguments, option_dict]
+	return (arguments, option_dict)
 
 
 if __name__ == '__main__':  # pragma: no cover
-	logging.basicConfig(format='\033[0;32m%(asctime)s %(name)s %(funcName)s\033[0;34m\n[%(levelname)s] %(message)s\033[0m', level=logging.DEBUG)  # PENDING リリースとデバッグ切り替えどうしようか logging.conf調べる
 	# logging.basicConfig(level=logging.DEBUG)  # PENDING リリースとデバッグ切り替えどうしようか logging.conf調べる
+	logging.basicConfig(format='\033[0;32m%(asctime)s %(name)s %(funcName)s\033[0;34m\n[%(levelname)s] %(message)s\033[0m', level=logging.DEBUG)  # PENDING リリースとデバッグ切り替えどうしようか logging.conf調べる
 
 
 	def wsgi_start_response(status: str, header: list):
