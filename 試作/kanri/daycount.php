@@ -43,12 +43,12 @@ while ($row = $results->fetchArray()) {
 
 $query = <<< EOM
 SELECT 
-	tags ,
+	replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(tags,'0',''),'1',''),'2',''),'3',''),'4',''),'5',''),'6',''),'7',''),'8',''),'9',''),':','') as 'tags' ,
 	COUNT(*) as 'count'
 FROM basedata 
 WHERE
 	site = '$site'
-GROUP BY tags
+GROUP BY replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(tags,'0',''),'1',''),'2',''),'3',''),'4',''),'5',''),'6',''),'7',''),'8',''),'9','') ,':','') 
 ORDER BY COUNT(*) DESC
 EOM;
 //, replace(substr(quote(zeroblob((count(*) + 1) / 2)), 3, count(*)), '0', '|') as 'graf' 
