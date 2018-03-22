@@ -24,3 +24,18 @@ class TestAction(unittest.TestCase):
 
 		ref = action.daycount({'site': 'test', 'tag': '#test', 'search_body': 'test'})
 		self.assertEqual('"called mock daycount test #test test"', ref)
+
+	@mock.patch('niascape.action.basedata')
+	def test_tag_count(self, moc):
+		self.assertTrue(hasattr(basedata, '_tag_count'))  # モックだと関数名の修正についていけないのでチェック
+
+		def method(site=''):  # PENDING 引数の定義を実装から動的にパクれないか inspectモジュール？
+			return f"called mock _tag_count {site}".strip()
+
+		moc._tag_count = method
+
+		ref = action.tagcount({})
+		self.assertEqual('"called mock _tag_count"', ref)
+
+		ref = action.tagcount({'site': 'test'})
+		self.assertEqual('"called mock _tag_count test"', ref)
