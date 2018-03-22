@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Dict, Union, Any
 
 import psycopg2
 from psycopg2.extras import DictCursor
@@ -53,11 +53,12 @@ def _daycount(site: str = 'test', tag: str = '', search_body: str = '') -> List[
 	return dict_result
 
 
-def _tag_count(site: str = 'test'):
+def _tag_count(site: str = 'test') -> List[Dict[str, Union[str, int]]]:
 	con = niascape.ini['postgresql'].get('connect')
 
+	# fixme プレースホルダ使う
 	sql = f"""
-	SELECT 
+	SELECT
 		regexp_replace(tags , ':[0-9]+','') as "tags",
 		COUNT(*) as "count"
 	FROM basedata
@@ -67,28 +68,28 @@ def _tag_count(site: str = 'test'):
 	ORDER BY COUNT(*) DESC
 	"""
 
+	dict_result = []  # type: List[Dict[str, Any]] # XXX List[Dict[str, Union[str, int]]]にしたい 数値にストリップねえよ言われる
 	with psycopg2.connect(con) as conn:
 		with conn.cursor(cursor_factory=DictCursor) as cur:
 			cur.execute(sql)
 			rows = cur.fetchall()
 
-			dict_result = []
 			for row in rows:
-				dict_result.append(dict(row))
+				dict_result.append(dict(row)) # PENDING 辞書じゃなくて名前付きタプルにする？
 
-	aaa = {}
-	for bbb in dict_result:
-		tags = bbb['tags'].strip().replace('\t',' ').split(' ')
-		for ccc in tags:
-			if ccc in aaa.keys() :
-				aaa[ccc] += bbb['count']
+	count_sum = {}  # type: Dict[str, int]
+	for row in dict_result:
+		tags = row['tags'].strip().replace('\t', ' ').split(' ')
+		for tag in tags:
+			if not tag in count_sum.keys():
+				count_sum[tag] = row['count']
 			else:
-				aaa[ccc] = bbb['count']
+				count_sum[tag] += row['count']
 
-	result = []
-	for k, v in sorted(aaa.items(), key=lambda x: -x[1]):
-		result.append({'tag':k,'count':v})
-	
+	result = []  # type:  List[Dict[str, Union[str, int]]]
+	for k, v in sorted(count_sum.items(), key=lambda x: -x[1]):
+		result.append({'tag': k, 'count': v})
+
 	return result
 
 

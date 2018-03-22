@@ -108,7 +108,7 @@ def _parse(environ: dict) -> Tuple[List[str], dict]:
 	else:
 		option_dict['site'] = ''
 
-	return (arguments, option_dict)
+	return arguments, option_dict
 
 
 if __name__ == '__main__':  # pragma: no cover

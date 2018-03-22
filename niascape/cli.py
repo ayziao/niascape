@@ -30,7 +30,7 @@ def run(argv: List[str]) -> str:
 def parse_argument_vector(argv: List[str]) -> Tuple[List[str], Dict[str, Union[str, bool]], List[str]]:
 	# PENDING urllib.parse.parse_qsのようにオプション値を全部リストにすべき？
 	arguments = []
-	option_dict = {} # type: Dict[str,Union[str,bool]]
+	option_dict = {}  # type: Dict[str, Union[str, bool]]
 	short_options = []
 
 	option_name = ''
@@ -60,7 +60,7 @@ def parse_argument_vector(argv: List[str]) -> Tuple[List[str], Dict[str, Union[s
 	if option_name != '':
 		option_dict[option_name] = True
 
-	return (arguments, option_dict, short_options)
+	return arguments, option_dict, short_options
 
 
 if __name__ == '__main__':  # pragma: no cover
