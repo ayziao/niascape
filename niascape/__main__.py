@@ -38,7 +38,7 @@ def run(action_name: str = 'top', option: dict = None) -> str:  # PENDING __ini_
 
 
 if __name__ == '__main__':  # pragma: no cover
-	logging.basicConfig(format='\033[0;31m%(asctime)s %(name)s %(funcName)s\n[%(levelname)s] %(message)s\033[0m', level=logging.DEBUG)  # PENDING リリースとデバッグ切り替えどうしようか logging.conf調べる
+	logging.basicConfig(format='\033[0;32m%(asctime)s %(name)s %(funcName)s\033[0;34m\n[%(levelname)s] %(message)s\033[0m', level=logging.DEBUG)  # PENDING リリースとデバッグ切り替えどうしようか logging.conf調べる
 
 	logger.debug("開始時刻(UTC): %s", niascape.init_time)
 
