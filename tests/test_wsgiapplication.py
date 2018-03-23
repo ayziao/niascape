@@ -55,7 +55,7 @@ class TestWsgiapplication(TestCase):
 	@mock.patch('niascape.action.basedata')
 	def test_daycount(self, moc):
 		def method(site='', tag='', search_body=''):  # PENDING 引数の定義を実装から動的にパクれないか inspectモジュール？
-			return f"called mock daycount {site} {tag} {search_body}".strip()
+			return [dummy(f"called mock daycount {site} {tag} {search_body}".strip())]
 
 		moc._daycount = method
 
@@ -74,3 +74,11 @@ class TestWsgiapplication(TestCase):
 		# PENDING 本文アサートどうするか
 		self.assertEqual('200 OK', ret_stat)
 		self.assertEqual([('Content-Type', 'text/json; charset=utf-8')], ret_hed)
+
+
+class dummy():
+	def __init__(self, dummy):
+		self.dummy = dummy
+
+	def _asdict(self):
+		return self.dummy

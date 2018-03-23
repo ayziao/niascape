@@ -18,7 +18,10 @@ class TestBasedata(unittest.TestCase):
 		ref = basedata._daycount()
 
 		logger.debug("日別投稿数\n%s", pformat(ref))
-		self.assertEqual({'Date': '2018-02-18', 'count': 2}, ref[0])
+		# self.assertEqual({'Date': '2018-02-18', 'count': 2}, ref[0])
+		self.assertEqual('2018-02-18', ref[0].date)
+		self.assertEqual(2, ref[0].count)
+
 
 	@unittest.skip("データベース関連のテストを保留")  # TODO データベースに接続してのテストについて考える
 	def test_tag_count(self):
