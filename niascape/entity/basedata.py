@@ -17,58 +17,63 @@ def _daycount(site: str = 'test', tag: str = '', search_body: str = '') -> List[
 	"""
 	logger.debug(search_body)
 
-	con = niascape.ini['postgresql'].get('connect') # TODO クラス化してインスタンス化時にDBコネクションを受けとる
+	con = niascape.ini['postgresql'].get('connect')  # TODO クラス化してインスタンス化時にDBコネクションを受けとる
 
 	logger.debug(con)
 
 	tag_where = ''
 	body_where = ''
 
-	# fixme プレースホルダ使う
+	param = [site]
 
 	if tag != '':
-		tag_where = f"AND (tags like '% {tag} %' or tags like '% {tag}:%')"
+		tag_where = "AND (tags like %s or tags like %s)"
+		param.extend(['% ' + tag + ' %', '% ' + tag + ':%'])
 	if search_body != '':
-		body_where = f"AND body LIKE '%{search_body}%'"
+		body_where = "AND body LIKE %s"
+		param.append('%' + search_body + '%')
+
+	limit = 1000  # PENDING ページングする？
+	param.append(limit)
 
 	sql = f"""
 	SELECT
 		to_char(DATE("datetime"),'YYYY-MM-DD') as "date" ,
 		COUNT(*)                               as "count"
 	FROM basedata
-	WHERE site = '{site}'
+	WHERE site = %s
 		{tag_where}
 		{body_where}
 	GROUP BY DATE("datetime")
 	ORDER BY DATE("datetime") DESC
-	LIMIT 1000
+	LIMIT %s
 	"""
 	Daycount = NamedTuple('Daycount', (('date', str), ('count', int)))
 	logger.debug(sql)
+	logger.debug(param)
 
 	with psycopg2.connect(con) as conn:
 		with conn.cursor(cursor_factory=DictCursor) as cur:
-			cur.execute(sql)
+			cur.execute(sql, param)
 			rows = cur.fetchall()
 			result = []
 			for row in rows:
+				# result.append(dict(row))
 				result.append(Daycount(*row))
-		# result.append(dict(row))
 
 	return result
 
 
 def _tag_count(site: str = 'test') -> List[Dict[str, Union[str, int]]]:
-	con = niascape.ini['postgresql'].get('connect') # TODO クラス化してインスタンス化時にDBコネクションを受けとる
+	con = niascape.ini['postgresql'].get('connect')  # TODO クラス化してインスタンス化時にDBコネクションを受けとる
 
-	# fixme プレースホルダ使う
-	sql = f"""
+	sql = """
 	SELECT
 		regexp_replace(tags , ':[0-9]+','') as "tags",
 		COUNT(*) as "count"
 	FROM basedata
 	WHERE
-		site = '{site}'
+		site = %s
 	GROUP BY regexp_replace(tags , ':[0-9]+','')
 	ORDER BY COUNT(*) DESC
 	"""
@@ -77,7 +82,7 @@ def _tag_count(site: str = 'test') -> List[Dict[str, Union[str, int]]]:
 
 	with psycopg2.connect(con) as conn:
 		with conn.cursor(cursor_factory=DictCursor) as cur:
-			cur.execute(sql)
+			cur.execute(sql, (site,))
 			rows = cur.fetchall()
 			# Tagcount = collections.namedtuple('tagcount', list(map(lambda x: x.name, cur.description))) # xxx 動的過ぎてmypyさんにおこられる
 			for row in rows:
@@ -100,21 +105,21 @@ def _tag_count(site: str = 'test') -> List[Dict[str, Union[str, int]]]:
 
 
 def get_all(site: str = 'test'):
-	con = niascape.ini['postgresql'].get('connect') # TODO クラス化してインスタンス化時にDBコネクションを受けとる
-	sql = f"""
+	limit = 100  # TODO ページング
+
+	con = niascape.ini['postgresql'].get('connect')  # TODO クラス化してインスタンス化時にDBコネクションを受けとる
+	sql = """
 	SELECT * FROM basedata
 	WHERE
-		site = '{site}'
+		site = %s
 	ORDER BY "datetime" DESC
-	LIMIT 100
+	LIMIT %s
 	"""
-	# TODO ページング
-
 	result = []  # type: List[Any]
 
 	with psycopg2.connect(con) as conn:
 		with conn.cursor(cursor_factory=DictCursor) as cur:
-			cur.execute(sql)
+			cur.execute(sql, (site, limit))
 			rows = cur.fetchall()
 			Item = collections.namedtuple('basedata', list(map(lambda x: x.name, cur.description)))  # xxx 動的過ぎてmypyさんにおこられる
 			for row in rows:
@@ -130,9 +135,10 @@ if __name__ == '__main__':  # pragma: no cover
 	# pprint(_daycount('test', '#test')))
 
 	# pprint(_daycount(**{'site':'test','tag':'#test','search_body':'test'}))
-	# pprint(_daycount('test', **{'tag': '#test', 'search_body': 'test'}))
-	# pprint(_daycount('test', **{'tag': '#test'}))
-	pprint(_tag_count(''))
+	pprint(_daycount('test', **{'tag': '#test', 'search_body': 'test'}))
+# pprint(_daycount('test', **{'search_body': 'test'}))
+# pprint(_daycount('test', **{'tag': '#test'}))
+# pprint(_tag_count(''))
 
 # for i in res:
 # 	pprint(i._asdict())
