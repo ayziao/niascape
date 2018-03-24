@@ -1,5 +1,5 @@
 import collections
-from typing import List, Dict, Union, Any, NamedTuple, Tuple
+from typing import List, Dict, Union, Any, NamedTuple
 
 import psycopg2
 from psycopg2.extras import DictCursor
@@ -15,16 +15,14 @@ def _daycount(site: str = 'test', tag: str = '', search_body: str = '') -> List[
 	"""
 	戻り値 名前付きタプルのリスト # xxx List[Daycount] するにはclass Daycount(NamedTuple) 必要 pypy…
 	"""
-	logger.debug(search_body)
-
 	con = niascape.ini['postgresql'].get('connect')  # TODO クラス化してインスタンス化時にDBコネクションを受けとる
 
-	logger.debug(con)
+	logger.debug("接続情報: %s",con)
 
 	tag_where = ''
 	body_where = ''
 
-	param = [site]
+	param = [site]  # type: List[Union[str, int]]
 
 	if tag != '':
 		tag_where = "AND (tags like %s or tags like %s)"
@@ -49,8 +47,8 @@ def _daycount(site: str = 'test', tag: str = '', search_body: str = '') -> List[
 	LIMIT %s
 	"""
 	Daycount = NamedTuple('Daycount', (('date', str), ('count', int)))
-	logger.debug(sql)
-	logger.debug(param)
+	logger.debug("日付投稿数SQL: %s",sql)
+	logger.debug("プレースホルダパラメータ: %s", param)
 
 	with psycopg2.connect(con) as conn:
 		with conn.cursor(cursor_factory=DictCursor) as cur:
@@ -92,7 +90,7 @@ def _tag_count(site: str = 'test') -> List[Dict[str, Union[str, int]]]:
 	for row in namedtuple_result:
 		tags = row.tags.strip().replace('\t', ' ').split(' ')
 		for tag in tags:
-			if not tag in count_sum.keys():
+			if tag not in count_sum.keys():
 				count_sum[tag] = row.count
 			else:
 				count_sum[tag] += row.count

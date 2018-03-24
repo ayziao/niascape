@@ -17,7 +17,7 @@ class TestWsgiclient(TestCase):
 			ret_stat = status
 			ret_hed = header
 
-		application(env, wsgi).__next__()
+		ret_content += application(env, wsgi).__next__()
 
 		# PENDING 本文アサートどうするか
 		self.assertEqual('200 OK', ret_stat)
@@ -42,19 +42,19 @@ class TestWsgiclient(TestCase):
 		self.assertEqual(b'Not Found', ret_content)
 
 	def test_parse_query_string(self):
-		ret = parse_query_string('blanc_value&key=value&sharp=%23hoge&list[]=1&list[]=2&list[]=3')
+		ret = parse_query_string('blank_value&key=value&sharp=%23hoge&list[]=1&list[]=2&list[]=3')
 		self.assertEqual({'key': 'value', 'list': ['1', '2', '3'], 'sharp': '#hoge'}, ret)
 
-		ret = parse_query_string('blanc_value&key=value&sharp=%23hoge&list[]=1&list[]=2&list[]=3', True)
-		self.assertEqual({'blanc_value': '', 'key': 'value', 'list': ['1', '2', '3'], 'sharp': '#hoge'}, ret)
+		ret = parse_query_string('blank_value&key=value&sharp=%23hoge&list[]=1&list[]=2&list[]=3', True)
+		self.assertEqual({'blank_value': '', 'key': 'value', 'list': ['1', '2', '3'], 'sharp': '#hoge'}, ret)
 
-		ret = parse_query_string('blanc_value&blanc_value2&key=value&sharp=%23hoge&list[]=1&list[]=2&list[]=3', True)
-		self.assertEqual({'blanc_value': '', 'blanc_value2': '', 'key': 'value', 'list': ['1', '2', '3'], 'sharp': '#hoge'}, ret)
+		ret = parse_query_string('blank_value&blank_value2&key=value&sharp=%23hoge&list[]=1&list[]=2&list[]=3', True)
+		self.assertEqual({'blank_value': '', 'blank_value2': '', 'key': 'value', 'list': ['1', '2', '3'], 'sharp': '#hoge'}, ret)
 
 	@mock.patch('niascape.action.basedata')
 	def test_daycount(self, moc):
 		def method(site='', tag='', search_body=''):  # PENDING 引数の定義を実装から動的にパクれないか inspectモジュール？
-			return [dummy(f"called mock daycount {site} {tag} {search_body}".strip())]
+			return [Dummy(f"called mock daycount {site} {tag} {search_body}".strip())]
 
 		moc._daycount = method
 
@@ -68,14 +68,14 @@ class TestWsgiclient(TestCase):
 			ret_stat = status
 			ret_hed = header
 
-		application(env, wsgi).__next__()
+		ret_content += application(env, wsgi).__next__()
 
 		# PENDING 本文アサートどうするか
 		self.assertEqual('200 OK', ret_stat)
 		self.assertEqual([('Content-Type', 'text/json; charset=utf-8')], ret_hed)
 
 
-class dummy():
+class Dummy:
 	def __init__(self, dummy):
 		self.dummy = dummy
 

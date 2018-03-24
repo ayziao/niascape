@@ -4,12 +4,14 @@ from unittest import mock
 from niascape import action
 from niascape.entity import basedata
 
-class dummy():
-	def __init__(self,dummy):
+
+class Dummy:
+	def __init__(self, dummy):
 		self.dummy = dummy
-		
+
 	def _asdict(self):
 		return self.dummy
+
 
 class TestAction(unittest.TestCase):
 	def test_top(self):
@@ -21,7 +23,7 @@ class TestAction(unittest.TestCase):
 		self.assertTrue(hasattr(basedata, '_daycount'))  # モックだと関数名の修正についていけないのでチェック
 
 		def method(site='', tag='', search_body=''):  # PENDING 引数の定義を実装から動的にパクれないか inspectモジュール？
-			return [dummy(f"called mock daycount {site} {tag} {search_body}".strip())]
+			return [Dummy(f"called mock daycount {site} {tag} {search_body}".strip())]
 
 		moc._daycount = method
 
@@ -36,7 +38,7 @@ class TestAction(unittest.TestCase):
 		self.assertTrue(hasattr(basedata, '_tag_count'))  # モックだと関数名の修正についていけないのでチェック
 
 		def method(site=''):  # PENDING 引数の定義を実装から動的にパクれないか inspectモジュール？
-			return [dummy(f"called mock _tag_count {site}".strip())]
+			return [Dummy(f"called mock _tag_count {site}".strip())]
 
 		moc._tag_count = method
 
