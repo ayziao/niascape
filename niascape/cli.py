@@ -11,7 +11,7 @@ logger = logging.getLogger(__name__)
 
 
 def run(argv: List[str]) -> str:
-	# TODO コマンドライン引数を解決してニアスケイプRUNを実行して結果をよしなに出力
+	# PENDING 結果の出力をどのような形式にすべきか
 	logger.debug("コマンドライン引数: %s", argv)
 
 	arguments, option_dict, short_options = parse_argument_vector(argv)  # PENDING ショートオプションの解析をどこでやるか
