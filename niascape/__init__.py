@@ -6,9 +6,32 @@ import os
 import datetime
 import configparser
 
+import logging
+
 init_time = datetime.datetime.utcnow()  # type: datetime.datetime
 
-from niascape.__main__ import run  # PENDING __ini__で定義すべきか
+
+def run(action_name: str = 'top', option: dict = None) -> str:  # PENDING mainにすべき？
+	from niascape import action
+
+	logger = logging.getLogger(__name__)
+
+	logger.debug("アクション: %s", action_name)
+	logger.debug("オプション: %s", option)
+
+	# PENDING アクションのサブパッケージ化
+	try:
+		m = getattr(action, action_name)
+	except AttributeError:
+		logger.debug("AttributeError: %s", action_name)
+		m = None
+
+	if callable(m):
+		return m(option)
+	else:
+		# TODO 例外を投げる
+		logger.info("アクションなし: %s", action_name)  # PENDING インフォかワーニングか設定で変えられるようにすべきか
+		return 'No Action'
 
 
 def _read_ini(file_name: str = 'config.ini') -> configparser.ConfigParser:

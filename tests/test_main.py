@@ -3,8 +3,8 @@ from unittest import TestCase
 import niascape
 
 
-class TestMyapp(TestCase):
-	def test_main(self):
+class TestMyPackage(TestCase):
+	def test_run(self):
 		ref = niascape.run()
 		self.assertEqual('top', ref)
 
