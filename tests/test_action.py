@@ -22,7 +22,7 @@ class TestAction(unittest.TestCase):
 	def test_daycount(self, moc):
 		self.assertTrue(hasattr(basedata, '_daycount'))  # モックだと関数名の修正についていけないのでチェック
 
-		def method(site='', tag='', search_body=''):  # PENDING 引数の定義を実装から動的にパクれないか inspectモジュール？
+		def method(conn, site='', tag='', search_body=''):  # PENDING 引数の定義を実装から動的にパクれないか inspectモジュール？
 			return [Dummy(f"called mock daycount {site} {tag} {search_body}".strip())]
 
 		moc._daycount = method
@@ -37,7 +37,7 @@ class TestAction(unittest.TestCase):
 	def test_tag_count(self, moc):
 		self.assertTrue(hasattr(basedata, '_tag_count'))  # モックだと関数名の修正についていけないのでチェック
 
-		def method(site=''):  # PENDING 引数の定義を実装から動的にパクれないか inspectモジュール？
+		def method(conn, site=''):  # PENDING 引数の定義を実装から動的にパクれないか inspectモジュール？
 			return [Dummy(f"called mock _tag_count {site}".strip())]
 
 		moc._tag_count = method

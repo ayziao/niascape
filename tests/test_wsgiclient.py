@@ -53,7 +53,7 @@ class TestWsgiclient(TestCase):
 
 	@mock.patch('niascape.action.basedata')
 	def test_daycount(self, moc):
-		def method(site='', tag='', search_body=''):  # PENDING 引数の定義を実装から動的にパクれないか inspectモジュール？
+		def method(conn, site='', tag='', search_body=''):  # PENDING 引数の定義を実装から動的にパクれないか inspectモジュール？
 			return [Dummy(f"called mock daycount {site} {tag} {search_body}".strip())]
 
 		moc._daycount = method
