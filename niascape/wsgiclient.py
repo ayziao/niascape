@@ -1,7 +1,7 @@
 """
 niascape.wsgiapplication
 """
-from typing import Callable, List, Tuple, Generator, Dict, Union ,Any
+from typing import Callable, List, Tuple, Generator, Dict, Union, Any
 from urllib.parse import parse_qsl
 
 import logging
@@ -62,7 +62,7 @@ def application(environ: dict, start_response: Callable[[str, List[Tuple[str, st
 		yield content.encode()
 
 
-def parse_query_string(query_string: str, keep_blank_values: bool = False) -> Dict[str,Union[str,List[str]]]:
+def parse_query_string(query_string: str, keep_blank_values: bool = False) -> Dict[str, Union[str, List[str]]]:
 	"""
 	urllib.parse.parse_qs が全部リストで値を返すので[]だけリストになるよう自作
 	# PENDING 逆にCLIパーサーをオプション値を全部リストにすべき？
