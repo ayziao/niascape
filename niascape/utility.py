@@ -2,8 +2,11 @@ import collections
 
 import sqlite3
 
-import psycopg2
-from psycopg2.extras import DictCursor
+try:
+	import psycopg2
+	from psycopg2.extras import DictCursor
+except ImportError:
+	pass
 
 import logging
 from pprint import pformat

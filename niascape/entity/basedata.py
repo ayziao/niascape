@@ -1,8 +1,11 @@
 import collections
 from typing import List, Dict, Union, Any, NamedTuple
 
-import psycopg2
-from psycopg2.extras import DictCursor
+try:
+	import psycopg2
+	from psycopg2.extras import DictCursor
+except ImportError:
+	pass
 
 import logging
 

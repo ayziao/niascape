@@ -1,6 +1,9 @@
 import unittest
 
-import psycopg2
+try:
+	import psycopg2
+except ImportError:
+	pass
 
 import logging
 from pprint import pformat

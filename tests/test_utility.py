@@ -1,7 +1,11 @@
 from unittest import TestCase, skip
 
 from typing import NamedTuple
-import psycopg2
+
+try:
+	import psycopg2
+except ImportError:
+	pass
 
 from niascape.utility import Database
 import niascape

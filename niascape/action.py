@@ -1,6 +1,9 @@
 import json
 
-import psycopg2
+try:
+	import psycopg2
+except ImportError:
+	pass
 
 from niascape.entity import basedata
 import niascape
