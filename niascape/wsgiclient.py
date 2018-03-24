@@ -20,7 +20,7 @@ def application(environ: dict, start_response: Callable[[str, List[Tuple[str, st
 	@param environ: webサーバ環境変数等
 	@param start_response: レスポンス コールバック関数  function(status: str, header: [(key: str,value: str), ...])
 	"""
-	logger.debug("environ: \n%s", pformat(environ))
+	logger.debug("environ: %s", pformat(environ))
 
 	if environ['PATH_INFO'] == '/favicon.ico':
 		# PENDING 拒否リスト作る
@@ -33,7 +33,7 @@ def application(environ: dict, start_response: Callable[[str, List[Tuple[str, st
 		arguments = parsed[0]
 		option_dict = parsed[1]
 
-		logger.debug("parsed: \n%s", pformat(parsed))
+		logger.debug("parsed: %s", pformat(parsed))
 
 		if len(arguments) > 0:
 			action_name = arguments[0]
@@ -80,9 +80,9 @@ def parse_query_string(query_string: str, keep_blank_values: bool = False) -> Di
 		else:
 			query_dict[key] = query
 
-	logger.debug("query_string: \n%s", pformat(query_string))
-	logger.debug("query_list: \n%s", pformat(query_list))
-	logger.debug("query_dict: \n%s", pformat(query_dict))
+	logger.debug("query_string: %s", pformat(query_string))
+	logger.debug("query_list  : %s", pformat(query_list))
+	logger.debug("query_dict  : %s", pformat(query_dict))
 
 	return query_dict
 
@@ -101,7 +101,7 @@ def _parse(environ: dict) -> Tuple[List[str], dict]:
 
 	path_list = environ['PATH_INFO'].split('/')
 
-	logger.debug("path: \n%s", path_list)
+	logger.debug("path: %s", path_list)
 
 	if len(path_list) > 1:
 		option_dict['site'] = path_list[1]
@@ -113,7 +113,7 @@ def _parse(environ: dict) -> Tuple[List[str], dict]:
 
 if __name__ == '__main__':  # pragma: no cover
 	# logging.basicConfig(level=logging.DEBUG)  # PENDING リリースとデバッグ切り替えどうしようか logging.conf調べる
-	logging.basicConfig(format='\033[0;32m%(asctime)s %(name)s %(funcName)s\033[0;34m\n[%(levelname)s] %(message)s\033[0m', level=logging.DEBUG)  # PENDING リリースとデバッグ切り替えどうしようか logging.conf調べる
+	logging.basicConfig(format='\033[0;32m%(asctime)s %(levelname)5s \033[0;34m%(message)s \033[0;32m(%(name)s.%(funcName)s) \033[0m', level=logging.DEBUG)  # PENDING リリースとデバッグ切り替えどうしようか logging.conf調べる
 
 
 	def wsgi_start_response(status: str, header: list):

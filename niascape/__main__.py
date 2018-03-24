@@ -13,14 +13,14 @@ if __name__ == '__main__':  # pragma: no cover
 
 	from niascape import cli, init_time
 
-	logging.basicConfig(format='\033[0;32m%(asctime)s %(name)s %(funcName)s\033[0;34m\n[%(levelname)s] %(message)s\033[0m', level=logging.DEBUG)  # PENDING リリースとデバッグ切り替えどうしようか logging.conf調べる
+	logging.basicConfig(format='\033[0;32m%(asctime)s %(levelname)5s \033[0;34m%(message)s \033[0;32m(%(name)s.%(funcName)s) \033[0m', level=logging.DEBUG)  # PENDING リリースとデバッグ切り替えどうしようか logging.conf調べる
 
 	logger.debug("開始時刻(UTC): %s", init_time)
 
 	logger.debug("実行中のスクリプトへの相対パス: %s", __file__)
 	logger.debug("実行中のスクリプトへの絶対パス: %s", os.path.abspath(__file__))
 
-	# sys.argv.extend("hoge test #test test".split())
+	sys.argv.extend("hoge test #test test".split())
 
 	print(cli.run(sys.argv))
 
