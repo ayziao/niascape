@@ -1,13 +1,12 @@
 from unittest import TestCase
 from unittest import mock
 
-import niascape
-from niascape.wsgiapplication import parse_query_string
+from niascape.wsgiclient import application, parse_query_string
 
 
-class TestWsgiapplication(TestCase):
+class TestWsgiclient(TestCase):
 
-	def test_wsgiclient_root(self):
+	def test_application_root(self):
 		env = {'PATH_INFO': '/', 'QUERY_STRING': ''}
 		ret_stat = ''
 		ret_hed = ''
@@ -18,13 +17,13 @@ class TestWsgiapplication(TestCase):
 			ret_stat = status
 			ret_hed = header
 
-		niascape.application(env, wsgi).__next__()
+		application(env, wsgi).__next__()
 
 		# PENDING 本文アサートどうするか
 		self.assertEqual('200 OK', ret_stat)
 		self.assertEqual([('Content-Type', 'text/html; charset=utf-8')], ret_hed)
 
-	def test_wsgiclient_favicon(self):
+	def test_application_favicon(self):
 		env = {'PATH_INFO': '/favicon.ico'}
 		ret_stat = ''
 		ret_hed = ''
@@ -35,7 +34,7 @@ class TestWsgiapplication(TestCase):
 			ret_stat = status
 			ret_hed = header
 
-		for a in niascape.application(env, wsgi):
+		for a in application(env, wsgi):
 			ret_content += a
 
 		self.assertEqual('404 Not Found', ret_stat)
@@ -69,8 +68,8 @@ class TestWsgiapplication(TestCase):
 			ret_stat = status
 			ret_hed = header
 
-		niascape.application(env, wsgi).__next__()
-		
+		application(env, wsgi).__next__()
+
 		# PENDING 本文アサートどうするか
 		self.assertEqual('200 OK', ret_stat)
 		self.assertEqual([('Content-Type', 'text/json; charset=utf-8')], ret_hed)
