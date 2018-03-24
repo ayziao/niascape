@@ -8,13 +8,14 @@ import configparser
 
 import logging
 
+logger = logging.getLogger(__name__)
+logger.debug("import ニアスケイプ")
+
 init_time = datetime.datetime.utcnow()  # type: datetime.datetime
 
 
 def run(action_name: str = 'top', option: dict = None) -> str:  # PENDING mainにすべき？
 	from niascape import action
-
-	logger = logging.getLogger(__name__)
 
 	logger.debug("アクション: %s", action_name)
 	logger.debug("オプション: %s", option)
