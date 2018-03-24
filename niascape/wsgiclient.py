@@ -88,7 +88,7 @@ def parse_query_string(query_string: str, keep_blank_values: bool = False) -> Di
 
 
 def _parse(environ: dict) -> Tuple[List[str], dict]:
-	arguments = []
+	arguments = []  # PENDING 0にスクリプト名的なもの入れてCLIと合わす？
 	option_dict = {}
 
 	query_dict = parse_query_string(environ['QUERY_STRING'], True)

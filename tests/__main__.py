@@ -22,7 +22,8 @@ if __name__ == "__main__":
 		path = os.path.abspath(__file__)
 	else:
 		path = os.path.dirname(os.path.abspath(__file__))
-		logging.basicConfig(format='%(asctime)s %(name)s %(funcName)s\n[%(levelname)s] %(message)s', level=logging.DEBUG)  # coverage通してない時デバッグ情報出す
+		logging.basicConfig(format='\033[0;32m%(asctime)s %(name)s %(funcName)s\033[0;34m\n[%(levelname)s] %(message)s\033[0m', level=logging.DEBUG)  # PENDING リリースとデバッグ切り替えどうしようか logging.conf調べる
+		# logging.basicConfig(format='%(asctime)s %(name)s %(funcName)s\n[%(levelname)s] %(message)s', level=logging.DEBUG)  # coverage通してない時デバッグ情報出す
 		if __file__ == "tests/__main__.py":
 			verbosity = 2
 
