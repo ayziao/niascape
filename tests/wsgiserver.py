@@ -13,13 +13,14 @@ logger = logging.getLogger(__name__)
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))  # PENDING 実行環境へパッケージとしてインストールすればsys.path.append必要なくなるくさいがどうするか
 
 import niascape
+from niascape import wsgiclient
 
 
 def make_server():
 	"""
 	# WSGIサーバ起動
 	"""
-	server = simple_server.make_server('', 8080, niascape.application)
+	server = simple_server.make_server('', 8080, wsgiclient.application)
 	server.serve_forever()
 
 
