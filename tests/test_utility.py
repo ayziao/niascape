@@ -14,30 +14,48 @@ logger = logging.getLogger(__name__)
 # logging.basicConfig(format='\033[0;32m%(asctime)s %(levelname)5s \033[0;34m%(message)s \033[0;32m(%(name)s.%(funcName)s) \033[0m', level=logging.DEBUG)  # PENDING リリースとデバッグ切り替えどうしようか logging.conf調べる
 
 
-@skip("データベース関連のテストを保留")  # TODO データベースに接続してのテストについて考える
 class TestDatabase(TestCase):
-	def test_init(self):
+	@skip("postgresqlのテストを保留")  # TODO データベースに接続してのテストについて考える
+	def test_init_ps(self):
 		ini = niascape._read_ini('config.ini.sample')  # TODO configパーサーオブジェクトやめる
 		niascape.ini = ini
 		db = Database(ini)
 		self.assertEqual(Database, type(db))
+		self.assertEqual('postgresql', db._dbms)
 
-	def test__get_conection_ps(self):
+	def test_init_sqlite(self):
+		db = Database()
+		self.assertEqual(Database, type(db))
+		self.assertEqual('sqlite', db._dbms)
+
+	@skip("postgresqlのテストを保留")  # TODO データベースに接続してのテストについて考える
+	def test__get_connection_ps(self):
 		ini = niascape._read_ini('config.ini.sample')
 		niascape.ini = ini
 		con = niascape.ini['postgresql'].get('connect')  # TODO クラス化してインスタンス化時にDBコネクションを受けとる
 
 		db = Database(ini)
-		ret = db._get_conection_ps(con)
+		ret = db._get_connection_ps(con)
 		# pprint(ret)
 		self.assertEqual(psycopg2.extensions.connection, type(ret))
 
-	def test__get_conection_sqlite(self):
+	def test__get_connection_sqlite(self):
 		self.skipTest('未実装')  # TODO 実装
 
 	def test_execute(self):
-		self.skipTest('未実装')  # TODO 実装
+		db = Database()
+		db.execute("CREATE TABLE dummy (num int(10) NOT NULL,str varchar(500) NOT NULL, PRIMARY KEY(num))")
+		db.execute("INSERT INTO dummy VALUES(1, '1')")
+		db.execute("INSERT INTO dummy VALUES(?, ?)", (2, '2'))
+		db.execute("INSERT INTO dummy VALUES(?, ?)", (3, '3'))
+		ret = db.execute_fetchall("SELECT * FROM dummy")
+		logger.debug('select all %s', ret)
+		self.assertEqual({'num': 1, 'str': '1'}, ret[0])
+		ret = db.execute_fetchall("SELECT * FROM dummy WHERE num = ?", (2,))
+		self.assertEqual({'num': 2, 'str': '2'}, ret[0])
+		logger.debug('selext one %s', ret)
 
+	@skip("postgresqlのテストを保留")  # TODO データベースに接続してのテストについて考える
 	def test_execute_fetchall(self):
 		ini = niascape._read_ini('config.ini.sample')
 		niascape.ini = ini
@@ -56,6 +74,7 @@ class TestDatabase(TestCase):
 		self.assertEqual('20180218232339289972', ret[0]['identifier'])
 		db.close()
 
+	@skip("postgresqlのテストを保留")  # TODO データベースに接続してのテストについて考える
 	def test_execute_fetchall_namedtuple(self):
 		ini = niascape._read_ini('config.ini.sample')
 		# db = Database(ini)
@@ -73,6 +92,7 @@ class TestDatabase(TestCase):
 			# pprint(ret)
 			self.assertEqual('20180218232339289972', ret[0].identifier)
 
+	@skip("postgresqlのテストを保留")  # TODO データベースに接続してのテストについて考える
 	def test_execute_fetchall_namedtuple_set(self):
 		ini = niascape._read_ini('config.ini.sample')
 		# db = Database(ini)
