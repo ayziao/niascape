@@ -1,6 +1,7 @@
 import unittest
 from unittest import mock
 
+import niascape
 from niascape import action
 from niascape.entity import basedata
 
@@ -20,6 +21,9 @@ class TestAction(unittest.TestCase):
 
 	@mock.patch('niascape.action.basedata')
 	def test_daycount(self, moc):
+		ini = niascape._read_ini('config.ini.sample')
+		niascape.ini = ini
+
 		self.assertTrue(hasattr(basedata, '_daycount'))  # モックだと関数名の修正についていけないのでチェック
 
 		def method(conn, site='', tag='', search_body=''):  # PENDING 引数の定義を実装から動的にパクれないか inspectモジュール？
@@ -35,6 +39,9 @@ class TestAction(unittest.TestCase):
 
 	@mock.patch('niascape.action.basedata')
 	def test_tag_count(self, moc):
+		ini = niascape._read_ini('config.ini.sample')
+		niascape.ini = ini
+
 		self.assertTrue(hasattr(basedata, '_tag_count'))  # モックだと関数名の修正についていけないのでチェック
 
 		def method(conn, site=''):  # PENDING 引数の定義を実装から動的にパクれないか inspectモジュール？
