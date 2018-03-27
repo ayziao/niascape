@@ -21,11 +21,11 @@ if __name__ == "__main__":
 	if __file__ == "tests":  # coverage 通すとディレクトリ実行時__file__がtests/__main__.pyにならない対策
 		path = os.path.abspath(__file__)
 		if 'pypy' in sys.executable:
-			logging.basicConfig(format='\033[0;32m%(asctime)s %(levelname)5s \033[0;34m%(message)s \033[0;32m(%(name)s.%(funcName)s) \033[0m', level=logging.DEBUG)  # PENDING リリースとデバッグ切り替えどうしようか logging.conf調べる
+			# logging.basicConfig(format='\033[0;32m%(asctime)s %(levelname)5s \033[0;34m%(message)s \033[0;32m(%(name)s.%(funcName)s) \033[0m', level=logging.DEBUG)  # PENDING リリースとデバッグ切り替えどうしようか logging.conf調べる
+			pass
 	else:
 		path = os.path.dirname(os.path.abspath(__file__))
-		logging.basicConfig(format='\033[0;32m%(asctime)s %(levelname)5s \033[0;34m%(message)s \033[0;32m(%(name)s.%(funcName)s) \033[0m', level=logging.DEBUG)  # PENDING リリースとデバッグ切り替えどうしようか logging.conf調べる
-		# logging.basicConfig(format='%(asctime)s %(name)s %(funcName)s\n[%(levelname)s] %(message)s', level=logging.DEBUG)  # coverage通してない時デバッグ情報出す
+		logging.basicConfig(format='\033[0;32m%(asctime)s %(levelname)5s \033[0;34m%(message)s \033[0;32m(%(name)s.%(funcName)s) \033[0m', level=logging.DEBUG)  # coverage通してない時デバッグ情報出す
 		if __file__ == "tests/__main__.py":
 			verbosity = 2
 

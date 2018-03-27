@@ -2,7 +2,8 @@
 PROJECT_DIR=$(cd $(dirname $0)/..;pwd)
 cd ${PROJECT_DIR}
 rm -r htmlcov
-if [ $1 = pypy ]; then
+OPTION='$1'
+if [ ${OPTION} = pypy ]; then
   pypy3 -m coverage run --branch --source=niascape tests
 else
   coverage run --branch --source=niascape tests

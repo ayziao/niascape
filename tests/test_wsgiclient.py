@@ -3,6 +3,13 @@ from unittest import mock
 
 from niascape.wsgiclient import application, parse_query_string
 
+import logging
+
+logger = logging.getLogger(__name__)
+
+
+# logging.basicConfig(format='\033[0;32m%(asctime)s %(levelname)5s \033[0;34m%(message)s \033[0;32m(%(name)s.%(funcName)s) \033[0m', level=logging.DEBUG)  # PENDING リリースとデバッグ切り替えどうしようか logging.conf調べる
+
 
 class TestWsgiclient(TestCase):
 
