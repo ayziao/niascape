@@ -1,12 +1,13 @@
 import collections
-
+import json
 import sqlite3
 
 try:
 	import psycopg2
 	from psycopg2.extras import DictCursor
 except ImportError:
-	pass
+	psycopg2 = None
+	DictCursor = None
 
 import logging
 from pprint import pformat
@@ -30,16 +31,16 @@ class Database:
 
 	def _connect(self):
 		# TODO SQLite ファイル対応
-		if self._setting is None:
+		if self._setting is None or psycopg2 is None:
 			self._dbms = 'sqlite'
 			self._connection = self._get_connection_sqlite()
 		else:
 			self._dbms = 'postgresql'
-			self._connection = self._get_connection_ps(self._setting['postgresql'].get('connect'))
+			self._connection = self._get_connection_ps(self._setting['postgresql']['connect'])
 
 	def _get_connection_ps(self, con):
 		connection = psycopg2.connect(con)
-		logger.debug("ポストグレス接続 :%s", pformat(self._connection))
+		logger.debug("ポストグレス接続 :%s", pformat(connection))
 
 		return connection
 
@@ -48,6 +49,7 @@ class Database:
 			connection = sqlite3.connect(":memory:")
 		else:
 			connection = sqlite3.connect(con)  # fixme ファイル指定
+		logger.debug("sqlite3接続 :%s", pformat(connection))
 		return connection
 
 	def execute(self, sql, param=None):
@@ -124,5 +126,20 @@ class Setting:
 	def __init__(self):
 		self.ini = None
 
-	def aaa(self):
+	def _loadSetting(self):
 		pass
+
+	def getSetting(self):
+		pass
+
+
+class NamedTupleSupportJSONEncoder(json.JSONEncoder):
+	def encode(self, o):
+		if hasattr(o, '_asdict'):
+			o = o._asdict()
+		return super(NamedTupleSupportJSONEncoder, self).encode(o)
+
+	def default(self, o):
+		if hasattr(o, '_asdict'):
+			return o._asdict()
+		return super(NamedTupleSupportJSONEncoder, self).default(o)
