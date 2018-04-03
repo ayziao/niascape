@@ -87,4 +87,4 @@ class Dummy:
 		self.dummy = dummy
 
 	def _asdict(self):
-		return self.dummy
+		return {'dummy': self.dummy}

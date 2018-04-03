@@ -11,7 +11,7 @@ class Dummy:
 		self.dummy = dummy
 
 	def _asdict(self):
-		return self.dummy
+		return {'dummy': self.dummy}
 
 
 class TestAction(unittest.TestCase):
@@ -32,10 +32,10 @@ class TestAction(unittest.TestCase):
 		moc._daycount = method
 
 		ref = action.daycount({})
-		self.assertEqual('["called mock daycount"]', ref)
+		self.assertEqual('[{"dummy": "called mock daycount"}]', ref)
 
 		ref = action.daycount({'site': 'test', 'tag': '#test', 'search_body': 'test'})
-		self.assertEqual('["called mock daycount test #test test"]', ref)
+		self.assertEqual('[{"dummy": "called mock daycount test #test test"}]', ref)
 
 	@mock.patch('niascape.action.basedata')
 	def test_tag_count(self, moc):
@@ -50,7 +50,14 @@ class TestAction(unittest.TestCase):
 		moc._tag_count = method
 
 		ref = action.tagcount({})
-		self.assertEqual('["called mock _tag_count"]', ref)
+		self.assertEqual('[{"dummy": "called mock _tag_count"}]', ref)
 
 		ref = action.tagcount({'site': 'test'})
-		self.assertEqual('["called mock _tag_count test"]', ref)
+		self.assertEqual('[{"dummy": "called mock _tag_count test"}]', ref)
+
+	@unittest.skip("モックなし確認用")
+	def test_daycount(self):
+		ini = niascape._read_ini('config.ini.sample')
+		niascape.ini = ini
+		ref = action.daycount({'site': 'test', 'tag': '#test'})
+		self.assertEqual('[{"date": "2016-12-30", "count": 1}, {"date": "2016-10-26", "count": 1}, {"date": "2015-07-10", "count": 1}]', ref)
