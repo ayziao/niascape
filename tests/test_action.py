@@ -56,7 +56,7 @@ class TestAction(unittest.TestCase):
 		self.assertEqual('[{"dummy": "called mock _tag_count test"}]', ref)
 
 	@unittest.skip("モックなし確認用")
-	def test_daycount(self):
+	def test_daycount_no_mock(self):
 		ini = niascape._read_ini('config.ini.sample')
 		niascape.ini = ini
 		ref = action.daycount({'site': 'test', 'tag': '#test'})

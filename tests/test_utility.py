@@ -59,7 +59,7 @@ class TestDatabase(TestCase):
 			self.assertEqual({'num': 1, 'str': '1'}, ret[0])
 			ret = db.execute_fetchall("SELECT * FROM dummy WHERE num = ?", (2,))
 			self.assertEqual({'num': 2, 'str': '2'}, ret[0])
-			logger.debug('selext one %s', ret)
+			logger.debug('select one %s', ret)
 
 	@skip("postgresqlのテストを保留")  # TODO データベースに接続してのテストについて考える
 	def test_execute_fetchall(self):
@@ -134,7 +134,7 @@ class TestAsdictSupportJSONEncoder(TestCase):
 		self.assertEqual('"hoge"', ret)
 
 	def test_encode_list(self):
-		test = []
+		test = list()
 		test.append('hoge')
 		test.append(1)
 		test.append(1.1)
@@ -148,19 +148,21 @@ class TestAsdictSupportJSONEncoder(TestCase):
 		self.assertEqual('["hoge", 1, 1.1, [], {}, true, false, null]', ret)
 
 	def test_encode_dict(self):
-		_dict = {'key': 'hoge', 'val': 1}
+		_dict = dict()
+		_dict["str"] = 'hoge'
+		_dict["int"] = 1
 		_dict["float"] = 1.1
 		_dict["list"] = []
 		_dict["dict"] = {}
 		_dict["true"] = True
 		_dict["false"] = False
 		_dict["none"] = None
-		_dict[True] = "Ture"
-		_dict[False] = "Flase"
+		_dict[True] = "True"
+		_dict[False] = "False"
 		_dict[None] = "None"
 
 		ret = json.dumps(_dict, cls=AsdictSupportJSONEncoder)
-		self.assertEqual('{"key": "hoge", "val": 1, "float": 1.1, "list": [], "dict": {}, "true": true, "false": false, "none": null, "true": "Ture", "false": "Flase", "null": "None"}', ret)
+		self.assertEqual('{"str": "hoge", "int": 1, "float": 1.1, "list": [], "dict": {}, "true": true, "false": false, "none": null, "true": "True", "false": "False", "null": "None"}', ret)
 
 	def test_encode_tuple(self):
 		_tuple = ('hoge', 1)
