@@ -133,8 +133,9 @@ class Setting:
 		pass
 
 
-# noinspection PyArgumentList,PyShadowingNames  # xxx 標準モジュールからパクったところが警告いっぱい出る
-class AsdictSupportJSONEncoder(encoder.JSONEncoder):
+# noinspection PyArgumentList,PyShadowingNames,PyShadowingNames
+class AsdictSupportJSONEncoder(encoder.JSONEncoder):  # xxx 標準モジュールからパクったところが警告いっぱい出る
+
 	def default(self, o):
 		if hasattr(o, '_asdict'):
 			return o._asdict()
@@ -159,8 +160,7 @@ class AsdictSupportJSONEncoder(encoder.JSONEncoder):
 		else:
 			_encoder = encoder.encode_basestring
 
-		def floatstr(o, allow_nan=self.allow_nan,
-								 _repr=float.__repr__, _inf=encoder.INFINITY, _neginf=-encoder.INFINITY):
+		def floatstr(o, allow_nan=self.allow_nan, _repr=float.__repr__, _inf=encoder.INFINITY, _neginf=-encoder.INFINITY):
 			# Check for specials.  Note that this type of test is processor
 			# and/or platform-specific, so do tests which don't depend on the
 			# internals.
@@ -189,7 +189,7 @@ class AsdictSupportJSONEncoder(encoder.JSONEncoder):
 		return _iterencode(o, 0)
 
 
-# noinspection PyPep8Naming,PyShadowingBuiltins,PyShadowingBuiltins,PyShadowingBuiltins,PyShadowingBuiltins,PyShadowingBuiltins,PyShadowingBuiltins,PyShadowingBuiltins,PyShadowingBuiltins  # xxx 標準モジュールからパクったところが警告いっぱい出る
+# noinspection PyPep8Naming,PyShadowingBuiltins,PyShadowingBuiltins,PyShadowingBuiltins,PyShadowingBuiltins,PyShadowingBuiltins,PyShadowingBuiltins,PyShadowingBuiltins,PyShadowingBuiltins
 def _make_iterencode(markers, _default, _encoder, _indent, _floatstr,
 										 _key_separator, _item_separator, _sort_keys, _skipkeys, _one_shot,
 										 ## HACK: hand-optimized bytecode; turn globals into locals
@@ -203,12 +203,12 @@ def _make_iterencode(markers, _default, _encoder, _indent, _floatstr,
 										 str=str,
 										 tuple=tuple,
 										 _intstr=int.__str__,
-										 ):
+										 ):  # xxx 標準モジュールからパクったところが警告いっぱい出る
 	if _indent is not None and not isinstance(_indent, str):
 		_indent = ' ' * _indent
 
-	# noinspection PyArgumentList,PyUnboundLocalVariable  # xxx 標準モジュールからパクったところが警告いっぱい出る
-	def _iterencode_list(lst, _current_indent_level):
+	# noinspection PyArgumentList,PyUnboundLocalVariable
+	def _iterencode_list(lst, _current_indent_level):  # xxx 標準モジュールからパクったところが警告いっぱい出る
 		if not lst:
 			yield '[]'
 			return
@@ -266,8 +266,8 @@ def _make_iterencode(markers, _default, _encoder, _indent, _floatstr,
 		if markers is not None:
 			del markers[markerid]
 
-	# noinspection PyArgumentList,PyUnboundLocalVariable  # xxx 標準モジュールからパクったところが警告いっぱい出る
-	def _iterencode_dict(dct, _current_indent_level):
+	# noinspection PyArgumentList,PyUnboundLocalVariable
+	def _iterencode_dict(dct, _current_indent_level):  # xxx 標準モジュールからパクったところが警告いっぱい出る
 		if not dct:
 			yield '{}'
 			return
@@ -348,8 +348,8 @@ def _make_iterencode(markers, _default, _encoder, _indent, _floatstr,
 		if markers is not None:
 			del markers[markerid]
 
-	# noinspection PyArgumentList,PyUnboundLocalVariable  # xxx 標準モジュールからパクったところが警告いっぱい出る
-	def _iterencode(o, _current_indent_level):
+	# noinspection PyArgumentList,PyUnboundLocalVariable
+	def _iterencode(o, _current_indent_level):  # xxx 標準モジュールからパクったところが警告いっぱい出る
 		if isinstance(o, str):
 			yield _encoder(o)
 		elif o is None:

@@ -1,5 +1,5 @@
 """
-niascape.wsgiapplication
+niascape.wsgiclient
 """
 from typing import Callable, List, Tuple, Generator, Dict, Union, Any
 from urllib.parse import parse_qsl
