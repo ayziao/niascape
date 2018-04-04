@@ -2,8 +2,8 @@ import json
 
 import niascape
 from niascape.entity import basedata
-from niascape.utility import Database, AsdictSupportJSONEncoder
-
+from niascape.utility import Database
+from niascape.utility.json import AsdictSupportJSONEncoder
 
 def top(option: dict) -> str:
 	return 'top'

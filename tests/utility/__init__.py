@@ -1,7 +1,5 @@
 from unittest import TestCase, skip
 
-import json
-import collections
 from typing import NamedTuple
 
 try:
@@ -9,14 +7,15 @@ try:
 except ImportError:
 	pass
 
-from niascape.utility import Database, AsdictSupportJSONEncoder
+from niascape.utility import Database
 import niascape
 
 import logging
 
 logger = logging.getLogger(__name__)
 
-logging.basicConfig(format='\033[0;32m%(asctime)s %(levelname)5s \033[0;34m%(message)s \033[0;32m(%(name)s.%(funcName)s) \033[0m', level=logging.DEBUG)  # PENDING リリースとデバッグ切り替えどうしようか logging.conf調べる
+
+# logging.basicConfig(format='\033[0;32m%(asctime)s %(levelname)5s \033[0;34m%(message)s \033[0;32m(%(name)s.%(funcName)s) \033[0m', level=logging.DEBUG)  # PENDING リリースとデバッグ切り替えどうしようか logging.conf調べる
 
 
 class TestDatabase(TestCase):
@@ -137,89 +136,22 @@ class TestDatabase(TestCase):
 		logger.debug(ret)
 		self.assertEqual(1, ret[0].count)
 
-	#
-	# ini = niascape._read_ini('config.ini.sample')
-	# # db = Database(ini)
-	# with Database(ini) as db:
-	# 	sql = """
-	# 	SELECT
-	# 		regexp_replace(tags , ':[0-9]+','') as "tags",
-	# 		COUNT(*) as "count"
-	# 	FROM basedata
-	# 	WHERE
-	# 		site = %s
-	# 	GROUP BY regexp_replace(tags , ':[0-9]+','')
-	# 	ORDER BY COUNT(*) DESC
-	# 	LIMIT %s
-	# 	"""
-	# 	tagcount = NamedTuple('tagcount', (('tags', str), ('count', int)))
-	# 	ret = db.execute_fetchall_namedtuple(sql, ('test', 3), namedtuple=tagcount)
-	# 	# pprint(ret)
-	# 	self.assertEqual(' twitter_posted ', ret[0].tags)
-
-
-class TestAsdictSupportJSONEncoder(TestCase):
-	def test_encode(self):
-		ret = json.dumps(None, cls=AsdictSupportJSONEncoder)
-		self.assertEqual('null', ret)
-		ret = json.dumps(True, cls=AsdictSupportJSONEncoder)
-		self.assertEqual('true', ret)
-		ret = json.dumps(False, cls=AsdictSupportJSONEncoder)
-		self.assertEqual('false', ret)
-		ret = json.dumps(1, cls=AsdictSupportJSONEncoder)
-		self.assertEqual('1', ret)
-		ret = json.dumps(1.1, cls=AsdictSupportJSONEncoder)
-		self.assertEqual('1.1', ret)
-		ret = json.dumps('hoge', cls=AsdictSupportJSONEncoder)
-		self.assertEqual('"hoge"', ret)
-
-	def test_encode_list(self):
-		test = list()
-		test.append('hoge')
-		test.append(1)
-		test.append(1.1)
-		test.append([])
-		test.append({})
-		test.append(True)
-		test.append(False)
-		test.append(None)
-
-		ret = json.dumps(test, cls=AsdictSupportJSONEncoder)
-		self.assertEqual('["hoge", 1, 1.1, [], {}, true, false, null]', ret)
-
-	def test_encode_dict(self):
-		_dict = dict()
-		_dict["str"] = 'hoge'
-		_dict["int"] = 1
-		_dict["float"] = 1.1
-		_dict["list"] = []
-		_dict["dict"] = {}
-		_dict["true"] = True
-		_dict["false"] = False
-		_dict["none"] = None
-		_dict[True] = "True"
-		_dict[False] = "False"
-		_dict[None] = "None"
-
-		ret = json.dumps(_dict, cls=AsdictSupportJSONEncoder)
-		self.assertEqual('{"str": "hoge", "int": 1, "float": 1.1, "list": [], "dict": {}, "true": true, "false": false, "none": null, "true": "True", "false": "False", "null": "None"}', ret)
-
-	def test_encode_tuple(self):
-		_tuple = ('hoge', 1)
-		ret = json.dumps(_tuple, cls=AsdictSupportJSONEncoder)
-		self.assertEqual('["hoge", 1]', ret)
-
-		namedtuple = NamedTuple('namedtuple', (('key', str), ('val', int)))
-		_namedtuple = namedtuple(*_tuple)
-		ret = json.dumps(_namedtuple, cls=AsdictSupportJSONEncoder)
-		self.assertEqual('{"key": "hoge", "val": 1}', ret)
-
-		ret = json.dumps([_namedtuple], cls=AsdictSupportJSONEncoder)
-		self.assertEqual('[{"key": "hoge", "val": 1}]', ret)
-
-		namedtuple = collections.namedtuple('collections_namedtuple', ('key', 'val'))
-		_namedtuple = namedtuple(*_tuple)
-		ret = json.dumps(_namedtuple, cls=AsdictSupportJSONEncoder)
-		self.assertEqual('{"key": "hoge", "val": 1}', ret)
-		ret = json.dumps([_namedtuple], cls=AsdictSupportJSONEncoder)
-		self.assertEqual('[{"key": "hoge", "val": 1}]', ret)
+#
+# ini = niascape._read_ini('config.ini.sample')
+# # db = Database(ini)
+# with Database(ini) as db:
+# 	sql = """
+# 	SELECT
+# 		regexp_replace(tags , ':[0-9]+','') as "tags",
+# 		COUNT(*) as "count"
+# 	FROM basedata
+# 	WHERE
+# 		site = %s
+# 	GROUP BY regexp_replace(tags , ':[0-9]+','')
+# 	ORDER BY COUNT(*) DESC
+# 	LIMIT %s
+# 	"""
+# 	tagcount = NamedTuple('tagcount', (('tags', str), ('count', int)))
+# 	ret = db.execute_fetchall_namedtuple(sql, ('test', 3), namedtuple=tagcount)
+# 	# pprint(ret)
+# 	self.assertEqual(' twitter_posted ', ret[0].tags)
