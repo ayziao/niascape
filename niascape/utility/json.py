@@ -4,11 +4,6 @@ from json import encoder
 # noinspection PyArgumentList,PyShadowingNames,PyShadowingNames
 class AsdictSupportJSONEncoder(encoder.JSONEncoder):  # xxx 標準モジュールからパクったところが警告いっぱい出る
 
-	def default(self, o):
-		if hasattr(o, '_asdict'):
-			return o._asdict()
-		return super(AsdictSupportJSONEncoder, self).default(o)
-
 	def iterencode(self, o, _one_shot=False):
 		"""Encode the given object and yield each string
 		representation as available.
@@ -43,9 +38,7 @@ class AsdictSupportJSONEncoder(encoder.JSONEncoder):  # xxx 標準モジュー�
 				return _repr(o)
 
 			if not allow_nan:
-				raise ValueError(
-					"Out of range float values are not JSON compliant: " +
-					repr(o))
+				raise ValueError("Out of range float values are not JSON compliant: " + repr(o))
 
 			return text
 

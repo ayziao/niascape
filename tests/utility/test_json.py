@@ -6,6 +6,11 @@ from typing import NamedTuple
 from niascape.utility.json import AsdictSupportJSONEncoder
 
 
+class Asdict:
+	def _asdict(self):
+		return {'name': 'asdict'}
+
+
 class TestAsdictSupportJSONEncoder(TestCase):
 	def test_encode(self):
 		ret = json.dumps(None, cls=AsdictSupportJSONEncoder)
@@ -71,3 +76,26 @@ class TestAsdictSupportJSONEncoder(TestCase):
 		self.assertEqual('{"key": "hoge", "val": 1}', ret)
 		ret = json.dumps([_namedtuple], cls=AsdictSupportJSONEncoder)
 		self.assertEqual('[{"key": "hoge", "val": 1}]', ret)
+
+	def test_encode_class(self):
+		o = Asdict()
+		ret = json.dumps(o, cls=AsdictSupportJSONEncoder)
+		self.assertEqual('{"name": "asdict"}', ret)
+
+	def test_encode_indent(self):
+		ret = json.dumps([1, 2, 3], cls=AsdictSupportJSONEncoder, indent='  ')
+		self.assertEqual('[\n  1,\n  2,\n  3\n]', ret)
+		ret = json.dumps({'key': "val"}, cls=AsdictSupportJSONEncoder, indent='  ')
+		self.assertEqual('{\n  "key": "val"\n}', ret)
+
+	def test_encode_check_circular(self):
+		ret = json.dumps('hoge', cls=AsdictSupportJSONEncoder)
+		self.assertEqual('"hoge"', ret)
+		ret = json.dumps('hoge', cls=AsdictSupportJSONEncoder, check_circular=False)
+		self.assertEqual('"hoge"', ret)
+
+	def test_encode_flort(self):
+		ret = json.dumps([float("inf"), -float("inf"), float("inf") - float("inf")], cls=AsdictSupportJSONEncoder)
+		self.assertEqual('[Infinity, -Infinity, NaN]', ret)
+		with self.assertRaises(ValueError):
+			json.dumps([float("inf"), -float("inf"), float("inf") - float("inf")], cls=AsdictSupportJSONEncoder, allow_nan=False)
