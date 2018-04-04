@@ -58,9 +58,9 @@ docs/_build/
 # IDE
 .idea/
 .idea/dictionaries/
-*.ini
 
 #
+*.ini
 twitteroauth/
 db.sqlite3
 /試作/nbproject/private/
