@@ -23,7 +23,6 @@ class TestDatabase(TestCase):
 
 	@classmethod
 	def setUpClass(cls):
-		print("setup")
 		ini = niascape._read_ini('config.ini.sample')  # TODO configパーサーオブジェクトやめる
 		niascape.ini = ini
 		cls._db = Database(ini)
@@ -44,7 +43,6 @@ class TestDatabase(TestCase):
 		ret = TestDatabase._db.execute_fetchall("select * from test")
 		logger.debug(ret)
 
-	# @skip("postgresqlのテストを保留")  # TODO データベースに接続してのテストについて考える
 	def test_init_ps(self):
 		ini = niascape._read_ini('config.ini.sample')  # TODO configパーサーオブジェクトやめる
 		niascape.ini = ini
@@ -57,16 +55,13 @@ class TestDatabase(TestCase):
 			self.assertEqual(Database, type(db))
 			self.assertEqual('sqlite', db._dbms)
 
-	# @skip("postgresqlのテストを保留")  # TODO データベースに接続してのテストについて考える
 	def test__get_connection_ps(self):
 		ini = niascape._read_ini('config.ini.sample')
 		niascape.ini = ini
 		con = niascape.ini['postgresql'].get('connect')  # TODO クラス化してインスタンス化時にDBコネクションを受けとる
-
-		db = Database(ini)
-		ret = db._get_connection_ps(con)
-		# pprint(ret)
-		self.assertEqual(psycopg2.extensions.connection, type(ret))
+		with Database(ini) as db:
+			ret = db._get_connection_ps(con)
+			self.assertEqual(psycopg2.extensions.connection, type(ret))
 
 	def test__get_connection_sqlite(self):
 		self.skipTest('未実装')  # TODO 実装
@@ -84,74 +79,18 @@ class TestDatabase(TestCase):
 			self.assertEqual({'num': 2, 'str': '2'}, ret[0])
 			logger.debug('select one %s', ret)
 
-	# @skip("postgresqlのテストを保留")  # TODO データベースに接続してのテストについて考える
 	def test_execute_fetchall(self):
 		ret = TestDatabase._db.execute_fetchall("select * from test")
 		logger.debug(ret)
 		self.assertEqual(1, ret[0]['id'])
 
-	#
-	# ini = niascape._read_ini('config.ini.sample')
-	# niascape.ini = ini
-	#
-	# with Database(ini) as db:
-	# 	sql = """
-	# 	SELECT * FROM basedata
-	# 	WHERE
-	# 		site = 'test'
-	# 	ORDER BY "datetime" DESC
-	# 	LIMIT 1
-	# 	"""
-	# 	ret = db.execute_fetchall(sql)
-	# 	# pprint(ret)
-	# 	self.assertEqual('20180218232339289972', ret[0]['identifier'])
-
-	# @skip("postgresqlのテストを保留")  # TODO データベースに接続してのテストについて考える
 	def test_execute_fetchall_namedtuple(self):
 		ret = TestDatabase._db.execute_fetchall_namedtuple("select * from test")
 		logger.debug(ret)
 		self.assertEqual(1, ret[0].id)
 
-	#
-	# ini = niascape._read_ini('config.ini.sample')
-	# # db = Database(ini)
-	#
-	# with Database.get_instance(ini) as db:
-	# 	logger.debug('Databaseインスタンス 初期化')
-	# 	sql = """
-	# 	SELECT * FROM basedata
-	# 	WHERE
-	# 		site = 'test'
-	# 	ORDER BY "datetime" DESC
-	# 	LIMIT 1
-	# 	"""
-	# 	ret = db.execute_fetchall_namedtuple(sql, tuplename='basedata')
-	# 	# pprint(ret)
-	# 	self.assertEqual('20180218232339289972', ret[0].identifier)
-
-	# @skip("postgresqlのテストを保留")  # TODO データベースに接続してのテストについて考える
 	def test_execute_fetchall_namedtuple_set(self):
 		count = NamedTuple('count', (('name', str), ('count', int)))
 		ret = TestDatabase._db.execute_fetchall_namedtuple("select 'hoge' as name , COUNT(*) as count from test", namedtuple=count)
 		logger.debug(ret)
 		self.assertEqual(1, ret[0].count)
-
-#
-# ini = niascape._read_ini('config.ini.sample')
-# # db = Database(ini)
-# with Database(ini) as db:
-# 	sql = """
-# 	SELECT
-# 		regexp_replace(tags , ':[0-9]+','') as "tags",
-# 		COUNT(*) as "count"
-# 	FROM basedata
-# 	WHERE
-# 		site = %s
-# 	GROUP BY regexp_replace(tags , ':[0-9]+','')
-# 	ORDER BY COUNT(*) DESC
-# 	LIMIT %s
-# 	"""
-# 	tagcount = NamedTuple('tagcount', (('tags', str), ('count', int)))
-# 	ret = db.execute_fetchall_namedtuple(sql, ('test', 3), namedtuple=tagcount)
-# 	# pprint(ret)
-# 	self.assertEqual(' twitter_posted ', ret[0].tags)
