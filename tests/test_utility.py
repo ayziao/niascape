@@ -16,25 +16,49 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-
-# logging.basicConfig(format='\033[0;32m%(asctime)s %(levelname)5s \033[0;34m%(message)s \033[0;32m(%(name)s.%(funcName)s) \033[0m', level=logging.DEBUG)  # PENDING リリースとデバッグ切り替えどうしようか logging.conf調べる
+logging.basicConfig(format='\033[0;32m%(asctime)s %(levelname)5s \033[0;34m%(message)s \033[0;32m(%(name)s.%(funcName)s) \033[0m', level=logging.DEBUG)  # PENDING リリースとデバッグ切り替えどうしようか logging.conf調べる
 
 
 class TestDatabase(TestCase):
-	@skip("postgresqlのテストを保留")  # TODO データベースに接続してのテストについて考える
+	_db = None
+
+	@classmethod
+	def setUpClass(cls):
+		print("setup")
+		ini = niascape._read_ini('config.ini.sample')  # TODO configパーサーオブジェクトやめる
+		niascape.ini = ini
+		cls._db = Database(ini)
+		ret = cls._db.execute_fetchall("select version()")
+		logger.debug(ret)
+		ret = cls._db.execute("CREATE TABLE test (id serial PRIMARY KEY, num integer, data varchar);")
+		logger.debug(ret)
+		ret = TestDatabase._db.execute("INSERT INTO test(num,data) VALUES (%s,%s)", (1, "hoge"))
+		logger.debug(ret)
+
+	@classmethod
+	def tearDownClass(cls):
+		cls._db.close()
+
+	def test_hoge(self):
+		ret = TestDatabase._db.execute("INSERT INTO test(num,data) VALUES (%s,%s)", (1, "hoge"))
+		logger.debug(ret)
+		ret = TestDatabase._db.execute_fetchall("select * from test")
+		logger.debug(ret)
+
+	# @skip("postgresqlのテストを保留")  # TODO データベースに接続してのテストについて考える
 	def test_init_ps(self):
 		ini = niascape._read_ini('config.ini.sample')  # TODO configパーサーオブジェクトやめる
 		niascape.ini = ini
-		db = Database(ini)
-		self.assertEqual(Database, type(db))
-		self.assertEqual('postgresql', db._dbms)
+		with Database(ini) as db:
+			self.assertEqual(Database, type(db))
+			self.assertEqual('postgresql', db._dbms)
 
 	def test_init_sqlite(self):
-		db = Database()
-		self.assertEqual(Database, type(db))
-		self.assertEqual('sqlite', db._dbms)
+		with Database() as db:
+			self.assertEqual(Database, type(db))
+			self.assertEqual('sqlite', db._dbms)
 
-	@skip("postgresqlのテストを保留")  # TODO データベースに接続してのテストについて考える
+	# @skip("postgresqlのテストを保留")  # TODO データベースに接続してのテストについて考える
 	def test__get_connection_ps(self):
 		ini = niascape._read_ini('config.ini.sample')
 		niascape.ini = ini
@@ -61,61 +85,77 @@ class TestDatabase(TestCase):
 			self.assertEqual({'num': 2, 'str': '2'}, ret[0])
 			logger.debug('select one %s', ret)
 
-	@skip("postgresqlのテストを保留")  # TODO データベースに接続してのテストについて考える
+	# @skip("postgresqlのテストを保留")  # TODO データベースに接続してのテストについて考える
 	def test_execute_fetchall(self):
-		ini = niascape._read_ini('config.ini.sample')
-		niascape.ini = ini
+		ret = TestDatabase._db.execute_fetchall("select * from test")
+		logger.debug(ret)
+		self.assertEqual(1, ret[0]['id'])
 
-		with Database(ini) as db:
-			sql = """
-			SELECT * FROM basedata
-			WHERE
-				site = 'test'
-			ORDER BY "datetime" DESC
-			LIMIT 1
-			"""
-			ret = db.execute_fetchall(sql)
-			# pprint(ret)
-			self.assertEqual('20180218232339289972', ret[0]['identifier'])
+	#
+	# ini = niascape._read_ini('config.ini.sample')
+	# niascape.ini = ini
+	#
+	# with Database(ini) as db:
+	# 	sql = """
+	# 	SELECT * FROM basedata
+	# 	WHERE
+	# 		site = 'test'
+	# 	ORDER BY "datetime" DESC
+	# 	LIMIT 1
+	# 	"""
+	# 	ret = db.execute_fetchall(sql)
+	# 	# pprint(ret)
+	# 	self.assertEqual('20180218232339289972', ret[0]['identifier'])
 
-	@skip("postgresqlのテストを保留")  # TODO データベースに接続してのテストについて考える
+	# @skip("postgresqlのテストを保留")  # TODO データベースに接続してのテストについて考える
 	def test_execute_fetchall_namedtuple(self):
-		ini = niascape._read_ini('config.ini.sample')
-		# db = Database(ini)
+		ret = TestDatabase._db.execute_fetchall_namedtuple("select * from test")
+		logger.debug(ret)
+		self.assertEqual(1, ret[0].id)
 
-		with Database.get_instance(ini) as db:
-			logger.debug('Databaseインスタンス 初期化')
-			sql = """
-			SELECT * FROM basedata
-			WHERE
-				site = 'test'
-			ORDER BY "datetime" DESC
-			LIMIT 1
-			"""
-			ret = db.execute_fetchall_namedtuple(sql, tuplename='basedata')
-			# pprint(ret)
-			self.assertEqual('20180218232339289972', ret[0].identifier)
+	#
+	# ini = niascape._read_ini('config.ini.sample')
+	# # db = Database(ini)
+	#
+	# with Database.get_instance(ini) as db:
+	# 	logger.debug('Databaseインスタンス 初期化')
+	# 	sql = """
+	# 	SELECT * FROM basedata
+	# 	WHERE
+	# 		site = 'test'
+	# 	ORDER BY "datetime" DESC
+	# 	LIMIT 1
+	# 	"""
+	# 	ret = db.execute_fetchall_namedtuple(sql, tuplename='basedata')
+	# 	# pprint(ret)
+	# 	self.assertEqual('20180218232339289972', ret[0].identifier)
 
-	@skip("postgresqlのテストを保留")  # TODO データベースに接続してのテストについて考える
+	# @skip("postgresqlのテストを保留")  # TODO データベースに接続してのテストについて考える
 	def test_execute_fetchall_namedtuple_set(self):
-		ini = niascape._read_ini('config.ini.sample')
-		# db = Database(ini)
-		with Database(ini) as db:
-			sql = """
-			SELECT
-				regexp_replace(tags , ':[0-9]+','') as "tags",
-				COUNT(*) as "count"
-			FROM basedata
-			WHERE
-				site = %s
-			GROUP BY regexp_replace(tags , ':[0-9]+','')
-			ORDER BY COUNT(*) DESC
-			LIMIT %s
-			"""
-			tagcount = NamedTuple('tagcount', (('tags', str), ('count', int)))
-			ret = db.execute_fetchall_namedtuple(sql, ('test', 3), namedtuple=tagcount)
-			# pprint(ret)
-			self.assertEqual(' twitter_posted ', ret[0].tags)
+		count = NamedTuple('count', (('name', str), ('count', int)))
+		ret = TestDatabase._db.execute_fetchall_namedtuple("select 'hoge' as name , COUNT(*) as count from test", namedtuple=count)
+		logger.debug(ret)
+		self.assertEqual(1, ret[0].count)
+
+	#
+	# ini = niascape._read_ini('config.ini.sample')
+	# # db = Database(ini)
+	# with Database(ini) as db:
+	# 	sql = """
+	# 	SELECT
+	# 		regexp_replace(tags , ':[0-9]+','') as "tags",
+	# 		COUNT(*) as "count"
+	# 	FROM basedata
+	# 	WHERE
+	# 		site = %s
+	# 	GROUP BY regexp_replace(tags , ':[0-9]+','')
+	# 	ORDER BY COUNT(*) DESC
+	# 	LIMIT %s
+	# 	"""
+	# 	tagcount = NamedTuple('tagcount', (('tags', str), ('count', int)))
+	# 	ret = db.execute_fetchall_namedtuple(sql, ('test', 3), namedtuple=tagcount)
+	# 	# pprint(ret)
+	# 	self.assertEqual(' twitter_posted ', ret[0].tags)
 
 
 class TestAsdictSupportJSONEncoder(TestCase):

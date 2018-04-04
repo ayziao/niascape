@@ -54,7 +54,11 @@ class Database:
 
 	def execute(self, sql, param=None):
 		if self._dbms == 'postgresql':
-			pass
+			with self._connection.cursor(cursor_factory=DictCursor) as cur:
+				cur.execute(sql, param)
+
+			logger.debug("sql :%s", sql)
+			logger.debug("query :%s", cur.query.decode('utf-8'))
 		else:
 			if param is None:
 				cursor = self._connection.execute(sql)
@@ -190,8 +194,7 @@ class AsdictSupportJSONEncoder(encoder.JSONEncoder):  # xxx 標準モジュー�
 
 
 # noinspection PyPep8Naming,PyShadowingBuiltins,PyShadowingBuiltins,PyShadowingBuiltins,PyShadowingBuiltins,PyShadowingBuiltins,PyShadowingBuiltins,PyShadowingBuiltins,PyShadowingBuiltins
-def _make_iterencode(markers, _default, _encoder, _indent, _floatstr,
-										 _key_separator, _item_separator, _sort_keys, _skipkeys, _one_shot,
+def _make_iterencode(markers, _default, _encoder, _indent, _floatstr, _key_separator, _item_separator, _sort_keys, _skipkeys, _one_shot,
 										 ## HACK: hand-optimized bytecode; turn globals into locals
 										 ValueError=ValueError,
 										 dict=dict,
