@@ -55,7 +55,12 @@ $day = '';
 //TODO 時間区切りを入れる
 
 while ($row = $results->fetchArray()) {
-	$day2 = substr($row['datetime'], 0, 10);
+	$datetime = new DateTime($row['datetime']);
+	date_modify($datetime,'-9hour');
+	$time = sprintf('%02d',((int)$datetime->format('H')+9)).$datetime->format(':i:s');
+
+//	$day2 = substr($row['datetime'], 0, 10);
+	$day2 = $datetime->format('Y-m-d');
 	if ($day != $day2) {
 		if ($day != '') {
 			$content .= "\n\t\t\t</div>";
@@ -73,7 +78,8 @@ while ($row = $results->fetchArray()) {
 		}
 	}
 
-	$content .= "\n\t\t\t\t" . '<div class="line"><span class="time"><a href="./' . $row['identifier'] . '">' . substr($row['datetime'], -8) . '</a></span>&thinsp;'
+//	$content .= "\n\t\t\t\t" . '<div class="line"><span class="time"><a href="./' . $row['identifier'] . '">' . substr($row['datetime'], -8) . '</a></span>&thinsp;'
+	$content .= "\n\t\t\t\t" . '<div class="line"><span class="time"><a href="./' . $row['identifier'] . '">' . $time . '</a></span>&thinsp;'
 					. str_replace("\n", '<br/>', str_replace("\r\n", '<br/>', $row['body'])) . $tagstr . '</div>';
 }
 $content .= "\n\t\t\t</div>";
