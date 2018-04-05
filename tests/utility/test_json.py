@@ -57,6 +57,9 @@ class TestAsdictSupportJSONEncoder(TestCase):
 		ret = json.dumps(_dict, cls=AsdictSupportJSONEncoder)
 		self.assertEqual('{"str": "hoge", "int": 1, "float": 1.1, "list": [], "dict": {}, "true": true, "false": false, "none": null, "true": "True", "false": "False", "null": "None"}', ret)
 
+		ret = json.dumps({1: 'int', 1.1: 'float'}, cls=AsdictSupportJSONEncoder)
+		self.assertEqual('{"1": "int", "1.1": "float"}', ret)
+
 	def test_encode_tuple(self):
 		_tuple = ('hoge', 1)
 		ret = json.dumps(_tuple, cls=AsdictSupportJSONEncoder)
@@ -81,8 +84,14 @@ class TestAsdictSupportJSONEncoder(TestCase):
 		o = Asdict()
 		ret = json.dumps(o, cls=AsdictSupportJSONEncoder)
 		self.assertEqual('{"name": "asdict"}', ret)
+		ret = json.dumps([o], cls=AsdictSupportJSONEncoder)
+		self.assertEqual('[{"name": "asdict"}]', ret)
+		ret = json.dumps({'indict': o}, cls=AsdictSupportJSONEncoder)
+		self.assertEqual('{"indict": {"name": "asdict"}}', ret)
 
 	def test_encode_indent(self):
+		ret = json.dumps([1, 2, 3], cls=AsdictSupportJSONEncoder, indent=4)
+		self.assertEqual('[\n    1,\n    2,\n    3\n]', ret)
 		ret = json.dumps([1, 2, 3], cls=AsdictSupportJSONEncoder, indent='  ')
 		self.assertEqual('[\n  1,\n  2,\n  3\n]', ret)
 		ret = json.dumps({'key': "val"}, cls=AsdictSupportJSONEncoder, indent='  ')
