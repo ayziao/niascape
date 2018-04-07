@@ -1,3 +1,6 @@
+from typing import Any, Dict, List, Union
+from configparser import ConfigParser
+
 import collections
 import sqlite3
 
@@ -15,27 +18,27 @@ logger = logging.getLogger(__name__)
 
 
 class Database:
-	def __init__(self, setting=None):
+	def __init__(self, setting: ConfigParser = None) -> None:
 		logger.debug('Databaseインスタンス 初期化')
 		self._setting = setting
 		self._connect()
 
-	def _connect(self):
+	def _connect(self) -> None:
 		if self._setting is None:
-			self._connection = sqlite3.connect(":memory:")
+			self._connection = sqlite3.connect(":memory:")  # type: Any
 		else:
 			self._connection = sqlite3.connect(self._setting['postgresql']['connect'])  # fixme ファイル指定
 		logger.debug("sqlite3接続 :%s", pformat(self._connection))
 		self._dbms = 'sqlite'
 
-	def execute(self, sql, param=None):
+	def execute(self, sql: str, param: Union[tuple, List[Union[str, int]]] = None) -> None:
 		if param is None:
 			cursor = self._connection.execute(sql)
 		else:
 			cursor = self._connection.execute(sql, param)
 		logger.debug("rowcount :%s", cursor.rowcount)
 
-	def execute_fetchall(self, sql, param=None):
+	def execute_fetchall(self, sql: str, param: Union[tuple, List[Union[str, int]]] = None) -> List[Dict[str, Any]]:
 		self._connection.row_factory = sqlite3.Row
 		if param is None:
 			cursor = self._connection.execute(sql)
@@ -52,10 +55,10 @@ class Database:
 
 		return ret_list
 
-	def execute_fetchall_namedtuple(self, sql, param=None, *, namedtuple=None, tuplename='namedtuple'):
+	def execute_fetchall_namedtuple(self, sql: str, param: Union[tuple, List[Union[str, int]]] = None, *, namedtuple=None, tuplename: str = 'namedtuple'):
 		pass  # TODO 実装する
 
-	def close(self):
+	def close(self) -> None:
 		logger.debug("接続クローズ :%s", pformat(self._connection))
 		self._connection.close()
 
@@ -63,27 +66,27 @@ class Database:
 		logger.debug("with 開始")
 		return self
 
-	def __exit__(self, exception_type, exception_value, traceback):
+	def __exit__(self, exception_type, exception_value, traceback) -> None:
 		self.close()
 		logger.debug("with 終了")
 
 
 class Postgresql(Database):
 
-	def _connect(self):
+	def _connect(self) -> None:
 		logger.debug('Postgresqlインスタンス 初期化')
 		self._dbms = 'postgresql'
 		self._connection = psycopg2.connect(self._setting['postgresql']['connect'])
 		logger.debug("Postgresql接続 :%s", pformat(self._connection))
 
-	def execute(self, sql: str, param=None):
+	def execute(self, sql: str, param: Union[tuple, List[Union[str, int]]] = None) -> None:
 		with self._connection.cursor(cursor_factory=DictCursor) as cur:
 			cur.execute(sql.replace('?', '%s'), param)
 
 		logger.debug("sql :%s", sql)
 		logger.debug("query :%s", cur.query.decode('utf-8'))
 
-	def execute_fetchall(self, sql, param=None):
+	def execute_fetchall(self, sql: str, param: Union[tuple, List[Union[str, int]]] = None) -> List[Dict[str, Any]]:
 		result = []
 		with self._connection.cursor(cursor_factory=DictCursor) as cur:
 			cur.execute(sql, param)
@@ -96,7 +99,7 @@ class Postgresql(Database):
 
 		return result
 
-	def execute_fetchall_namedtuple(self, sql, param=None, *, namedtuple=None, tuplename='namedtuple'):
+	def execute_fetchall_namedtuple(self, sql: str, param: Union[tuple, List[Union[str, int]]] = None, *, namedtuple=None, tuplename: str = 'namedtuple'):
 		result = []
 		with self._connection.cursor() as cur:
 			cur.execute(sql, param)
@@ -114,7 +117,7 @@ class Postgresql(Database):
 		return result
 
 
-def get_db(setting=None):
+def get_db(setting: ConfigParser = None) -> Database:
 	# TODO SQLite ファイル対応
 	if setting is None or psycopg2 is None:
 		db = Database()

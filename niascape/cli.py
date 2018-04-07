@@ -5,6 +5,7 @@
 import os
 import sys
 from typing import List, Tuple, Dict, Union
+
 import logging
 
 logger = logging.getLogger(__name__)
@@ -29,9 +30,9 @@ def run(argv: List[str]) -> str:
 
 def parse_argument_vector(argv: List[str]) -> Tuple[List[str], Dict[str, Union[str, bool]], List[str]]:
 	# PENDING urllib.parse.parse_qsのようにオプション値を全部リストにすべき？
-	arguments = []  # PENDING 0を削ってwsgiと合わすべき？
+	arguments = []  # type: List[str]  # PENDING 0を削ってwsgiと合わすべき？
 	option_dict = {}  # type: Dict[str, Union[str, bool]]
-	short_options = []
+	short_options = []  # type: List[str]
 
 	option_name = ''
 
