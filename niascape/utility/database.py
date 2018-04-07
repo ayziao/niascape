@@ -27,7 +27,7 @@ class Database:
 		if self._setting is None:
 			self._connection = sqlite3.connect(":memory:")  # type: Any
 		else:
-			self._connection = sqlite3.connect(self._setting['postgresql']['connect'])  # fixme ファイル指定
+			self._connection = sqlite3.connect(self._setting['sqlite3']['connect'])  # fixme ファイル指定
 		logger.debug("sqlite3接続 :%s", pformat(self._connection))
 		self._dbms = 'sqlite'
 		self._connection.row_factory = sqlite3.Row

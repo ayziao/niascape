@@ -22,10 +22,15 @@ def _daycount(db: Database, site: str = 'test', tag: str = '', search_body: str 
 		body_where = "AND body LIKE ?"
 		param.append(f"%{search_body}%")
 
+	if db._dbms == 'postgresql':
+		date = 'to_char(DATE("datetime"),\'YYYY-MM-DD\')'
+	else:
+		date = 'DATE("datetime")'
+
 	sql = f"""
 	SELECT
-		to_char(DATE("datetime"),'YYYY-MM-DD') as "date" ,
-		COUNT(*)                               as "count"
+		{date} as "date" ,
+		COUNT(*) as "count"
 	FROM basedata
 	WHERE site = ?
 		{tag_where}
@@ -44,14 +49,18 @@ def _daycount(db: Database, site: str = 'test', tag: str = '', search_body: str 
 
 
 def _tag_count(db: Database, site: str = 'test') -> List[Dict[str, Union[str, int]]]:
-	sql = """
+	if db._dbms == 'postgresql':
+		tags = "regexp_replace(tags , ':[0-9]+','')"
+	else:
+		tags = "replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(tags,'0',''),'1',''),'2',''),'3',''),'4',''),'5',''),'6',''),'7',''),'8',''),'9',''),':','')"
+	sql = f"""
 	SELECT
-		regexp_replace(tags , ':[0-9]+','') as "tags",
+		{tags} as "tags",
 		COUNT(*) as "count"
 	FROM basedata
 	WHERE
 		site = ?
-	GROUP BY regexp_replace(tags , ':[0-9]+','')
+	GROUP BY {tags}
 	ORDER BY COUNT(*) DESC
 	"""
 	tagcount = NamedTuple('tagcount', (('tags', str), ('count', int)))
