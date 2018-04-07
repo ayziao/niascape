@@ -5,7 +5,9 @@ from niascape.entity import basedata
 from niascape.utility.database import Database
 from niascape.utility.json import AsdictSupportJSONEncoder
 
-def top(option: dict) -> str:
+
+# noinspection PyUnusedLocal
+def top(option: dict) -> str:  # PENDING topという概念はWebでしか無いのでは であればwsgiclientで実装すべきでは
 	return 'top'
 
 

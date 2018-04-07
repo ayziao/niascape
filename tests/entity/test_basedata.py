@@ -1,13 +1,13 @@
 import unittest
 
+import niascape
+from niascape.entity import basedata
+from niascape.utility.database import Database
+
 import logging
 from pprint import pformat
 
 logger = logging.getLogger(__name__)
-
-import niascape
-from niascape.entity import basedata
-from niascape.utility.database import Database
 
 
 # logging.basicConfig(format='\033[0;32m%(asctime)s %(levelname)5s \033[0;34m%(message)s \033[0;32m(%(name)s.%(funcName)s) \033[0m', level=logging.DEBUG)  # PENDING リリースとデバッグ切り替えどうしようか logging.conf調べる

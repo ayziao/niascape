@@ -2,6 +2,7 @@ from unittest import TestCase
 from unittest import mock
 
 from niascape.wsgiclient import application, parse_query_string
+from niascape.utility.database import Database
 
 import logging
 
@@ -61,6 +62,7 @@ class TestWsgiclient(TestCase):
 	@mock.patch('niascape.action.basedata')
 	def test_daycount(self, moc):
 		def method(conn, site='', tag='', search_body=''):  # PENDING 引数の定義を実装から動的にパクれないか inspectモジュール？
+			self.assertIsInstance(conn, Database)
 			return [Dummy(f"called mock daycount {site} {tag} {search_body}".strip())]
 
 		moc._daycount = method

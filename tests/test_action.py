@@ -4,6 +4,7 @@ from unittest import mock
 import niascape
 from niascape import action
 from niascape.entity import basedata
+from niascape.utility.database import Database
 
 
 class Dummy:
@@ -27,6 +28,7 @@ class TestAction(unittest.TestCase):
 		self.assertTrue(hasattr(basedata, '_daycount'))  # モックだと関数名の修正についていけないのでチェック
 
 		def method(conn, site='', tag='', search_body=''):  # PENDING 引数の定義を実装から動的にパクれないか inspectモジュール？
+			self.assertIsInstance(conn, Database)
 			return [Dummy(f"called mock daycount {site} {tag} {search_body}".strip())]
 
 		moc._daycount = method
@@ -45,6 +47,7 @@ class TestAction(unittest.TestCase):
 		self.assertTrue(hasattr(basedata, '_tag_count'))  # モックだと関数名の修正についていけないのでチェック
 
 		def method(conn, site=''):  # PENDING 引数の定義を実装から動的にパクれないか inspectモジュール？
+			self.assertIsInstance(conn, Database)
 			return [Dummy(f"called mock _tag_count {site}".strip())]
 
 		moc._tag_count = method
