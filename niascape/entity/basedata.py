@@ -4,7 +4,7 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-from niascape.utility import Database
+from niascape.utility.database import Database
 
 
 def _daycount(db: Database, site: str = 'test', tag: str = '', search_body: str = '') -> List[Any]:
