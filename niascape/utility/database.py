@@ -30,6 +30,7 @@ class Database:
 			self._connection = sqlite3.connect(self._setting['postgresql']['connect'])  # fixme ファイル指定
 		logger.debug("sqlite3接続 :%s", pformat(self._connection))
 		self._dbms = 'sqlite'
+		self._connection.row_factory = sqlite3.Row
 
 	def execute(self, sql: str, param: Union[tuple, List[Union[str, int]]] = None) -> None:
 		if param is None:
@@ -37,23 +38,45 @@ class Database:
 		else:
 			cursor = self._connection.execute(sql, param)
 		logger.debug("rowcount :%s", cursor.rowcount)
+		cursor.close()
 
 	def execute_fetchall(self, sql: str, param: Union[tuple, List[Union[str, int]]] = None, *, namedtuple=None, tuplename: str = None):
-		self._connection.row_factory = sqlite3.Row
+		if namedtuple is None and tuplename is None:
+			return self.execute_fetchall_dict(sql, param)
+		else:
+			return self.execute_fetchall_namedtuple(sql, param, namedtuple=namedtuple, tuplename=tuplename)
+
+	def execute_fetchall_dict(self, sql: str, param: Union[tuple, List[Union[str, int]]] = None) -> List[Dict[str, Any]]:
 		if param is None:
 			cursor = self._connection.execute(sql)
 		else:
 			cursor = self._connection.execute(sql, param)
 		logger.debug("rowcount :%s", cursor.rowcount)
 
-		ret_list = []
+		result = []
 		for row in cursor:
-			item = {}
-			for k in row.keys():
-				item[k] = row[k]
-			ret_list.append(item)
+			result.append(dict(row))
 
-		return ret_list
+		cursor.close()
+
+		return result
+
+	def execute_fetchall_namedtuple(self, sql: str, param: Union[tuple, List[Union[str, int]]] = None, *, namedtuple=None, tuplename: str = 'namedtuple'):
+		if param is None:
+			cursor = self._connection.execute(sql)
+		else:
+			cursor = self._connection.execute(sql, param)
+		rows = cursor.fetchall()
+		if namedtuple is None:
+			namedtuple = collections.namedtuple(tuplename, rows[0].keys())
+
+		result = []
+		for row in rows:
+			result.append(namedtuple(*row))
+
+		cursor.close()
+
+		return result
 
 	def close(self) -> None:
 		logger.debug("接続クローズ :%s", pformat(self._connection))
@@ -85,7 +108,7 @@ class Postgresql(Database):
 
 	def execute_fetchall(self, sql: str, param: Union[tuple, List[Union[str, int]]] = None, *, namedtuple=None, tuplename: str = None):
 		if namedtuple is None and tuplename is None:
-			return self.execute_fetchall_dict(sql.replace('?', '%s'), param)
+			return self.execute_fetchall_dict(sql, param)
 		else:
 			return self.execute_fetchall_namedtuple(sql, param, namedtuple=namedtuple, tuplename=tuplename)
 

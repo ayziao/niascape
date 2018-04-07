@@ -26,7 +26,7 @@ class TestDatabase(unittest.TestCase):
 		db = get_db()
 		ret = db.execute("CREATE TABLE test (id serial PRIMARY KEY, num integer, data varchar);")
 		logger.debug(ret)
-		ret = db.execute("INSERT INTO test(num,data) VALUES (?,?)", (1, "hoge"))
+		ret = db.execute("INSERT INTO test(id, num, data) VALUES (?, ?, ?)", (1, 1, "hoge"))
 		logger.debug(ret)
 		cls._db = db
 
@@ -57,7 +57,19 @@ class TestDatabase(unittest.TestCase):
 		db = self._db
 
 		ret = db.execute_fetchall("SELECT * FROM test")
-		self.assertEqual({'data': 'hoge', 'id': None, 'num': 1}, ret[0])
+		self.assertEqual({'data': 'hoge', 'id': 1, 'num': 1}, ret[0])
+
+	def test_execute_fetchall_namedtuple(self):
+		db = self._db
+
+		ret = db.execute_fetchall("SELECT * FROM test WHERE id = ?",(1,), tuplename='test')
+		self.assertEqual(1, ret[0].id)
+		self.assertEqual(1, ret[0].num)
+		self.assertEqual('hoge', ret[0].data)
+
+		count = NamedTuple('count', (('name', str), ('count', int)))
+		ret = self._db.execute_fetchall("select 'hoge' as name , COUNT(*) as count from test", namedtuple=count)
+		self.assertEqual(1, ret[0].count)
 
 
 @unittest.skipUnless(psycopg2, 'psycopg2無し')
