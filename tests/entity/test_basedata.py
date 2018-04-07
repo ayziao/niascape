@@ -18,8 +18,8 @@ class TestBasedata(unittest.TestCase):
 
 	def test_daycount(self):
 		ini = niascape._read_ini('config.ini.sample')
-		# niascape.ini = ini
-		with Database.get_instance(ini) as conn:
+		# ini = niascape.ini
+		with Database(ini) as conn:
 			ref = basedata._daycount(conn)
 			logger.debug("日別投稿数\n%s", pformat(ref[:3]))
 			# self.assertEqual({'Date': '2018-02-18', 'count': 2}, ref[0])
@@ -40,8 +40,8 @@ class TestBasedata(unittest.TestCase):
 
 	def test_tag_count(self):
 		ini = niascape._read_ini('config.ini.sample')
-		# niascape.ini = ini
-		with Database.get_instance(ini) as db:
+		# ini = niascape.ini
+		with Database(ini) as db:
 			ref = basedata._tag_count(db)
 
 		logger.debug("タグ件数\n%s", pformat(ref[:3]))
@@ -49,8 +49,8 @@ class TestBasedata(unittest.TestCase):
 
 	def test_get_all(self):
 		ini = niascape._read_ini('config.ini.sample')
-		# niascape.ini = ini
-		with Database.get_instance(ini) as db:
+		# ini = niascape.ini
+		with Database(ini) as db:
 			ref = basedata.get_all(db)
 
 		logger.debug("basedata\n%s", pformat(ref[:3]))

@@ -17,10 +17,6 @@ logger = logging.getLogger(__name__)
 # PENDING DBMS別にクラス作る？ 継承？
 
 class Database:
-	@classmethod
-	def get_instance(cls, setting):
-		return Database(setting)
-
 	def __init__(self, setting=None):
 		logger.debug('Databaseインスタンス 初期化')
 		self._setting = setting
