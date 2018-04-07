@@ -96,6 +96,8 @@ class TestPostgresql(unittest.TestCase):
 		logger.debug(ret)
 		ret = db.execute_fetchall("select * from dummy")
 		logger.debug(ret)
+		ret = self._db.execute_fetchall("select COUNT(*) as count from dummy", tuplename='count')
+		self.assertEqual(3, ret[0].count)
 
 	def test_execute_fetchall(self):
 		ret = self._db.execute_fetchall("select * from test")
@@ -109,6 +111,6 @@ class TestPostgresql(unittest.TestCase):
 
 	def test_execute_fetchall_namedtuple_set(self):
 		count = NamedTuple('count', (('name', str), ('count', int)))
-		ret = self._db.execute_fetchall_namedtuple("select 'hoge' as name , COUNT(*) as count from test", namedtuple=count)
+		ret = self._db.execute_fetchall("select 'hoge' as name , COUNT(*) as count from test", namedtuple=count)
 		logger.debug(ret)
 		self.assertEqual(1, ret[0].count)

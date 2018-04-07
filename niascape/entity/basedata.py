@@ -16,10 +16,10 @@ def _daycount(db: Database, site: str = 'test', tag: str = '', search_body: str 
 	param = [site]  # type: List[Union[str, int]]
 
 	if tag != '':
-		tag_where = "AND (tags like %s or tags like %s)"
+		tag_where = "AND (tags like ? or tags like ?)"
 		param.extend([f"% {tag} %", f"% {tag}:%"])
 	if search_body != '':
-		body_where = "AND body LIKE %s"
+		body_where = "AND body LIKE ?"
 		param.append(f"%{search_body}%")
 
 	sql = f"""
@@ -27,12 +27,12 @@ def _daycount(db: Database, site: str = 'test', tag: str = '', search_body: str 
 		to_char(DATE("datetime"),'YYYY-MM-DD') as "date" ,
 		COUNT(*)                               as "count"
 	FROM basedata
-	WHERE site = %s
+	WHERE site = ?
 		{tag_where}
 		{body_where}
 	GROUP BY DATE("datetime")
 	ORDER BY DATE("datetime") DESC
-	LIMIT %s
+	LIMIT ?
 	"""
 	limit = 1000  # PENDING ページングする？
 	param.append(limit)
@@ -40,7 +40,7 @@ def _daycount(db: Database, site: str = 'test', tag: str = '', search_body: str 
 	logger.debug("日付投稿数SQL: %s", sql)
 	logger.debug("プレースホルダパラメータ: %s", param)
 
-	return db.execute_fetchall_namedtuple(sql, param, namedtuple=daycount)
+	return db.execute_fetchall(sql, param, namedtuple=daycount)
 
 
 def _tag_count(db: Database, site: str = 'test') -> List[Dict[str, Union[str, int]]]:
@@ -50,13 +50,13 @@ def _tag_count(db: Database, site: str = 'test') -> List[Dict[str, Union[str, in
 		COUNT(*) as "count"
 	FROM basedata
 	WHERE
-		site = %s
+		site = ?
 	GROUP BY regexp_replace(tags , ':[0-9]+','')
 	ORDER BY COUNT(*) DESC
 	"""
 	tagcount = NamedTuple('tagcount', (('tags', str), ('count', int)))
 
-	namedtuple_result = db.execute_fetchall_namedtuple(sql, (site,), namedtuple=tagcount)
+	namedtuple_result = db.execute_fetchall(sql, (site,), namedtuple=tagcount)
 
 	count_sum = {}  # type: Dict[str, int]
 	for row in namedtuple_result:
@@ -78,9 +78,9 @@ def get_all(db: Database, site: str = 'test'):
 	sql = """
 	SELECT * FROM basedata
 	WHERE
-		site = %s
+		site = ?
 	ORDER BY "datetime" DESC
-	LIMIT %s
+	LIMIT ?
 	"""
 	limit = 100  # TODO ページング
-	return db.execute_fetchall_namedtuple(sql, (site, limit), tuplename='basedata')
+	return db.execute_fetchall(sql, (site, limit), tuplename='basedata')
