@@ -1,7 +1,7 @@
 from json import encoder
 
 
-# noinspection PyArgumentList,PyShadowingNames,PyShadowingNames
+# noinspection PyArgumentList,PyShadowingNames,PyShadowingNames,SpellCheckingInspection
 class AsdictSupportJSONEncoder(encoder.JSONEncoder):  # xxx 標準モジュールからパクったところが警告いっぱい出る
 
 	def iterencode(self, o, _one_shot=False):
@@ -50,7 +50,7 @@ class AsdictSupportJSONEncoder(encoder.JSONEncoder):  # xxx 標準モジュー�
 		return _iterencode(o, 0)
 
 
-# noinspection PyPep8Naming,PyShadowingBuiltins,PyShadowingBuiltins,PyShadowingBuiltins,PyShadowingBuiltins,PyShadowingBuiltins,PyShadowingBuiltins,PyShadowingBuiltins,PyShadowingBuiltins
+# noinspection PyPep8,PyPep8Naming,PyShadowingBuiltins,SpellCheckingInspection,SpellCheckingInspection
 def _make_iterencode(markers, _default, _encoder, _indent, _floatstr, _key_separator, _item_separator, _sort_keys, _skipkeys, _one_shot,
 										 ## HACK: hand-optimized bytecode; turn globals into locals
 										 ValueError=ValueError,
@@ -67,7 +67,7 @@ def _make_iterencode(markers, _default, _encoder, _indent, _floatstr, _key_separ
 	if _indent is not None and not isinstance(_indent, str):
 		_indent = ' ' * _indent
 
-	# noinspection PyArgumentList,PyUnboundLocalVariable,PyProtectedMember
+	# noinspection PyArgumentList,PyUnboundLocalVariable,PyProtectedMember,SpellCheckingInspection
 	def _iterencode_list(lst, _current_indent_level):  # xxx 標準モジュールからパクったところが警告いっぱい出る
 		if not lst:
 			yield '[]'
@@ -126,7 +126,7 @@ def _make_iterencode(markers, _default, _encoder, _indent, _floatstr, _key_separ
 		if markers is not None:
 			del markers[markerid]
 
-	# noinspection PyArgumentList,PyUnboundLocalVariable,PyProtectedMember
+	# noinspection PyArgumentList,PyUnboundLocalVariable,PyProtectedMember,SpellCheckingInspection
 	def _iterencode_dict(dct, _current_indent_level):  # xxx 標準モジュールからパクったところが警告いっぱい出る
 		if not dct:
 			yield '{}'
@@ -208,7 +208,7 @@ def _make_iterencode(markers, _default, _encoder, _indent, _floatstr, _key_separ
 		if markers is not None:
 			del markers[markerid]
 
-	# noinspection PyArgumentList,PyUnboundLocalVariable,PyProtectedMember
+	# noinspection PyArgumentList,PyUnboundLocalVariable,PyProtectedMember,SpellCheckingInspection
 	def _iterencode(o, _current_indent_level):  # xxx 標準モジュールからパクったところが警告いっぱい出る
 		if isinstance(o, str):
 			yield _encoder(o)

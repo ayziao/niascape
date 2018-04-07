@@ -104,7 +104,7 @@ class TestAsdictSupportJSONEncoder(TestCase):
 		ret = json.dumps('hoge', cls=AsdictSupportJSONEncoder, check_circular=False)
 		self.assertEqual('"hoge"', ret)
 
-	def test_encode_flort(self):
+	def test_encode_float(self):
 		ret = json.dumps([float("inf"), -float("inf"), float("inf") - float("inf")], cls=AsdictSupportJSONEncoder)
 		self.assertEqual('[Infinity, -Infinity, NaN]', ret)
 		with self.assertRaises(ValueError):
