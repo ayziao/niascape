@@ -14,82 +14,87 @@ from pprint import pformat
 logger = logging.getLogger(__name__)
 
 
-# PENDING DBMS別にクラス作る？ 継承？
-
 class Database:
 	def __init__(self, setting=None):
 		logger.debug('Databaseインスタンス 初期化')
 		self._setting = setting
-		self._connection = None
-		self._dbms = ''
 		self._connect()
 
 	def _connect(self):
-		# TODO SQLite ファイル対応
-		if self._setting is None or psycopg2 is None:
-			self._dbms = 'sqlite'
-			self._connection = self._get_connection_sqlite()
+		if self._setting is None:
+			self._connection = sqlite3.connect(":memory:")
 		else:
-			self._dbms = 'postgresql'
-			self._connection = self._get_connection_ps(self._setting['postgresql']['connect'])
-
-	def _get_connection_ps(self, con):
-		connection = psycopg2.connect(con)
-		logger.debug("ポストグレス接続 :%s", pformat(connection))
-
-		return connection
-
-	def _get_connection_sqlite(self, con=None):
-		if con is None:
-			connection = sqlite3.connect(":memory:")
-		else:
-			connection = sqlite3.connect(con)  # fixme ファイル指定
-		logger.debug("sqlite3接続 :%s", pformat(connection))
-		return connection
+			self._connection = sqlite3.connect(self._setting['postgresql']['connect'])  # fixme ファイル指定
+		logger.debug("sqlite3接続 :%s", pformat(self._connection))
+		self._dbms = 'sqlite'
 
 	def execute(self, sql, param=None):
-		if self._dbms == 'postgresql':
-			with self._connection.cursor(cursor_factory=DictCursor) as cur:
-				cur.execute(sql, param)
-
-			logger.debug("sql :%s", sql)
-			logger.debug("query :%s", cur.query.decode('utf-8'))
+		if param is None:
+			cursor = self._connection.execute(sql)
 		else:
-			if param is None:
-				cursor = self._connection.execute(sql)
-			else:
-				cursor = self._connection.execute(sql, param)
-			logger.debug("rowcount :%s", cursor.rowcount)
+			cursor = self._connection.execute(sql, param)
+		logger.debug("rowcount :%s", cursor.rowcount)
 
 	def execute_fetchall(self, sql, param=None):
-		if self._dbms == 'postgresql':
-			result = []
-			with self._connection.cursor(cursor_factory=DictCursor) as cur:
-				cur.execute(sql, param)
-				for row in cur:
-					result.append(dict(row))
-
-			logger.debug("description :%s", pformat(cur.description))
-			logger.debug("sql :%s", sql)
-			logger.debug("query :%s", cur.query.decode('utf-8'))
-
-			return result
+		self._connection.row_factory = sqlite3.Row
+		if param is None:
+			cursor = self._connection.execute(sql)
 		else:
-			self._connection.row_factory = sqlite3.Row
-			if param is None:
-				cursor = self._connection.execute(sql)
-			else:
-				cursor = self._connection.execute(sql, param)
-			logger.debug("rowcount :%s", cursor.rowcount)
+			cursor = self._connection.execute(sql, param)
+		logger.debug("rowcount :%s", cursor.rowcount)
 
-			ret_list = []
-			for row in cursor:
-				item = {}
-				for k in row.keys():
-					item[k] = row[k]
-				ret_list.append(item)
+		ret_list = []
+		for row in cursor:
+			item = {}
+			for k in row.keys():
+				item[k] = row[k]
+			ret_list.append(item)
 
-			return ret_list
+		return ret_list
+
+	def execute_fetchall_namedtuple(self, sql, param=None, *, namedtuple=None, tuplename='namedtuple'):
+		pass  # TODO 実装する
+
+	def close(self):
+		logger.debug("接続クローズ :%s", pformat(self._connection))
+		self._connection.close()
+
+	def __enter__(self):
+		logger.debug("with 開始")
+		return self
+
+	def __exit__(self, exception_type, exception_value, traceback):
+		self.close()
+		logger.debug("with 終了")
+
+
+class Postgresql(Database):
+
+	def _connect(self):
+		logger.debug('Postgresqlインスタンス 初期化')
+		self._dbms = 'postgresql'
+		self._connection = psycopg2.connect(self._setting['postgresql']['connect'])
+		logger.debug("Postgresql接続 :%s", pformat(self._connection))
+
+	def execute(self, sql: str, param=None):
+		with self._connection.cursor(cursor_factory=DictCursor) as cur:
+			cur.execute(sql.replace('?', '%s'), param)
+
+		logger.debug("sql :%s", sql)
+		logger.debug("query :%s", cur.query.decode('utf-8'))
+
+	def execute_fetchall(self, sql, param=None):
+		result = []
+		with self._connection.cursor(cursor_factory=DictCursor) as cur:
+			cur.execute(sql, param)
+			for row in cur:
+				result.append(dict(row))
+
+		logger.debug("description :%s", pformat(cur.description))
+		logger.debug("sql :%s", sql)
+		logger.debug("query :%s", cur.query.decode('utf-8'))
+
+		return result
 
 	def execute_fetchall_namedtuple(self, sql, param=None, *, namedtuple=None, tuplename='namedtuple'):
 		result = []
@@ -108,14 +113,11 @@ class Database:
 
 		return result
 
-	def close(self):
-		logger.debug("接続クローズ :%s", pformat(self._connection))
-		self._connection.close()
 
-	def __enter__(self):
-		logger.debug("with 開始")
-		return self
-
-	def __exit__(self, exception_type, exception_value, traceback):
-		self.close()
-		logger.debug("with 終了")
+def get_db(setting=None):
+	# TODO SQLite ファイル対応
+	if setting is None or psycopg2 is None:
+		db = Database()
+	else:
+		db = Postgresql(setting)
+	return db
