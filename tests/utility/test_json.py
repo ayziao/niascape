@@ -7,6 +7,7 @@ from niascape.utility.json import AsdictSupportJSONEncoder
 
 
 class Asdict:
+	# noinspection PyMethodMayBeStatic
 	def _asdict(self):
 		return {'name': 'asdict'}
 

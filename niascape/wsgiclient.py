@@ -115,7 +115,6 @@ if __name__ == '__main__':  # pragma: no cover
 	# logging.basicConfig(level=logging.DEBUG)  # PENDING リリースとデバッグ切り替えどうしようか logging.conf調べる
 	logging.basicConfig(format='\033[0;32m%(asctime)s %(levelname)5s \033[0;34m%(message)s \033[0;32m(%(name)s.%(funcName)s) \033[0m', level=logging.DEBUG)  # PENDING リリースとデバッグ切り替えどうしようか logging.conf調べる
 
-
 	# noinspection PyUnusedLocal
 	def wsgi_start_response(status: str, header: list):
 		pass

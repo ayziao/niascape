@@ -67,7 +67,7 @@ def _make_iterencode(markers, _default, _encoder, _indent, _floatstr, _key_separ
 	if _indent is not None and not isinstance(_indent, str):
 		_indent = ' ' * _indent
 
-	# noinspection PyArgumentList,PyUnboundLocalVariable
+	# noinspection PyArgumentList,PyUnboundLocalVariable,PyProtectedMember
 	def _iterencode_list(lst, _current_indent_level):  # xxx 標準モジュールからパクったところが警告いっぱい出る
 		if not lst:
 			yield '[]'
@@ -126,7 +126,7 @@ def _make_iterencode(markers, _default, _encoder, _indent, _floatstr, _key_separ
 		if markers is not None:
 			del markers[markerid]
 
-	# noinspection PyArgumentList,PyUnboundLocalVariable
+	# noinspection PyArgumentList,PyUnboundLocalVariable,PyProtectedMember
 	def _iterencode_dict(dct, _current_indent_level):  # xxx 標準モジュールからパクったところが警告いっぱい出る
 		if not dct:
 			yield '{}'
@@ -208,7 +208,7 @@ def _make_iterencode(markers, _default, _encoder, _indent, _floatstr, _key_separ
 		if markers is not None:
 			del markers[markerid]
 
-	# noinspection PyArgumentList,PyUnboundLocalVariable
+	# noinspection PyArgumentList,PyUnboundLocalVariable,PyProtectedMember
 	def _iterencode(o, _current_indent_level):  # xxx 標準モジュールからパクったところが警告いっぱい出る
 		if isinstance(o, str):
 			yield _encoder(o)
