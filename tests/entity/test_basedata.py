@@ -19,6 +19,7 @@ class TestBasedata(unittest.TestCase):
 	@classmethod
 	def setUpClass(cls):
 		db = get_db(niascape._read_ini('config.ini.sample')['database'])
+		logger.debug(db.dbms)
 		# db = get_db(niascape.ini)
 		# db = get_db()
 

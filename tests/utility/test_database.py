@@ -102,7 +102,7 @@ class TestPostgresql(unittest.TestCase):
 		self.assertEqual(Postgresql, type(self._db))
 		self.assertIsInstance(self._db, Database)
 		self.assertIsInstance(self._db, Postgresql)
-		self.assertEqual('postgresql', self._db._dbms)
+		self.assertEqual('postgresql', self._db.dbms)
 		self.assertEqual(psycopg2.extensions.connection, type(self._db._connection))
 
 	def test_execute(self):

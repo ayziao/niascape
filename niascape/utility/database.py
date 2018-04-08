@@ -98,7 +98,7 @@ class Postgresql(Database):
 
 	def _connect(self) -> None:
 		logger.debug('Postgresqlインスタンス 初期化')
-		self._dbms = 'postgresql'
+		self.dbms = 'postgresql'
 		self._connection = psycopg2.connect(self._setting['connect'])
 		logger.debug("Postgresql接続 :%s", pformat(self._connection))
 
