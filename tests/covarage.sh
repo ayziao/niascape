@@ -5,6 +5,9 @@ rm -r htmlcov
 OPTION=$1
 if [ ${OPTION} = "pypy" ] ; then
   pypy3 -m coverage run --branch --source=niascape tests
+elif [ ${OPTION} = "all" ] ; then
+  coverage run --branch --source=niascape tests
+  pypy3 -m coverage run -a --branch --source=niascape tests
 else
   coverage run --branch --source=niascape tests
 fi
