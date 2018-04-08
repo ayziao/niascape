@@ -23,7 +23,7 @@ if __name__ == '__main__':  # pragma: no cover
 	logger.debug("実行中のスクリプトへの相対パス: %s", __file__)
 	logger.debug("実行中のスクリプトへの絶対パス: %s", os.path.abspath(__file__))
 
-	# sys.argv.extend("hoge test #test test".split())
+	# sys.argv.extend("nothing_action test #test test".split())
 	# sys.argv.extend("daycount test #test test".split())
 
 	print(cli.run(sys.argv))

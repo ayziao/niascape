@@ -92,4 +92,4 @@ def get_all(db: Database, site: str = 'test'):
 	LIMIT ?
 	"""
 	limit = 100  # TODO ページング
-	return db.execute_fetchall(sql, (site, limit), tuplename='basedata')
+	return db.execute_fetchall(sql, (site, limit), tuple_name='basedata')

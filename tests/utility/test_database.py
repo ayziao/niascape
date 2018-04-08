@@ -68,7 +68,7 @@ class TestDatabase(unittest.TestCase):
 	def test_execute_fetchall_namedtuple(self):
 		db = self._db
 
-		ret = db.execute_fetchall("SELECT * FROM test WHERE id = ?",(1,), tuplename='test')
+		ret = db.execute_fetchall("SELECT * FROM test WHERE id = ?", (1,), tuple_name='test')
 		self.assertEqual(1, ret[0].id)
 		self.assertEqual(1, ret[0].num)
 		self.assertEqual('hoge', ret[0].data)
@@ -114,7 +114,7 @@ class TestPostgresql(unittest.TestCase):
 		logger.debug(ret)
 		ret = db.execute_fetchall("select * from dummy")
 		logger.debug(ret)
-		ret = self._db.execute_fetchall("select COUNT(*) as count from dummy", tuplename='count')
+		ret = self._db.execute_fetchall("select COUNT(*) as count from dummy", tuple_name='count')
 		self.assertEqual(3, ret[0].count)
 
 	def test_execute_fetchall(self):

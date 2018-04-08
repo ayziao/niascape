@@ -43,11 +43,11 @@ class Database:
 		logger.debug("rowcount :%s", cursor.rowcount)
 		cursor.close()
 
-	def execute_fetchall(self, sql: str, param: Union[tuple, List[Union[str, int]]] = None, *, namedtuple=None, tuplename: str = None):
-		if namedtuple is None and tuplename is None:
+	def execute_fetchall(self, sql: str, param: Union[tuple, List[Union[str, int]]] = None, *, namedtuple=None, tuple_name: str = None):
+		if namedtuple is None and tuple_name is None:
 			return self.execute_fetchall_dict(sql, param)
 		else:
-			return self.execute_fetchall_namedtuple(sql, param, namedtuple=namedtuple, tuplename=tuplename)
+			return self.execute_fetchall_namedtuple(sql, param, namedtuple=namedtuple, tuple_name=tuple_name)
 
 	def execute_fetchall_dict(self, sql: str, param: Union[tuple, List[Union[str, int]]] = None) -> List[Dict[str, Any]]:
 		if param is None:
@@ -64,18 +64,18 @@ class Database:
 
 		return result
 
-	def execute_fetchall_namedtuple(self, sql: str, param: Union[tuple, List[Union[str, int]]] = None, *, namedtuple: NamedTuple = None, tuplename: str = 'namedtuple'):
+	def execute_fetchall_namedtuple(self, sql: str, param: Union[tuple, List[Union[str, int]]] = None, *, namedtuple=None, tuple_name: str = 'namedtuple'):
 		if param is None:
 			cursor = self._connection.execute(sql)
 		else:
 			cursor = self._connection.execute(sql, param)
 		rows = cursor.fetchall()
 		if namedtuple is None:
-			namedtuple = NamedTuple(tuplename, list(map(lambda x: (x, Any), rows[0].keys())))  # type: ignore  # XXX 動的すぎてかmypyさんにおこられる
+			namedtuple = NamedTuple(tuple_name, list(map(lambda x: (x, Any), rows[0].keys())))  # type: ignore  # XXX NamedTupleの型チェック無理
 
 		result = []
 		for row in rows:
-			result.append(namedtuple(*row))  # type: ignore  # XXX 動的すぎてかmypyさんにおこられる
+			result.append(namedtuple(*row))  # type: ignore # XXX NamedTupleの型チェック無理
 
 		cursor.close()
 
@@ -109,11 +109,11 @@ class Postgresql(Database):
 		logger.debug("sql :%s", sql)
 		logger.debug("query :%s", cur.query.decode('utf-8'))
 
-	def execute_fetchall(self, sql: str, param: Union[tuple, List[Union[str, int]]] = None, *, namedtuple: NamedTuple = None, tuplename: str = None):
-		if namedtuple is None and tuplename is None:
+	def execute_fetchall(self, sql: str, param: Union[tuple, List[Union[str, int]]] = None, *, namedtuple=None, tuple_name: str = None):
+		if namedtuple is None and tuple_name is None:
 			return self.execute_fetchall_dict(sql, param)
 		else:
-			return self.execute_fetchall_namedtuple(sql, param, namedtuple=namedtuple, tuplename=tuplename)
+			return self.execute_fetchall_namedtuple(sql, param, namedtuple=namedtuple, tuple_name=tuple_name)
 
 	def execute_fetchall_dict(self, sql: str, param: Union[tuple, List[Union[str, int]]] = None) -> List[Dict[str, Any]]:
 		result = []
@@ -128,16 +128,16 @@ class Postgresql(Database):
 
 		return result
 
-	def execute_fetchall_namedtuple(self, sql: str, param: Union[tuple, List[Union[str, int]]] = None, *, namedtuple: NamedTuple = None, tuplename: str = 'namedtuple'):
+	def execute_fetchall_namedtuple(self, sql: str, param: Union[tuple, List[Union[str, int]]] = None, *, namedtuple=None, tuple_name: str = 'namedtuple'):
 		result = []
 		with self._connection.cursor() as cur:
 			cur.execute(sql.replace('?', '%s'), param)
 			rows = cur.fetchall()
 			if namedtuple is None:
-				namedtuple = NamedTuple(tuplename, list(map(lambda x: (x.name, Any), cur.description)))  # type: ignore  # XXX 動的すぎてかmypyさんにおこられる
+				namedtuple = NamedTuple(tuple_name, list(map(lambda x: (x.name, Any), cur.description)))  # type: ignore # XXX NamedTupleの型チェック無理
 
 			for row in rows:
-				result.append(namedtuple(*row))  # type: ignore  # XXX 動的すぎてかmypyさんにおこられる
+				result.append(namedtuple(*row))  # type: ignore # XXX NamedTupleの型チェック無理
 
 		logger.debug("description :%s", pformat(cur.description))
 		logger.debug("sql :%s", sql)
