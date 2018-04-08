@@ -1,7 +1,6 @@
-from typing import Any, Dict, List, Union
+from typing import Any, Dict, List, Union, NamedTuple
 from configparser import ConfigParser
 
-import collections
 import sqlite3
 
 try:
@@ -20,16 +19,20 @@ logger = logging.getLogger(__name__)
 class Database:
 	def __init__(self, setting: ConfigParser = None) -> None:
 		logger.debug('Databaseインスタンス 初期化')
+
 		self._setting = setting
+		self.dbms = ''  # type: str
+		self._connection = None  # type: Any
+
 		self._connect()
 
 	def _connect(self) -> None:
 		if self._setting is None:
-			self._connection = sqlite3.connect(":memory:")  # type: Any
+			self._connection = sqlite3.connect(":memory:")
 		else:
-			self._connection = sqlite3.connect(self._setting['sqlite3']['connect'])  # fixme ファイル指定
+			self._connection = sqlite3.connect(self._setting['connect'])  # type: ignore  # XXX 設定をセクションで受け取ってるとmypyさんにおこられ 辞書化すべきか
 		logger.debug("sqlite3接続 :%s", pformat(self._connection))
-		self._dbms = 'sqlite'
+		self.dbms = 'sqlite'
 		self._connection.row_factory = sqlite3.Row
 
 	def execute(self, sql: str, param: Union[tuple, List[Union[str, int]]] = None) -> None:
@@ -61,18 +64,18 @@ class Database:
 
 		return result
 
-	def execute_fetchall_namedtuple(self, sql: str, param: Union[tuple, List[Union[str, int]]] = None, *, namedtuple=None, tuplename: str = 'namedtuple'):
+	def execute_fetchall_namedtuple(self, sql: str, param: Union[tuple, List[Union[str, int]]] = None, *, namedtuple: NamedTuple = None, tuplename: str = 'namedtuple'):
 		if param is None:
 			cursor = self._connection.execute(sql)
 		else:
 			cursor = self._connection.execute(sql, param)
 		rows = cursor.fetchall()
 		if namedtuple is None:
-			namedtuple = collections.namedtuple(tuplename, rows[0].keys())
+			namedtuple = NamedTuple(tuplename, list(map(lambda x: (x, Any), rows[0].keys())))  # type: ignore  # XXX 動的すぎてかmypyさんにおこられる
 
 		result = []
 		for row in rows:
-			result.append(namedtuple(*row))
+			result.append(namedtuple(*row))  # type: ignore  # XXX 動的すぎてかmypyさんにおこられる
 
 		cursor.close()
 
@@ -96,7 +99,7 @@ class Postgresql(Database):
 	def _connect(self) -> None:
 		logger.debug('Postgresqlインスタンス 初期化')
 		self._dbms = 'postgresql'
-		self._connection = psycopg2.connect(self._setting['postgresql']['connect'])
+		self._connection = psycopg2.connect(self._setting['connect'])
 		logger.debug("Postgresql接続 :%s", pformat(self._connection))
 
 	def execute(self, sql: str, param: Union[tuple, List[Union[str, int]]] = None) -> None:
@@ -106,7 +109,7 @@ class Postgresql(Database):
 		logger.debug("sql :%s", sql)
 		logger.debug("query :%s", cur.query.decode('utf-8'))
 
-	def execute_fetchall(self, sql: str, param: Union[tuple, List[Union[str, int]]] = None, *, namedtuple=None, tuplename: str = None):
+	def execute_fetchall(self, sql: str, param: Union[tuple, List[Union[str, int]]] = None, *, namedtuple: NamedTuple = None, tuplename: str = None):
 		if namedtuple is None and tuplename is None:
 			return self.execute_fetchall_dict(sql, param)
 		else:
@@ -125,16 +128,16 @@ class Postgresql(Database):
 
 		return result
 
-	def execute_fetchall_namedtuple(self, sql: str, param: Union[tuple, List[Union[str, int]]] = None, *, namedtuple=None, tuplename: str = 'namedtuple'):
+	def execute_fetchall_namedtuple(self, sql: str, param: Union[tuple, List[Union[str, int]]] = None, *, namedtuple: NamedTuple = None, tuplename: str = 'namedtuple'):
 		result = []
 		with self._connection.cursor() as cur:
 			cur.execute(sql.replace('?', '%s'), param)
 			rows = cur.fetchall()
 			if namedtuple is None:
-				namedtuple = collections.namedtuple(tuplename, list(map(lambda x: x.name, cur.description)))
+				namedtuple = NamedTuple(tuplename, list(map(lambda x: (x.name, Any), cur.description)))  # type: ignore  # XXX 動的すぎてかmypyさんにおこられる
 
 			for row in rows:
-				result.append(namedtuple(*row))
+				result.append(namedtuple(*row))  # type: ignore  # XXX 動的すぎてかmypyさんにおこられる
 
 		logger.debug("description :%s", pformat(cur.description))
 		logger.debug("sql :%s", sql)
@@ -144,9 +147,10 @@ class Postgresql(Database):
 
 
 def get_db(setting: ConfigParser = None) -> Database:
-	# TODO SQLite ファイル対応
-	if setting is None or psycopg2 is None:
-		db = Database()
-	else:
-		db = Postgresql(setting)
-	return db
+	if setting is not None:
+		if setting['dbms'] == 'sqlite':
+			return Database(setting)
+		elif setting['dbms'] == 'postgresql' and psycopg2 is not None:
+			return Postgresql(setting)
+
+	return Database()

@@ -9,7 +9,7 @@ logger = logging.getLogger(__name__)
 
 def _daycount(db: Database, site: str = 'test', tag: str = '', search_body: str = '') -> List[Any]:
 	"""
-	戻り値 名前付きタプルのリスト # xxx List[Daycount] するにはclass Daycount(NamedTuple) 必要 pypy…
+	戻り値 名前付きタプルのリスト # xxx List[DayCount] するにはclass DayCount(NamedTuple) 必要 pypy…
 	"""
 	tag_where = ''
 	body_where = ''
@@ -22,7 +22,7 @@ def _daycount(db: Database, site: str = 'test', tag: str = '', search_body: str 
 		body_where = "AND body LIKE ?"
 		param.append(f"%{search_body}%")
 
-	if db._dbms == 'postgresql':
+	if db.dbms == 'postgresql':
 		date = 'to_char(DATE("datetime"),\'YYYY-MM-DD\')'
 	else:
 		date = 'DATE("datetime")'
@@ -49,7 +49,7 @@ def _daycount(db: Database, site: str = 'test', tag: str = '', search_body: str 
 
 
 def _tag_count(db: Database, site: str = 'test') -> List[Dict[str, Union[str, int]]]:
-	if db._dbms == 'postgresql':
+	if db.dbms == 'postgresql':
 		tags = "regexp_replace(tags , ':[0-9]+','')"
 	else:
 		tags = "replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(tags,'0',''),'1',''),'2',''),'3',''),'4',''),'5',''),'6',''),'7',''),'8',''),'9',''),':','')"

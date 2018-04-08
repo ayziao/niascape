@@ -1,2 +1,7 @@
-[postgresql]
+[database]
+dbms = postgresql
 connect = host=localhost dbname=postgres
+
+[database_sqlite]
+dbms = sqlite
+connect = :memory:

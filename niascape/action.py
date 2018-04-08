@@ -12,11 +12,10 @@ def top(option: dict) -> str:  # PENDING topという概念はWebでしか無い
 
 
 def daycount(option: dict) -> str:
-	with get_db(niascape.ini) as db:
+	with get_db(niascape.ini['database']) as db:  # type: ignore  # XXX セクションぶっこむとmypyさんにおこられ 辞書化すべきか
 		return json.dumps(basedata._daycount(db, **option), cls=AsdictSupportJSONEncoder)  # PENDING どこでJSON化すべきか
 
 
 def tagcount(option: dict) -> str:
-	with get_db(niascape.ini) as db:
-		# return json.dumps(list(map(lambda x: x._asdict(), basedata._tag_count(db, **option))))  # PENDING どこでJSON化すべきか
+	with get_db(niascape.ini['database']) as db:  # type: ignore  # XXX セクションぶっこむとmypyさんにおこられ 辞書化すべきか
 		return json.dumps(basedata._tag_count(db, **option), cls=AsdictSupportJSONEncoder)  # PENDING どこでJSON化すべきか

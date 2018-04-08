@@ -23,7 +23,9 @@ class TestDatabase(unittest.TestCase):
 
 	@classmethod
 	def setUpClass(cls):
-		db = get_db()
+		ini = niascape._read_ini('config.ini.sample')  # TODO configパーサーオブジェクトやめる
+		niascape.ini = ini
+		db = get_db(ini['database_sqlite'])
 		ret = db.execute("CREATE TABLE test (id serial PRIMARY KEY, num integer, data varchar);")
 		logger.debug(ret)
 		ret = db.execute("INSERT INTO test(id, num, data) VALUES (?, ?, ?)", (1, 1, "hoge"))
@@ -37,7 +39,11 @@ class TestDatabase(unittest.TestCase):
 	def test_instance(self):
 		self.assertEqual(Database, type(self._db))
 		self.assertIsInstance(self._db, Database)
-		self.assertEqual('sqlite', self._db._dbms)
+		self.assertEqual('sqlite', self._db.dbms)
+
+		db = get_db()
+		self.assertIsInstance(db, Database)
+		self.assertEqual('sqlite', db.dbms)
 
 	def test_execute(self):
 		db = self._db
@@ -80,7 +86,7 @@ class TestPostgresql(unittest.TestCase):
 	def setUpClass(cls):
 		ini = niascape._read_ini('config.ini.sample')  # TODO configパーサーオブジェクトやめる
 		niascape.ini = ini
-		cls._db = get_db(ini)
+		cls._db = get_db(ini['database'])
 		ret = cls._db.execute_fetchall("select version()")
 		logger.debug(ret)
 		ret = cls._db.execute("CREATE TABLE test (id serial PRIMARY KEY, num integer, data varchar);")
