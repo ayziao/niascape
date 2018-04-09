@@ -29,6 +29,9 @@ class TestDatabase(unittest.TestCase):
 		ret = db.execute("CREATE TABLE test (id serial PRIMARY KEY, num integer, data varchar);")
 		logger.debug(ret)
 		ret = db.execute("INSERT INTO test(id, num, data) VALUES (?, ?, ?)", (1, 1, "hoge"))
+		ret = db.execute("INSERT INTO test(id, num, data) VALUES (?, ?, ?)", (2, 2, "piyp"))
+		ret = db.execute("INSERT INTO test(id, num, data) VALUES (?, ?, ?)", (3, 3, "fuga"))
+		ret = db.execute("INSERT INTO test(id, num, data) VALUES (?, ?, ?)", (4, 4, "ham"))
 		logger.debug(ret)
 		cls._db = db
 
@@ -65,6 +68,18 @@ class TestDatabase(unittest.TestCase):
 		ret = db.execute_fetchall("SELECT * FROM test")
 		self.assertEqual({'data': 'hoge', 'id': 1, 'num': 1}, ret[0])
 
+	def test_fetc_page(self):
+		db = self._db
+
+		ret = db.execute_fetch_page("SELECT * FROM test")
+		self.assertEqual({'data': 'hoge', 'id': 1, 'num': 1}, ret[0])
+
+		ret = db.execute_fetch_page("SELECT * FROM test", page="aaa")
+		self.assertEqual({'data': 'hoge', 'id': 1, 'num': 1}, ret[0])
+
+		ret = db.execute_fetch_page("SELECT * FROM test", page=2, per_page=2)
+		self.assertEqual({'data': 'fuga', 'id': 3, 'num': 3}, ret[0])
+
 	def test_execute_fetchall_namedtuple(self):
 		db = self._db
 
@@ -75,7 +90,7 @@ class TestDatabase(unittest.TestCase):
 
 		count = NamedTuple('count', (('name', str), ('count', int)))
 		ret = self._db.execute_fetchall("select 'hoge' as name , COUNT(*) as count from test", namedtuple=count)
-		self.assertEqual(1, ret[0].count)
+		self.assertEqual(4, ret[0].count)
 
 
 @unittest.skipUnless(psycopg2, 'psycopg2無し')
@@ -92,6 +107,9 @@ class TestPostgresql(unittest.TestCase):
 		ret = cls._db.execute("CREATE TABLE test (id serial PRIMARY KEY, num integer, data varchar);")
 		logger.debug(ret)
 		ret = cls._db.execute("INSERT INTO test(num,data) VALUES (%s,%s)", (1, "hoge"))
+		ret = cls._db.execute("INSERT INTO test(num,data) VALUES (%s,%s)", (2, "piyp"))
+		ret = cls._db.execute("INSERT INTO test(num,data) VALUES (%s,%s)", (3, "fuga"))
+		ret = cls._db.execute("INSERT INTO test(num,data) VALUES (%s,%s)", (4, "ham"))
 		logger.debug(ret)
 
 	@classmethod
@@ -131,4 +149,4 @@ class TestPostgresql(unittest.TestCase):
 		count = NamedTuple('count', (('name', str), ('count', int)))
 		ret = self._db.execute_fetchall("select 'hoge' as name , COUNT(*) as count from test", namedtuple=count)
 		logger.debug(ret)
-		self.assertEqual(1, ret[0].count)
+		self.assertEqual(4, ret[0].count)

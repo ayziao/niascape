@@ -31,7 +31,7 @@ def run(argv: List[str]) -> str:
 def parse_argument_vector(argv: List[str]) -> Tuple[List[str], Dict[str, Union[str, bool]], List[str]]:
 	# PENDING urllib.parse.parse_qsのようにオプション値を全部リストにすべき？
 	arguments = []  # type: List[str]  # PENDING 0を削ってwsgiと合わすべき？
-	option_dict = {}  # type: Dict[str, Union[str, bool]]
+	option_dict = {}  # type: Dict[str, Union[str, int, bool]]
 	short_options = []  # type: List[str]
 
 	option_name = ''
@@ -43,7 +43,10 @@ def parse_argument_vector(argv: List[str]) -> Tuple[List[str], Dict[str, Union[s
 				option_name = ''
 			if '=' in argument:
 				key, val = argument[2:].split('=')
-				option_dict[key] = val
+				if val.isdigit():
+					option_dict[key] = int(val)  # PENDING 他の型とか？
+				else:
+					option_dict[key] = val
 			else:
 				option_name = argument[2:]
 		# logger.debug(argument + ': Long option')
@@ -55,7 +58,10 @@ def parse_argument_vector(argv: List[str]) -> Tuple[List[str], Dict[str, Union[s
 			if option_name == '':
 				arguments.append(argument)
 			else:
-				option_dict[option_name] = argument
+				if argument.isdigit():
+					option_dict[option_name] = int(argument)  # PENDING 他の型とか？
+				else:
+					option_dict[option_name] = argument
 				option_name = ''
 
 	if option_name != '':

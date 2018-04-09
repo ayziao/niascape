@@ -9,6 +9,8 @@ if __name__ == '__main__':  # pragma: no cover
 	import os
 	import sys
 	import logging
+	import json
+	from pprint import pprint
 
 	logger = logging.getLogger(__name__)
 	sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))  # PENDING 実行環境へパッケージとしてインストールすればsys.path.append必要なくなるくさいがどうするか
@@ -23,9 +25,15 @@ if __name__ == '__main__':  # pragma: no cover
 	logger.debug("実行中のスクリプトへの相対パス: %s", __file__)
 	logger.debug("実行中のスクリプトへの絶対パス: %s", os.path.abspath(__file__))
 
-	# sys.argv.extend("nothing_action test #test test".split())
-	# sys.argv.extend("daycount test #test test".split())
+	# sys.argv.extend("nothing_action".split())
+	# sys.argv.extend("daycount --site=test --tag=#test test".split())
+	# sys.argv.extend("tagcount --site=test".split())
+	sys.argv.extend("timeline --site=test --page=2".split())
 
-	print(cli.run(sys.argv))
+	pprint(cli.run(sys.argv))
+
+	ret = json.loads(cli.run(sys.argv))
+	print(len(ret))
+	pprint(ret)
 
 	logger.debug("終了時刻(UTC): %s", datetime.datetime.utcnow())

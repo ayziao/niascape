@@ -50,6 +50,17 @@ class Database:
 		else:
 			return self.execute_fetchall_namedtuple(sql, param, namedtuple=namedtuple, tuple_name=tuple_name)
 
+	def execute_fetch_page(self, sql: str, param: Union[tuple, List[Union[str, int]]] = None, page=1, per_page=100, *, namedtuple=None, tuple_name: str = None):
+		if not isinstance(page, int) or page < 1:
+			page = 1
+		offset = per_page * (page - 1)
+		sql += f' LIMIT {per_page} OFFSET {offset}'
+
+		if namedtuple is None and tuple_name is None:
+			return self.execute_fetchall_dict(sql, param)
+		else:
+			return self.execute_fetchall_namedtuple(sql, param, namedtuple=namedtuple, tuple_name=tuple_name)
+
 	def execute_fetchall_dict(self, sql: str, param: Union[tuple, List[Union[str, int]]] = None) -> List[Dict[str, Any]]:
 		if param is None:
 			cursor = self._connection.execute(sql)

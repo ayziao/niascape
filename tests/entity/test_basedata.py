@@ -103,11 +103,15 @@ class TestBasedata(unittest.TestCase):
 		db = self._db
 
 		ref = basedata.get_all(db)
-		logger.debug("basedata\n%s", pformat(ref[:3]))
+		logger.debug("basedata\n%s", pformat(ref[:5]))
 		self.assertEqual('20170101235959999000', ref[0].identifier)
 
+		ref = basedata.get_all(db, 'test', 2)
+		logger.debug("basedata\n%s", pformat(ref[:5]))
+		self.assertEqual([], ref)
+
 		ref = basedata.get_all(db, 'dummy')
-		logger.debug("basedata\n%s", pformat(ref[:3]))
+		logger.debug("basedata\n%s", pformat(ref[:5]))
 		self.assertEqual('20180101123456789000', ref[0].identifier)
 		# self.assertEqual('20180218232339289972', ref[0].identifier)
 		pass

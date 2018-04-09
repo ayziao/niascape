@@ -83,13 +83,12 @@ def _tag_count(db: Database, site: str = 'test') -> List[Dict[str, Union[str, in
 	return result
 
 
-def get_all(db: Database, site: str = 'test'):
+def get_all(db: Database, site: str = 'test', page=1):
 	sql = """
 	SELECT * FROM basedata
 	WHERE
 		site = ?
 	ORDER BY "identifier" DESC
-	LIMIT ?
 	"""
-	limit = 200  # TODO ページング
-	return db.execute_fetchall(sql, (site, limit), tuple_name='basedata')
+	per_page = 200  # TODO 1ページあたりの表示数を変更できるようにする
+	return db.execute_fetch_page(sql, (site,), page, per_page, tuple_name='basedata')
