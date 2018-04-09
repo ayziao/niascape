@@ -29,11 +29,10 @@ def application(environ: dict, start_response: Callable[[str, List[Tuple[str, st
 		yield 'Not Found'.encode()
 
 	else:
-		parsed = _parse(environ)  # parse_query_string(environ['QUERY_STRING'], True)
-		arguments = parsed[0]
-		option_dict = parsed[1]
+		arguments, option_dict = _parse(environ)  # parse_query_string(environ['QUERY_STRING'], True)
 
-		logger.debug("parsed: %s", pformat(parsed))
+		logger.debug("parsed: %s", pformat(arguments))
+		logger.debug("parsed: %s", pformat(option_dict))
 
 		if len(arguments) > 0:
 			action_name = arguments[0]
