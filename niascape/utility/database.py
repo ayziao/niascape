@@ -110,12 +110,6 @@ class Postgresql(Database):
 		logger.debug("sql :%s", sql)
 		logger.debug("query :%s", cur.query.decode('utf-8'))
 
-	def execute_fetchall(self, sql: str, param: Union[tuple, List[Union[str, int]]] = None, *, namedtuple=None, tuple_name: str = None):
-		if namedtuple is None and tuple_name is None:
-			return self.execute_fetchall_dict(sql, param)
-		else:
-			return self.execute_fetchall_namedtuple(sql, param, namedtuple=namedtuple, tuple_name=tuple_name)
-
 	def execute_fetchall_dict(self, sql: str, param: Union[tuple, List[Union[str, int]]] = None) -> List[Dict[str, Any]]:
 		result = []
 		with self._connection.cursor(cursor_factory=DictCursor) as cur:
