@@ -57,6 +57,19 @@ class TestAction(unittest.TestCase):
 		ref = action.tagcount({'site': 'test'})
 		self.assertEqual('[{"dummy": "called mock _tag_count test"}]', ref)
 
+	@mock.patch('niascape.action.basedata')
+	def test_timeline(self, moc):
+		self.assertTrue(hasattr(basedata, 'get_all'))  # モックだと関数名の修正についていけないのでチェック
+
+		def method(conn, site=''):  # PENDING 引数の定義を実装から動的にパクれないか inspectモジュール？
+			self.assertIsInstance(conn, Database)
+			return [Dummy(f"called mock get_all {site}".strip())]
+
+		moc.get_all = method
+
+		ref = action.timeline({})
+		self.assertEqual('[{"dummy": "called mock get_all"}]', ref)
+
 	@unittest.skip("モックなし確認用")
 	def test_daycount_no_mock(self):
 		ini = niascape._read_ini('config.ini')
