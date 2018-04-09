@@ -104,7 +104,7 @@ class TestBasedata(unittest.TestCase):
 
 		ref = basedata.get_all(db)
 		logger.debug("basedata\n%s", pformat(ref[:3]))
-		self.assertEqual('12345678901234567890', ref[0].identifier)
+		self.assertEqual('20170101235959999000', ref[0].identifier)
 
 		ref = basedata.get_all(db, 'dummy')
 		logger.debug("basedata\n%s", pformat(ref[:3]))

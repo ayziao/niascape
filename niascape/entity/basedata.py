@@ -88,8 +88,8 @@ def get_all(db: Database, site: str = 'test'):
 	SELECT * FROM basedata
 	WHERE
 		site = ?
-	ORDER BY "datetime" DESC
+	ORDER BY "identifier" DESC
 	LIMIT ?
 	"""
-	limit = 100  # TODO ページング
+	limit = 200  # TODO ページング
 	return db.execute_fetchall(sql, (site, limit), tuple_name='basedata')

@@ -31,6 +31,7 @@ class Database:
 			self._connection = sqlite3.connect(":memory:")
 		else:
 			self._connection = sqlite3.connect(self._setting['connect'])  # type: ignore  # XXX 設定をセクションで受け取ってるとmypyさんにおこられ 辞書化すべきか
+			logger.debug("sqlite3ファイル :%s", pformat(self._setting['connect']))
 		logger.debug("sqlite3接続 :%s", pformat(self._connection))
 		self.dbms = 'sqlite'
 		self._connection.row_factory = sqlite3.Row
