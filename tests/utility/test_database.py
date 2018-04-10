@@ -1,4 +1,4 @@
-import unittest
+from unittest import TestCase, skipUnless
 
 from typing import NamedTuple
 
@@ -18,7 +18,7 @@ logger = logging.getLogger(__name__)
 # logging.basicConfig(format='\033[0;32m%(asctime)s %(levelname)5s \033[0;34m%(message)s \033[0;32m(%(name)s.%(funcName)s) \033[0m', level=logging.DEBUG)  # PENDING リリースとデバッグ切り替えどうしようか logging.conf調べる
 
 
-class TestDatabase(unittest.TestCase):
+class TestDatabase(TestCase):
 	_db = None
 
 	@classmethod
@@ -93,8 +93,8 @@ class TestDatabase(unittest.TestCase):
 		self.assertEqual(4, ret[0].count)
 
 
-@unittest.skipUnless(psycopg2, 'psycopg2無し')
-class TestPostgresql(unittest.TestCase):
+@skipUnless(psycopg2, 'psycopg2無し')
+class TestPostgresql(TestCase):
 	_db = None
 
 	@classmethod

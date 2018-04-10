@@ -11,8 +11,8 @@ import unittest
 import os
 import sys
 
-import logging
 from pprint import pformat
+import logging.config
 
 logger = logging.getLogger(__name__)
 

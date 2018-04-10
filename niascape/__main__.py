@@ -8,8 +8,8 @@ if __name__ == '__main__':  # pragma: no cover
 
 	import os
 	import sys
-	import logging
 	import json
+	import logging
 	from pprint import pprint
 
 	logger = logging.getLogger(__name__)

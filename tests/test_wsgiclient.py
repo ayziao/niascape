@@ -1,5 +1,4 @@
-from unittest import TestCase
-from unittest import mock
+from unittest import TestCase, mock
 
 from niascape.wsgiclient import application, parse_query_string
 from niascape.utility.database import Database

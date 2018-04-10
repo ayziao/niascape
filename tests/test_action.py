@@ -1,5 +1,4 @@
-import unittest
-from unittest import mock
+from unittest import TestCase, mock, skip
 
 import niascape
 from niascape import action
@@ -15,7 +14,7 @@ class Dummy:
 		return {'dummy': self.dummy}
 
 
-class TestAction(unittest.TestCase):
+class TestAction(TestCase):
 	@classmethod
 	def setUpClass(cls):
 		ini = niascape._read_ini('config.ini.sample')
@@ -70,7 +69,7 @@ class TestAction(unittest.TestCase):
 		ref = action.timeline({})
 		self.assertEqual('[{"dummy": "called mock get_all"}]', ref)
 
-	@unittest.skip("モックなし確認用")
+	@skip("モックなし確認用")
 	def test_daycount_no_mock(self):
 		ini = niascape._read_ini('config.ini')
 		niascape.ini = ini
