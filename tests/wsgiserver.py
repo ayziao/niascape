@@ -4,13 +4,13 @@
 """
 import os
 import sys
+import json
 from wsgiref import simple_server
 
-import logging
+import logging.config
 
-logger = logging.getLogger(__name__)
-
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))  # PENDING 実行環境へパッケージとしてインストールすればsys.path.append必要なくなるくさいがどうするか
+path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.append(path)  # PENDING 実行環境へパッケージとしてインストールすればsys.path.append必要なくなるくさいがどうするか
 
 import niascape
 from niascape import wsgiclient
@@ -25,7 +25,9 @@ def make_server():
 
 
 if __name__ == '__main__':
-	logging.basicConfig(format='\033[0;32m%(asctime)s %(levelname)5s \033[0;34m%(message)s \033[0;32m(%(name)s.%(funcName)s) \033[0m', level=logging.DEBUG)  # PENDING リリースとデバッグ切り替えどうしようか logging.conf調べる
+	with open(path + '/tests/logger_config.json', 'r') as fp:
+		logging.config.dictConfig(json.load(fp))
+	logger = logging.getLogger(__name__)
 	logger.debug("開始時刻(UTC): %s", niascape.init_time)
 
 	make_server()

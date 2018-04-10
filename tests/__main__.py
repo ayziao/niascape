@@ -10,27 +10,32 @@ import unittest
 
 import os
 import sys
+import json
 
 from pprint import pformat
 import logging.config
-
-logger = logging.getLogger(__name__)
 
 if __name__ == "__main__":
 	verbosity = 1
 	if __file__ == "tests":  # coverage 通すとディレクトリ実行時__file__がtests/__main__.pyにならない対策
 		path = os.path.abspath(__file__)
 		if 'pypy' in sys.executable:
-			# logging.basicConfig(format='\033[0;32m%(asctime)s %(levelname)5s \033[0;34m%(message)s \033[0;32m(%(name)s.%(funcName)s) \033[0m', level=logging.DEBUG)  # PENDING リリースとデバッグ切り替えどうしようか logging.conf調べる
+			# with open(path + '/logger_config.json', 'r') as fp: logging.config.dictConfig(json.load(fp))
 			pass
 	else:
 		path = os.path.dirname(os.path.abspath(__file__))
-		logging.basicConfig(format='\033[0;32m%(asctime)s %(levelname)5s \033[0;34m%(message)s \033[0;32m(%(name)s.%(funcName)s) \033[0m', level=logging.DEBUG)  # coverage通してない時デバッグ情報出す
+		with open(path + '/logger_config.json', 'r') as fp:
+			logging.config.dictConfig(json.load(fp))
+
 		if __file__ == "tests/__main__.py":
 			verbosity = 2
 
+	logger = logging.getLogger(__name__)
 	logger.debug("executable : %s", sys.executable)
-	logger.debug("カレントディレクトリ          : %s", os.getcwd())
+	logger.debug("__name__: %s", __name__)
+	logger.debug("path: %s", path)
+	logger.info("__file__: %s", __file__)
+	logger.info("カレントディレクトリ          : %s", os.getcwd())
 	logger.debug("実行中のスクリプトへの相対パス: %s", __file__)
 	logger.debug("実行中のスクリプトへの絶対パス: %s", os.path.abspath(__file__))
 	logger.debug("Python検索パス:\n%s", pformat(sys.path))

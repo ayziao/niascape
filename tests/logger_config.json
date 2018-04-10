@@ -1,0 +1,22 @@
+{
+	"version": 1,
+	"root": {
+		"level": "DEBUG",
+		"handlers": [
+			"debug"
+		]
+	},
+	"handlers": {
+		"debug": {
+			"class": "logging.StreamHandler",
+			"level": "DEBUG",
+			"formatter": "colored",
+			"stream": "ext://sys.stderr"
+		}
+	},
+	"formatters": {
+		"colored": {
+			"format": "\u001b[0;32m%(asctime)s %(levelname)5s \u001b[0;34m%(message)s \u001b[0;32m(%(name)s.%(funcName)s) \u001b[0m"
+		}
+	}
+}

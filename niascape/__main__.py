@@ -8,14 +8,14 @@ if __name__ == '__main__':  # pragma: no cover
 
 	import os
 	import sys
-	import json
-	import logging
+	import logging.config
 	from pprint import pprint
 
-	logger = logging.getLogger(__name__)
-	sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))  # PENDING 実行環境へパッケージとしてインストールすればsys.path.append必要なくなるくさいがどうするか
+	path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+	sys.path.append(path)  # PENDING 実行環境へパッケージとしてインストールすればsys.path.append必要なくなるくさいがどうするか
 
-	logging.basicConfig(format='\033[0;32m%(asctime)s %(levelname)5s \033[0;34m%(message)s \033[0;32m(%(name)s.%(funcName)s) \033[0m', level=logging.DEBUG)  # PENDING リリースとデバッグ切り替えどうしようか logging.conf調べる
+	# import json ; logging.config.dictConfig(json.load(open(path + '/tests/logger_config.json', 'r')))
+	logger = logging.getLogger(__name__)
 
 	from niascape import cli, init_time
 
@@ -28,12 +28,12 @@ if __name__ == '__main__':  # pragma: no cover
 	# sys.argv.extend("nothing_action".split())
 	# sys.argv.extend("daycount --site=test --tag=#test test".split())
 	# sys.argv.extend("tagcount --site=test".split())
-	sys.argv.extend("timeline --site=test --page=2".split())
+	# sys.argv.extend("timeline --site=test --page=2".split())
 
 	pprint(cli.run(sys.argv))
 
-	ret = json.loads(cli.run(sys.argv))
-	print(len(ret))
-	pprint(ret)
+	# ret = json.loads(cli.run(sys.argv))
+	# print(len(ret))
+	# pprint(ret)
 
 	logger.debug("終了時刻(UTC): %s", datetime.datetime.utcnow())

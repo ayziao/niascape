@@ -6,7 +6,7 @@ import os
 import sys
 from typing import List, Tuple, Dict, Union
 
-import logging
+import logging.config
 
 logger = logging.getLogger(__name__)
 
@@ -71,12 +71,12 @@ def parse_argument_vector(argv: List[str]) -> Tuple[List[str], Dict[str, Union[s
 
 
 if __name__ == '__main__':  # pragma: no cover
-	sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))  # PENDING 実行環境へパッケージとしてインストールすればsys.path.append必要なくなるくさいがどうするか
+	path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+	sys.path.append(path)  # PENDING 実行環境へパッケージとしてインストールすればsys.path.append必要なくなるくさいがどうするか
 
-	logging.basicConfig(level=logging.DEBUG)  # PENDING リリースとデバッグ切り替えどうしようか logging.conf調べる
-	# logging.basicConfig(format='\033[0;31m%(asctime)s %(name)s\n[%(levelname)s] %(message)s\033[0m', level=logging.DEBUG)
+	# import json ; logging.config.dictConfig(json.load(open(path + '/tests/logger_config.json', 'r')))
+	logger = logging.getLogger()
 
-	sys.argv.extend("daycount --site test --tag=#test --search_body test".split())
-	# sys.argv.extend("action test #test test".split())
+	# sys.argv.extend("daycount --site test --tag=#test --search_body test".split())
 
 	print(run(sys.argv))

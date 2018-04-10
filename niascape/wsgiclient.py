@@ -6,7 +6,7 @@ from urllib.parse import parse_qsl
 
 import niascape
 
-import logging
+import logging.config
 from pprint import pformat
 
 logger = logging.getLogger(__name__)
@@ -111,8 +111,7 @@ def _parse(environ: dict) -> Tuple[List[str], dict]:
 
 
 if __name__ == '__main__':  # pragma: no cover
-	# logging.basicConfig(level=logging.DEBUG)  # PENDING リリースとデバッグ切り替えどうしようか logging.conf調べる
-	logging.basicConfig(format='\033[0;32m%(asctime)s %(levelname)5s \033[0;34m%(message)s \033[0;32m(%(name)s.%(funcName)s) \033[0m', level=logging.DEBUG)  # PENDING リリースとデバッグ切り替えどうしようか logging.conf調べる
+	# import os, json ; logging.config.dictConfig(json.load(pen(os.path.dirname(os.path.dirname(os.path.abspath(__file__))) + '/tests/logger_config.json', 'r'))) ; logger = logging.getLogger()
 
 	# noinspection PyUnusedLocal
 	def wsgi_start_response(status: str, header: list):
