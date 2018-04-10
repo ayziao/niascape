@@ -1,5 +1,9 @@
 from json import encoder
 
+import logging
+
+logger = logging.getLogger(__name__)
+
 
 # noinspection PyArgumentList,PyShadowingNames,PyShadowingNames,SpellCheckingInspection
 class AsdictSupportJSONEncoder(encoder.JSONEncoder):  # xxx 標準モジュールからパクったところが警告いっぱい出る

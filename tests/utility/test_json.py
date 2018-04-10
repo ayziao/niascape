@@ -5,11 +5,32 @@ import collections
 from typing import NamedTuple
 from niascape.utility.json import AsdictSupportJSONEncoder
 
+import logging
+
+logger = logging.getLogger(__name__)
+
+
+# logging.basicConfig(format='\033[0;32m%(asctime)s %(levelname)5s \033[0;34m%(message)s \033[0;32m(%(name)s.%(funcName)s) \033[0m', level=logging.DEBUG)  # PENDING リリースとデバッグ切り替えどうしようか logging.conf調べる
+
+
+def default(self, o):
+	return 'hoge'
+
+
+def junkan(self, o):
+	return [o]
+
 
 class Asdict:
 	# noinspection PyMethodMayBeStatic
 	def _asdict(self):
 		return {'name': 'asdict'}
+
+
+class ccc:
+	def __init__(self):
+		self.str = 'hoge'
+		self.int = 1
 
 
 class TestAsdictSupportJSONEncoder(TestCase):
@@ -101,11 +122,36 @@ class TestAsdictSupportJSONEncoder(TestCase):
 	def test_encode_check_circular(self):
 		ret = json.dumps('hoge', cls=AsdictSupportJSONEncoder)
 		self.assertEqual('"hoge"', ret)
-		ret = json.dumps('hoge', cls=AsdictSupportJSONEncoder, check_circular=False)
-		self.assertEqual('"hoge"', ret)
+		ret = json.dumps(['hoge'], cls=AsdictSupportJSONEncoder, check_circular=False)
+		self.assertEqual('["hoge"]', ret)
+		ret = json.dumps(['hoge'], cls=AsdictSupportJSONEncoder, ensure_ascii=False)
+		self.assertEqual('["hoge"]', ret)
 
 	def test_encode_float(self):
 		ret = json.dumps([float("inf"), -float("inf"), float("inf") - float("inf")], cls=AsdictSupportJSONEncoder)
 		self.assertEqual('[Infinity, -Infinity, NaN]', ret)
 		with self.assertRaises(ValueError):
 			json.dumps([float("inf"), -float("inf"), float("inf") - float("inf")], cls=AsdictSupportJSONEncoder, allow_nan=False)
+
+	def test_junkan(self):  # XXX 雑なカバレッジ上げ
+		o = ccc()
+		AsdictSupportJSONEncoder.default = junkan
+		with self.assertRaises(ValueError):
+			ret = json.dumps(o, cls=AsdictSupportJSONEncoder)
+			ret = json.dumps([o], cls=AsdictSupportJSONEncoder)
+			ret = json.dumps({1: o}, cls=AsdictSupportJSONEncoder)
+
+	def test_ccc(self):  # XXX 雑なカバレッジ上げ
+		o = ccc()
+		with self.assertRaises(TypeError):
+			ret = json.dumps(o, cls=AsdictSupportJSONEncoder)
+
+		with self.assertRaises(TypeError):
+			ret = json.dumps({o: 1}, cls=AsdictSupportJSONEncoder)
+
+		AsdictSupportJSONEncoder.default = default
+		ret = json.dumps(o, cls=AsdictSupportJSONEncoder)
+		ret = json.dumps([o], cls=AsdictSupportJSONEncoder)
+		ret = json.dumps({'hoge': o}, cls=AsdictSupportJSONEncoder)
+		ret = json.dumps(o, cls=AsdictSupportJSONEncoder, check_circular=False)
+		ret = json.dumps([o], cls=AsdictSupportJSONEncoder, check_circular=False)
