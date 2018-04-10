@@ -27,7 +27,7 @@ class Asdict:
 		return {'name': 'asdict'}
 
 
-class ccc:
+class ErrorCheck:
 	def __init__(self):
 		self.str = 'hoge'
 		self.int = 1
@@ -134,7 +134,7 @@ class TestAsdictSupportJSONEncoder(TestCase):
 			json.dumps([float("inf"), -float("inf"), float("inf") - float("inf")], cls=AsdictSupportJSONEncoder, allow_nan=False)
 
 	def test_junkan(self):  # XXX 雑なカバレッジ上げ
-		o = ccc()
+		o = ErrorCheck()
 		AsdictSupportJSONEncoder.default = junkan
 		with self.assertRaises(ValueError):
 			ret = json.dumps(o, cls=AsdictSupportJSONEncoder)
@@ -142,7 +142,7 @@ class TestAsdictSupportJSONEncoder(TestCase):
 			ret = json.dumps({1: o}, cls=AsdictSupportJSONEncoder)
 
 	def test_ccc(self):  # XXX 雑なカバレッジ上げ
-		o = ccc()
+		o = ErrorCheck()
 		with self.assertRaises(TypeError):
 			ret = json.dumps(o, cls=AsdictSupportJSONEncoder)
 
