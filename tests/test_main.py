@@ -11,21 +11,21 @@ logger = logging.getLogger(__name__)
 
 class TestMyPackage(TestCase):
 	def test_run(self):
-		ref = niascape.run()
+		ref = niascape.main()
 		self.assertEqual('top', ref)
 
-		ref = niascape.run('top')
+		ref = niascape.main('top')
 		self.assertEqual('top', ref)
 
 		# モジュール変数をうっかり呼ばないか
-		ref = niascape.run('basedata')
+		ref = niascape.main('basedata')
 		self.assertEqual('No Action', ref)
-		ref = niascape.run('json')
+		ref = niascape.main('json')
 		self.assertEqual('No Action', ref)
 
 	def test_run_no_action(self):
 		with self.assertLogs('niascape', level='INFO') as cm:
-			ref = niascape.run('hoge')
+			ref = niascape.main('hoge')
 			self.assertEqual('No Action', ref)
 		self.assertEqual(cm.output, ['INFO:niascape:アクションなし: hoge'])
 

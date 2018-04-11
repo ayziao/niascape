@@ -14,7 +14,7 @@ logger.debug("import ニアスケイプ")
 init_time = datetime.datetime.utcnow()  # type: datetime.datetime
 
 
-def run(action_name: str = 'top', option: dict = None) -> str:  # PENDING mainにすべき？
+def main(action_name: str = 'top', option: dict = None) -> str:
 	from niascape import action
 
 	logger.debug("アクション: %s", action_name)

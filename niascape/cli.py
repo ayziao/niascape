@@ -25,7 +25,7 @@ def run(argv: List[str]) -> str:
 
 	# PENDING アクションなし例外きたらエラーコード終了？
 	import niascape
-	return niascape.run(action_name, option_dict)  # PENDING オプション間違って unexpected keyword argument 出たらactionのhelp出す？
+	return niascape.main(action_name, option_dict)  # PENDING オプション間違って unexpected keyword argument 出たらactionのhelp出す？
 
 
 def parse_argument_vector(argv: List[str]) -> Tuple[List[str], Dict[str, Union[str, bool]], List[str]]:

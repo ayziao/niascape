@@ -39,7 +39,7 @@ def application(environ: dict, start_response: Callable[[str, List[Tuple[str, st
 		else:
 			action_name = 'top'
 
-		content = niascape.run(action_name, option_dict)
+		content = niascape.main(action_name, option_dict)
 
 		if action_name == 'top' or content == 'No Action':
 			html = """
