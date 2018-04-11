@@ -368,6 +368,10 @@ APIエラー仕様 https://www.eisbahn.jp/yoichiro/2017/01/rfc_7807.html
     serial_number reservation_time queue_type content add_time
 
 
+wsgiclient.parse_query_string CLIパーサーのオプション値を全部リストにしてurllib.parse.parse_qsを使いこのメソッドは削除すべきか
+cli.parse_argument_vector urllib.parse.parse_qsのようにオプション値を全部リストにすべきか
+
+
 ●計画考
 ユースケース洗い出し
 ドメイン分析

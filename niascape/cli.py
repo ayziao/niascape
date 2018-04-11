@@ -29,7 +29,6 @@ def run(argv: List[str]) -> str:
 
 
 def parse_argument_vector(argv: List[str]) -> Tuple[List[str], Dict[str, Union[str, bool]], List[str]]:
-	# PENDING urllib.parse.parse_qsのようにオプション値を全部リストにすべき？
 	arguments = []  # type: List[str]
 	option_dict = {}  # type: Dict[str, Union[str, int, bool]]
 	short_options = []  # type: List[str]

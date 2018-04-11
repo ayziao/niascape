@@ -23,7 +23,7 @@ def application(environ: dict, start_response: Callable[[str, List[Tuple[str, st
 	logger.debug("environ: %s", pformat(environ))
 
 	if environ['PATH_INFO'] == '/favicon.ico':
-		# PENDING 拒否リスト作る
+		# PENDING 拒否リスト作る？
 		# PENDING ファビコンどうするか
 		start_response('404 Not Found', [('Content-Type', 'text/plain; charset=utf-8')])
 		yield 'Not Found'.encode()
@@ -64,7 +64,6 @@ def application(environ: dict, start_response: Callable[[str, List[Tuple[str, st
 def parse_query_string(query_string: str, keep_blank_values: bool = False) -> Dict[str, Union[str, List[str]]]:
 	"""
 	urllib.parse.parse_qs が全部リストで値を返すので[]だけリストになるよう自作
-	# PENDING 逆にCLIパーサーをオプション値を全部リストにすべき？
 	"""
 	query_list = parse_qsl(query_string, keep_blank_values=keep_blank_values)
 	query_dict = {}  # type: Dict[str,Any]  # XXX Dict[str,Union[str,List[str]]] にしたい 文字列にアペンドなんてねーよってマイパイさんにいわれる
