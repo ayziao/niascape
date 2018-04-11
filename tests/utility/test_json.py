@@ -3,14 +3,13 @@ from unittest import TestCase
 import json
 import collections
 from typing import NamedTuple
-from niascape.utility.json import AsdictSupportJSONEncoder
 
-import logging
+import logging.config
 
+# logging.config.dictConfig(json.load(open('../logger_config.json', 'r')))
 logger = logging.getLogger(__name__)
 
-
-# logging.basicConfig(format='\033[0;32m%(asctime)s %(levelname)5s \033[0;34m%(message)s \033[0;32m(%(name)s.%(funcName)s) \033[0m', level=logging.DEBUG)  # PENDING リリースとデバッグ切り替えどうしようか logging.conf調べる
+from niascape.utility.json import AsdictSupportJSONEncoder
 
 
 def default(self, o):

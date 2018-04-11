@@ -28,7 +28,7 @@ class TestAction(TestCase):
 	def test_daycount(self, moc):
 		self.assertTrue(hasattr(basedata, '_daycount'))  # モックだと関数名の修正についていけないのでチェック
 
-		def method(conn, site='', tag='', search_body=''):  # PENDING 引数の定義を実装から動的にパクれないか inspectモジュール？
+		def method(conn, site='', tag='', search_body=''):  # XXX 引数の定義を実装から動的にパクれないか inspectモジュール？
 			self.assertIsInstance(conn, Database)
 			return [Dummy(f"called mock daycount {site} {tag} {search_body}".strip())]
 
@@ -44,7 +44,7 @@ class TestAction(TestCase):
 	def test_tag_count(self, moc):
 		self.assertTrue(hasattr(basedata, '_tag_count'))  # モックだと関数名の修正についていけないのでチェック
 
-		def method(conn, site=''):  # PENDING 引数の定義を実装から動的にパクれないか inspectモジュール？
+		def method(conn, site=''):  # XXX 引数の定義を実装から動的にパクれないか inspectモジュール？
 			self.assertIsInstance(conn, Database)
 			return [Dummy(f"called mock _tag_count {site}".strip())]
 
@@ -60,7 +60,7 @@ class TestAction(TestCase):
 	def test_timeline(self, moc):
 		self.assertTrue(hasattr(basedata, 'get_all'))  # モックだと関数名の修正についていけないのでチェック
 
-		def method(conn, site=''):  # PENDING 引数の定義を実装から動的にパクれないか inspectモジュール？
+		def method(conn, site=''):  # XXX 引数の定義を実装から動的にパクれないか inspectモジュール？
 			self.assertIsInstance(conn, Database)
 			return [Dummy(f"called mock get_all {site}".strip())]
 

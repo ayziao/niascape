@@ -6,7 +6,7 @@ services:
   - postgresql
 #addons:
 #  postgresql: "9.6"
-install: # TODO coveralls以外 setup.pyへ？
+install: # PENDING coveralls以外 setup.pyへ？
   - pip install psycopg2
   - pip install coveralls 
 before_script:

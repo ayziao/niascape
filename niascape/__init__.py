@@ -26,7 +26,7 @@ def main(action_name: str = 'top', option: dict = None) -> str:
 	logger.debug("アクション: %s", action_name)
 	logger.debug("オプション: %s", option)
 
-	# PENDING アクションのサブパッケージ化
+	# FUTURE アクションのサブパッケージ化
 	try:
 		m = getattr(action, action_name)
 	except AttributeError:
@@ -36,7 +36,7 @@ def main(action_name: str = 'top', option: dict = None) -> str:
 	if callable(m):
 		return m(option)
 	else:
-		# PENDING 例外を投げる？警告を出す？ SyntaxError ValueError SyntaxWarning ResourceWarning
+		# PENDING 例外を投げる？警告を出す？ AttributeError SyntaxError ValueError SyntaxWarning ResourceWarning
 		logger.info("アクションなし: %s", action_name)  # PENDING インフォかワーニングか設定で変えられるようにすべきか
 		return 'No Action'
 

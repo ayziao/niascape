@@ -1,12 +1,11 @@
 from unittest import TestCase
 
-import niascape
+import logging.config
 
-import logging
-
+# import json ; logging.config.dictConfig(json.load(open('logger_config.json', 'r')))
 logger = logging.getLogger(__name__)
 
-# logging.basicConfig(format='\033[0;32m%(asctime)s %(levelname)5s \033[0;34m%(message)s \033[0;32m(%(name)s.%(funcName)s) \033[0m', level=logging.DEBUG)  # PENDING リリースとデバッグ切り替えどうしようか logging.conf調べる
+import niascape
 
 
 class TestMyPackage(TestCase):

@@ -82,7 +82,7 @@ class Database:
 		else:
 			cursor = self._connection.execute(sql, param)
 		rows = cursor.fetchall()
-		if len(rows) == 0:  # PENDING 0件のときの処理やっつけ
+		if len(rows) == 0:  # FIXME 0件のときの処理やっつけ
 			return []
 		if namedtuple is None:
 			namedtuple = NamedTuple(tuple_name, list(map(lambda x: (x, Any), rows[0].keys())))  # type: ignore  # XXX NamedTupleの型チェック無理

@@ -15,15 +15,15 @@ def run(argv: List[str]) -> str:
 	# PENDING 結果の出力をどのような形式にすべきか
 	logger.debug("コマンドライン引数: %s", argv)
 
-	arguments, option_dict, short_options = parse_argument_vector(argv)  # PENDING ショートオプションの解析をどこでやるか
+	arguments, option_dict, short_options = parse_argument_vector(argv)  # FUTURE ショートオプションの解析をどこでやるか検討
 
 	if len(arguments) > 0:
 		action_name = arguments[0]
 	else:
-		# PENDING -help しろよメッセージ出すか
+		# FUTURE -help しろよメッセージ出す
 		action_name = 'top'
 
-	# PENDING アクションなし例外きたらエラーコード終了？
+	# FUTURE アクションなしだったら -help しろよメッセージ出しつつエラーコード終了
 	import niascape
 	return niascape.main(action_name, option_dict)  # PENDING オプション間違って unexpected keyword argument 出たらactionのhelp出す？
 
@@ -64,10 +64,10 @@ def parse_argument_vector(argv: List[str]) -> Tuple[List[str], Dict[str, Union[s
 def _cast(string: str) -> Union[str, int]:
 	if string.isdigit():
 		return int(string)
-	# TODO float
-	# TODO bool
-	# PENDING カンマ区切りを配列に？
-	# PENDING 他に変換すべき型はあるか
+	# FUTURE float
+	# FUTURE bool
+	# FUTURE カンマ区切りを配列にするか検討
+	# FUTURE 他に変換すべき型はあるか検討
 	return string
 
 
