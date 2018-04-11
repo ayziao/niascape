@@ -17,8 +17,8 @@ def run(argv: List[str]) -> str:
 
 	arguments, option_dict, short_options = parse_argument_vector(argv)  # PENDING ショートオプションの解析をどこでやるか
 
-	if len(arguments) > 1:
-		action_name = arguments[1]
+	if len(arguments) > 0:
+		action_name = arguments[0]
 	else:
 		# PENDING -help しろよメッセージ出すか
 		action_name = 'top'
@@ -30,7 +30,7 @@ def run(argv: List[str]) -> str:
 
 def parse_argument_vector(argv: List[str]) -> Tuple[List[str], Dict[str, Union[str, bool]], List[str]]:
 	# PENDING urllib.parse.parse_qsのようにオプション値を全部リストにすべき？
-	arguments = []  # type: List[str]  # PENDING 0を削ってwsgiと合わすべき？
+	arguments = []  # type: List[str]
 	option_dict = {}  # type: Dict[str, Union[str, int, bool]]
 	short_options = []  # type: List[str]
 
@@ -67,7 +67,7 @@ def parse_argument_vector(argv: List[str]) -> Tuple[List[str], Dict[str, Union[s
 	if option_name != '':
 		option_dict[option_name] = True
 
-	return arguments, option_dict, short_options
+	return arguments[1:], option_dict, short_options  # argumentsの0を削ってwsgiと合わせる
 
 
 if __name__ == '__main__':  # pragma: no cover

@@ -13,17 +13,20 @@ class TestCli(TestCase):
 
 	def test_parse(self):
 		ret = cli.parse_argument_vector(['script'])
-		self.assertEqual((['script'], {}, []), ret)
+		self.assertEqual(([], {}, []), ret)
 
-		ret = cli.parse_argument_vector(['script', '--option'])
-		self.assertEqual((['script'], {'option': True}, []), ret)
+		ret = cli.parse_argument_vector(['script', 'action'])
+		self.assertEqual((['action'], {}, []), ret)
 
-		ret = cli.parse_argument_vector(['script', '--option', '1'])
-		self.assertEqual((['script'], {'option': 1}, []), ret)
+		ret = cli.parse_argument_vector(['script', 'action', '--option'])
+		self.assertEqual((['action'], {'option': True}, []), ret)
 
-		ret = cli.parse_argument_vector(['script', '--option=1'])
-		self.assertEqual((['script'], {'option': 1}, []), ret)
+		ret = cli.parse_argument_vector(['script', 'action', '--option', '1'])
+		self.assertEqual((['action'], {'option': 1}, []), ret)
 
-		argv = ['script', 'sub_command', 'path', '--option1', '--option2', 'foo', '--option3=bar', '-als', '-u']
+		ret = cli.parse_argument_vector(['script', 'action', '--option=1'])
+		self.assertEqual((['action'], {'option': 1}, []), ret)
+
+		argv = ['script', 'action', 'sub_command', 'path', '--option1', '--option2', 'foo', '--option3=bar', '-als', '-u']
 		ret = cli.parse_argument_vector(argv)
-		self.assertEqual((['script', 'sub_command', 'path'], {'option1': True, 'option2': 'foo', 'option3': 'bar'}, ['als', 'u']), ret)
+		self.assertEqual((['action', 'sub_command', 'path'], {'option1': True, 'option2': 'foo', 'option3': 'bar'}, ['als', 'u']), ret)
