@@ -62,14 +62,14 @@ def parse_argument_vector(argv: List[str]) -> Tuple[List[str], Dict[str, Union[s
 	return arguments[1:], option_dict, short_options  # argumentsの0を削ってwsgiと合わせる
 
 
-def _cast(str_: str) -> Any:
-	if str_.isdigit():
-		return int(str_)
+def _cast(string: str) -> Any:
+	if string.isdigit():
+		return int(string)
 	# TODO float
 	# TODO bool
 	# PENDING カンマ区切りを配列に？
 	# PENDING 他に変換すべき型はあるか
-	return str_
+	return string
 
 
 if __name__ == '__main__':  # pragma: no cover
