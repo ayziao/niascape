@@ -14,11 +14,12 @@ logger = logging.getLogger(__name__)
 
 def application(environ: dict, start_response: Callable[[str, List[Tuple[str, str]]], None]) -> Generator:
 	"""
-	# WSGI application
-	#
-	# WSGIサーバから呼ばれるところ
-	@param environ: webサーバ環境変数等
-	@param start_response: レスポンス コールバック関数  function(status: str, header: [(key: str,value: str), ...])
+	WSGI application
+
+	WSGIサーバから呼ばれるところ
+
+	:param environ: webサーバ環境変数等
+	:param start_response: レスポンス コールバック関数  function(status: str, header: [(key: str,value: str), ...])
 	"""
 	logger.debug("environ: %s", pformat(environ))
 
@@ -29,7 +30,7 @@ def application(environ: dict, start_response: Callable[[str, List[Tuple[str, st
 		yield 'Not Found'.encode()
 
 	else:
-		arguments, option_dict = _parse(environ)  # parse_query_string(environ['QUERY_STRING'], True)
+		arguments, option_dict = _parse(environ)
 
 		logger.debug("parsed: %s", pformat(arguments))
 		logger.debug("parsed: %s", pformat(option_dict))
@@ -64,6 +65,10 @@ def application(environ: dict, start_response: Callable[[str, List[Tuple[str, st
 def parse_query_string(query_string: str, keep_blank_values: bool = False) -> Dict[str, Union[str, List[str]]]:
 	"""
 	urllib.parse.parse_qs が全部リストで値を返すので[]だけリストになるよう自作
+
+	:param query_string: environ['QUERY_STRING']
+	:param keep_blank_values: 値の入っていないフィールドを無視しないか
+	:return: 辞書へパースされたクエリ
 	"""
 	query_list = parse_qsl(query_string, keep_blank_values=keep_blank_values)
 	query_dict = {}  # type: Dict[str,Any]  # XXX Dict[str,Union[str,List[str]]] にしたい 文字列にアペンドなんてねーよってマイパイさんにいわれる

@@ -15,6 +15,12 @@ init_time = datetime.datetime.utcnow()  # type: datetime.datetime
 
 
 def main(action_name: str = 'top', option: dict = None) -> str:
+	"""
+	ニアスケイプ 主処理
+	:param action_name: アクション名
+	:param option: オプションパラメータ辞書
+	:return: 結果文字列
+	"""
 	from niascape import action
 
 	logger.debug("アクション: %s", action_name)
@@ -30,7 +36,7 @@ def main(action_name: str = 'top', option: dict = None) -> str:
 	if callable(m):
 		return m(option)
 	else:
-		# TODO 例外を投げる
+		# PENDING 例外を投げる？警告を出す？ SyntaxError ValueError SyntaxWarning ResourceWarning
 		logger.info("アクションなし: %s", action_name)  # PENDING インフォかワーニングか設定で変えられるようにすべきか
 		return 'No Action'
 

@@ -24,9 +24,9 @@ class TestWsgiclient(TestCase):
 
 		ret_content += application(env, wsgi).__next__()
 
-		# PENDING 本文アサートどうするか
 		self.assertEqual('200 OK', ret_stat)
 		self.assertEqual([('Content-Type', 'text/html; charset=utf-8')], ret_hed)
+		self.assertEqual(b'<html><head><meta content="text/html charset=UTF-8" http-equiv="Content-Type"/><title>top</title></head><body><p>top</p></body></html>', ret_content)
 
 	def test_application_favicon(self):
 		env = {'PATH_INFO': '/favicon.ico'}
@@ -76,9 +76,9 @@ class TestWsgiclient(TestCase):
 
 		ret_content += application(env, wsgi).__next__()
 
-		# PENDING 本文アサートどうするか
 		self.assertEqual('200 OK', ret_stat)
 		self.assertEqual([('Content-Type', 'text/json; charset=utf-8')], ret_hed)
+		self.assertEqual(b'[{"dummy": "called mock daycount  test"}]', ret_content)
 
 
 class Dummy:
