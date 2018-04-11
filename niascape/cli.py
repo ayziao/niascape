@@ -4,7 +4,7 @@
 """
 import os
 import sys
-from typing import Any, List, Tuple, Dict, Union
+from typing import List, Tuple, Dict, Union
 
 import logging.config
 
@@ -28,7 +28,7 @@ def run(argv: List[str]) -> str:
 	return niascape.main(action_name, option_dict)  # PENDING オプション間違って unexpected keyword argument 出たらactionのhelp出す？
 
 
-def parse_argument_vector(argv: List[str]) -> Tuple[List[str], Dict[str, Union[str, bool]], List[str]]:
+def parse_argument_vector(argv: List[str]) -> Tuple[List[str], Dict[str, Union[str, int, bool]], List[str]]:
 	arguments = []  # type: List[str]
 	option_dict = {}  # type: Dict[str, Union[str, int, bool]]
 	short_options = []  # type: List[str]
@@ -61,7 +61,7 @@ def parse_argument_vector(argv: List[str]) -> Tuple[List[str], Dict[str, Union[s
 	return arguments[1:], option_dict, short_options  # argumentsの0を削ってwsgiと合わせる
 
 
-def _cast(string: str) -> Any:
+def _cast(string: str) -> Union[str, int]:
 	if string.isdigit():
 		return int(string)
 	# TODO float
