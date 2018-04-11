@@ -10,7 +10,7 @@ logger = logging.getLogger(__name__)
 
 
 class TestMyPackage(TestCase):
-	def test_run(self):
+	def test_main(self):
 		ref = niascape.main()
 		self.assertEqual('top', ref)
 
@@ -23,7 +23,7 @@ class TestMyPackage(TestCase):
 		ref = niascape.main('json')
 		self.assertEqual('No Action', ref)
 
-	def test_run_no_action(self):
+	def test_main_no_action(self):
 		with self.assertLogs('niascape', level='INFO') as cm:
 			ref = niascape.main('hoge')
 			self.assertEqual('No Action', ref)
