@@ -4,7 +4,7 @@
 """
 import os
 import sys
-from typing import List, Tuple, Dict, Union
+from typing import Any, List, Tuple, Dict, Union
 
 import logging.config
 
@@ -43,31 +43,33 @@ def parse_argument_vector(argv: List[str]) -> Tuple[List[str], Dict[str, Union[s
 				option_name = ''
 			if '=' in argument:
 				key, val = argument[2:].split('=')
-				if val.isdigit():
-					option_dict[key] = int(val)  # PENDING 他の型とか？
-				else:
-					option_dict[key] = val
+				option_dict[key] = _cast(val)
 			else:
 				option_name = argument[2:]
-		# logger.debug(argument + ': Long option')
 		elif argument[0] == '-':
 			logger.debug(argument + ': short option')
 			short_options.append(argument[1:])
 		else:
-			# logger.debug(argument + ': operand')
 			if option_name == '':
 				arguments.append(argument)
 			else:
-				if argument.isdigit():
-					option_dict[option_name] = int(argument)  # PENDING 他の型とか？
-				else:
-					option_dict[option_name] = argument
+				option_dict[option_name] = _cast(argument)
 				option_name = ''
 
 	if option_name != '':
 		option_dict[option_name] = True
 
 	return arguments[1:], option_dict, short_options  # argumentsの0を削ってwsgiと合わせる
+
+
+def _cast(str_: str) -> Any:
+	if str_.isdigit():
+		return int(str_)
+	# TODO float
+	# TODO bool
+	# PENDING カンマ区切りを配列に？
+	# PENDING 他に変換すべき型はあるか
+	return str_
 
 
 if __name__ == '__main__':  # pragma: no cover
