@@ -17,11 +17,14 @@ init_time = datetime.datetime.utcnow()  # type: datetime.datetime
 def main(action_name: str = 'top', option: dict = None) -> str:
 	"""
 	ニアスケイプ 主処理
+
 	:param action_name: アクション名
 	:param option: オプションパラメータ辞書
 	:return: 結果文字列
 	"""
 	from niascape import action
+
+	# TODO アクション名受け取りじゃなくて位置引数リスト受け取りにする 1件目YYYYMMDD形式なら日サマリとか振り分け
 
 	logger.debug("アクション: %s", action_name)
 	logger.debug("オプション: %s", option)
