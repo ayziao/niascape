@@ -12,6 +12,14 @@ logger = logging.getLogger(__name__)
 
 
 def run(argv: List[str]) -> str:
+	"""
+	コマンドライン実行
+
+	コマンドライン引数をパースしてニアスケイプメインに投げる
+
+	:param argv: sys.argv
+	:return: 結果文字列
+	"""
 	# PENDING 結果の出力をどのような形式にすべきか
 	logger.debug("コマンドライン引数: %s", argv)
 
@@ -22,13 +30,19 @@ def run(argv: List[str]) -> str:
 	else:
 		# FUTURE -help しろよメッセージ出す
 		action_name = 'top'
-
 	# FUTURE アクションなしだったら -help しろよメッセージ出しつつエラーコード終了
+
 	import niascape
 	return niascape.main(action_name, option_dict)  # PENDING オプション間違って unexpected keyword argument 出たらactionのhelp出す？
 
 
 def parse_argument_vector(argv: List[str]) -> Tuple[List[str], Dict[str, Union[str, int, bool]], List[str]]:
+	"""
+	コマンドライン引数リストのパース
+
+	:param argv: sys.argv
+	:return: 位置引数, オプション引数辞書, ショートオプションリスト
+	"""
 	arguments = []  # type: List[str]
 	option_dict = {}  # type: Dict[str, Union[str, int, bool]]
 	short_options = []  # type: List[str]
@@ -64,6 +78,7 @@ def parse_argument_vector(argv: List[str]) -> Tuple[List[str], Dict[str, Union[s
 def _cast(string: str) -> Union[str, int]:
 	if string.isdigit():
 		return int(string)
+	# FUTURE 符号付き整数
 	# FUTURE float
 	# FUTURE bool
 	# FUTURE カンマ区切りを配列にするか検討
@@ -75,8 +90,7 @@ if __name__ == '__main__':  # pragma: no cover
 	path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 	sys.path.append(path)  # PENDING 実行環境へパッケージとしてインストールすればsys.path.append必要なくなるくさいがどうするか
 
-	# import json ; logging.config.dictConfig(json.load(open(path + '/tests/logger_config.json', 'r')))
-	logger = logging.getLogger()
+	# import json ; logging.config.dictConfig(json.load(open(path + '/tests/logger_config.json', 'r'))) ; logger = logging.getLogger()
 
 	# sys.argv.extend("daycount --site test --tag=#test --search_body test".split())
 
