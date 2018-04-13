@@ -8,13 +8,12 @@ if __name__ == '__main__':  # pragma: no cover
 
 	import os
 	import sys
-	import logging.config
-	from pprint import pprint
 
 	path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 	sys.path.append(path)  # PENDING 実行環境へパッケージとしてインストールすればsys.path.append必要なくなるくさいがどうするか
 
-	# import json ; logging.config.dictConfig(json.load(open(path + '/tests/logger_config.json', 'r')))
+	import logging.config
+	import json ; logging.config.dictConfig(json.load(open(path + '/tests/logger_config.json', 'r')))
 	logger = logging.getLogger(__name__)
 
 	from niascape import cli, init_time
@@ -30,7 +29,7 @@ if __name__ == '__main__':  # pragma: no cover
 	# sys.argv.extend("tagcount --site=test".split())
 	# sys.argv.extend("timeline --site=test --page=2".split())
 
-	pprint(cli.run(sys.argv))
+	print(cli.run(sys.argv))
 
 	# ret = json.loads(cli.run(sys.argv))
 	# print(len(ret))
