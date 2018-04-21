@@ -13,7 +13,8 @@ if __name__ == '__main__':  # pragma: no cover
 	sys.path.append(path)  # PENDING 実行環境へパッケージとしてインストールすればsys.path.append必要なくなるくさいがどうするか
 
 	import logging.config
-	import json ; logging.config.dictConfig(json.load(open(path + '/tests/logger_config.json', 'r')))
+	import json
+	logging.config.dictConfig(json.load(open(path + '/tests/logger_config.json', 'r')))
 	logger = logging.getLogger(__name__)
 
 	from niascape import cli, init_time

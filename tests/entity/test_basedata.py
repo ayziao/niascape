@@ -88,6 +88,12 @@ class TestBasedata(TestCase):
 		# self.assertEqual(1, ref[0].count)
 		pass
 
+	def test_monthcount(self):
+		db = self._db
+		ref = basedata._monthcount(db)
+		self.assertEqual('1970-01', ref[0].date)
+		self.assertEqual(1, ref[0].count)
+
 	def test_tag_count(self):
 		db = self._db
 		ref = basedata._tag_count(db)
