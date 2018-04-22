@@ -2,7 +2,6 @@
 /*
  * 月別投稿件数
  */
-
 header('Content-Type: text/html; charset=UTF-8');
 
 $ini_array = parse_ini_file(dirname(__FILE__) . "/../setting.ini");
@@ -11,82 +10,37 @@ $site = $_GET["site"] ? $_GET["site"] : $ini_array['default_site'];
 $tag = $_GET["tag"] ? $_GET["tag"] : '';
 $searchbody = $_GET["searchbody"] ? $_GET["searchbody"] : '';
 
-if ($tag) {
-	$tagwhere = "	and (tags like '% $tag %' or tags like '% $tag:%')";
-}
-if ($searchbody) {
-	$bodywhere = "	AND body LIKE '%$searchbody%'";
-}
+$command = "python3 /Volumes/data/niascape/niascape monthcount";
+$command .= $site ? ' --site='.$site : '';
+$command .= $tag ? ' --tag='.$tag : '';
+$command .= $searchbody ? ' --search_body='.$searchbody : '';
+exec($command, $out, $ret);
+$monthcount = json_decode(end($out), true);
 
-$query = <<< EOM
-SELECT 
-	strftime('%Y-%m',`datetime`) as `Date` , 
-	COUNT(*) as 'count',
-	replace(substr(quote(zeroblob((round(count(*) / 10) + 1) / 2)), 3, (round(count(*) / 10))), '0', '|') as 'graf' 
-FROM basedata 
-WHERE site = '$site' 
-$tagwhere 
-$bodywhere
-GROUP BY strftime('%Y-%m',`datetime`)
-EOM;
-
-
-$handle = new SQLite3($location);
-$results = $handle->query($query);
-
-while ($row = $results->fetchArray()) {
-	$content .= '<tr>' . '<td nowrap>' . $row['Date'] . '</td>' . '<td align="right">' . $row['count'] . '</td>' . '<td><div style="background-color: blue;  width: ' . $row['count'] /2 . 'px; font-size: 10px;">&nbsp;</div></td>' . '<td>' . $row['graf'] . '</td>' . '</tr>';
+foreach ($monthcount as $row){
+	$content .= '<tr>' . '<td nowrap>' . $row['date'] . '</td>' . '<td align="right">' . $row['count'] . '</td>' . '<td><div style="background-color: blue;  width: ' . $row['count'] . 'px; font-size: 10px;">&nbsp;</div></td>' . '</tr>';
 }
 
 //タグ利用頻度順リンク
-//タグ件数取得
+$command = "python3 /Volumes/data/niascape/niascape tagcount";
+$command .= $site ? ' --site='.$site : '';
+exec($command, $out, $ret);
+$tagcount = json_decode(end($out), true);
 
-$query = <<< EOM
-SELECT 
-	replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(tags,'0',''),'1',''),'2',''),'3',''),'4',''),'5',''),'6',''),'7',''),'8',''),'9',''),':','') as 'tags' ,
-	COUNT(*) as 'count'
-FROM basedata 
-WHERE
-	site = '$site'
-GROUP BY replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(tags,'0',''),'1',''),'2',''),'3',''),'4',''),'5',''),'6',''),'7',''),'8',''),'9',''),':','')
-ORDER BY COUNT(*) DESC
-EOM;
-//, replace(substr(quote(zeroblob((count(*) + 1) / 2)), 3, count(*)), '0', '|') as 'graf' 
-
-$results = $handle->query($query);
-$array = [];
-while ($row = $results->fetchArray()) {
-	$tags = explode(" ", str_replace("\t", ' ', trim($row['tags'])));
-	foreach ($tags as $value) {
-		$aaa = mb_strstr($value, ':', ture) ? mb_strstr($value, ':', ture) : $value; //スペースで切り離し
-		$array[$aaa] += $row['count']; //件数足し足し
-	}
-	ksort($array);
-	arsort($array);
+$link .= '<a href="?kanri=daycount&site=' . $site . '">全て</a><br>';
+foreach ($tagcount as $row) {
+	$link .= '<a href="?kanri=daycount&site=' . $site . '&tag=' . urlencode($row['tag']) . '">' . $row['tag'] . '</a> ' . $row['count'] . '<br>';
 }
-
-$link .= '<a href="?kanri=monthcount&site=' . $site . '">全て</a><br>';
-foreach ($array as $key => $value) {
-	$link .= '<a href="?kanri=monthcount&site=' . $site . '&tag=' . urlencode($key) . '">' . $key . '</a> ' . $value . '<br>';
-}
-
 
 //siteリンク
+$command = "python3 /Volumes/data/niascape/niascape sites";
+exec($command, $out, $ret);
+$sites = json_decode(end($out), true);
 
-$query = <<< EOM
-SELECT 
-	site
-	, COUNT(*)
-FROM basedata 
-GROUP BY site
-ORDER BY COUNT(*) DESC
-EOM;
-
-$results = $handle->query($query);
-
-while ($row = $results->fetchArray()) {
+foreach ($sites as $row) {
 	$sitelink .= '<a href="?kanri=monthcount&site=' . $row['site'] . '">' . $row['site'] . '</a> ';
 }
+
 ?>
 <html>
 	<head>

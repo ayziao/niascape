@@ -10,25 +10,10 @@ $site = $_GET["site"] ? $_GET["site"] : $ini_array['default_site'];
 $tag = $_GET["tag"] ? $_GET["tag"] : '';
 $searchbody = $_GET["searchbody"] ? $_GET["searchbody"] : '';
 
-if ($tag) {
-	$tagwhere = "	and (tags like '% $tag %' or tags like '% $tag:%')";
-}
-if ($searchbody) {
-	$bodywhere = "	AND body LIKE '%$searchbody%'";
-}
-
 $command = "python3 /Volumes/data/niascape/niascape daycount";
-if($site){ 
-  $command .= ' --site '.$site; 
-}
+$command .= $site ? ' --site='.$site : '';
 $command .= $tag ? ' --tag='.$tag : '';
-
-//if($tag){ 
-//  $command .= ' --tag='.$tag; 
-//}
-if($searchbody){ 
-  $command .= ' --search_body '.$searchbody; 
-}
+$command .= $searchbody ? ' --search_body='.$searchbody : '';
 exec($command, $out, $ret);
 $daycount = json_decode(end($out), true);
 
@@ -37,16 +22,12 @@ foreach ($daycount as $row){
 }
 
 //タグ利用頻度順リンク
-//タグ件数取得
 $command = "python3 /Volumes/data/niascape/niascape tagcount";
-if($site){ 
-  $command .= ' --site '.$site; 
-}
+$command .= $site ? ' --site='.$site : '';
 exec($command, $out, $ret);
 $tagcount = json_decode(end($out), true);
 
 $link .= '<a href="?kanri=daycount&site=' . $site . '">全て</a><br>';
-
 foreach ($tagcount as $row) {
 	$link .= '<a href="?kanri=daycount&site=' . $site . '&tag=' . urlencode($row['tag']) . '">' . $row['tag'] . '</a> ' . $row['count'] . '<br>';
 }
@@ -59,6 +40,7 @@ $sites = json_decode(end($out), true);
 foreach ($sites as $row) {
 	$sitelink .= '<a href="?kanri=daycount&site=' . $row['site'] . '">' . $row['site'] . '</a> ';
 }
+
 ?>
 <html>
 	<head>
