@@ -93,5 +93,6 @@ if __name__ == '__main__':  # pragma: no cover
 	# import json ; logging.config.dictConfig(json.load(open(path + '/tests/logger_config.json', 'r'))) ; logger = logging.getLogger()
 
 	# sys.argv.extend("daycount --site test --tag=#test --search_body test".split())
+	# sys.argv.extend("timeline --site test".split())
 
 	print(run(sys.argv))

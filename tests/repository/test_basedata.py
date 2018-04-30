@@ -118,5 +118,7 @@ class TestBasedata(TestCase):
 		ref = basedata.get_all(db, 'dummy')
 		logger.debug("basedata\n%s", pformat(ref[:5]))
 		self.assertEqual('20180101123456789000', ref[0].identifier)
-		# self.assertEqual('20180218232339289972', ref[0].identifier)
-		pass
+
+		# print(ref[0].__dict__)
+
+
