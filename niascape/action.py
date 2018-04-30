@@ -1,7 +1,7 @@
 import json
 
 import niascape
-from niascape.entity import basedata
+from niascape.repository import basedata
 from niascape.utility.database import get_db
 from niascape.utility.json import AsdictSupportJSONEncoder
 

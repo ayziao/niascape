@@ -8,7 +8,7 @@ from pprint import pformat
 logger = logging.getLogger(__name__)
 
 import niascape
-from niascape.entity import basedata
+from niascape.repository import basedata
 from niascape.utility.database import get_db
 
 

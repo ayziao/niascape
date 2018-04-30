@@ -2,7 +2,7 @@ from unittest import TestCase, mock, skip
 
 import niascape
 from niascape import action
-from niascape.entity import basedata
+from niascape.repository import basedata
 from niascape.utility.database import Database
 
 
