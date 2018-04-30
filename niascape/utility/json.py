@@ -1,4 +1,5 @@
 from json import encoder
+from datetime import datetime
 
 import logging
 
@@ -7,6 +8,13 @@ logger = logging.getLogger(__name__)
 
 # noinspection PyArgumentList,PyShadowingNames,PyShadowingNames,SpellCheckingInspection
 class AsdictSupportJSONEncoder(encoder.JSONEncoder):  # xxx 標準モジュールからパクったところが警告いっぱい出る
+
+	def default(self, o):
+		if isinstance(o, datetime):
+			return o.strftime('%Y-%m-%d %H:%M:%S')
+			# return o.strftime('%Y-%m-%d %H:%M:%S.%f')
+			# return o.isoformat()
+		return super(AsdictSupportJSONEncoder, self).default(o)
 
 	def iterencode(self, o, _one_shot=False):
 		"""Encode the given object and yield each string
