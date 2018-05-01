@@ -3,6 +3,7 @@ niascape パッケージ
 
 """
 import os
+from importlib import import_module
 import datetime
 import configparser
 
@@ -22,14 +23,18 @@ def main(action: str = 'top', option: dict = None) -> str:
 	:param option: オプションパラメータ辞書
 	:return: 結果文字列
 	"""
-	from niascape import usecase
-
 	# TODO アクション名受け取りじゃなくて位置引数リスト受け取りにする 1件目YYYYMMDD形式なら日サマリとか振り分け
 
 	logger.debug("アクション: %s", action)
 	logger.debug("オプション: %s", option)
 
-	# FUTURE アクションのサブパッケージ化
+	actions = action.rsplit('.',1)
+	if len(actions) > 1:
+		usecase = _import_usecase('.'+actions[0])
+		action = actions[1]
+	else:
+		usecase = _import_usecase('')
+
 	try:
 		m = getattr(usecase, action)
 	except AttributeError:
@@ -42,6 +47,15 @@ def main(action: str = 'top', option: dict = None) -> str:
 		# PENDING 例外を投げる？警告を出す？ AttributeError SyntaxError ValueError SyntaxWarning ResourceWarning
 		logger.info("アクションなし: %s", action)  # PENDING インフォかワーニングか設定で変えられるようにすべきか
 		return 'No Action'
+
+
+def _import_usecase(m):
+	logger.debug(m)
+	module_name = 'niascape.usecase' + m
+	module = import_module(module_name)
+	logger.debug(module)
+
+	return module
 
 
 def _read_ini(file_name: str = 'config.ini') -> configparser.ConfigParser:
