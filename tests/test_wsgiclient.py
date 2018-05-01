@@ -56,7 +56,7 @@ class TestWsgiclient(TestCase):
 		ret = parse_query_string('blank_value&blank_value2&key=value&sharp=%23hoge&list[]=1&list[]=2&list[]=3', True)
 		self.assertEqual({'blank_value': '', 'blank_value2': '', 'key': 'value', 'list': ['1', '2', '3'], 'sharp': '#hoge'}, ret)
 
-	@mock.patch('niascape.usecase.basedata')
+	@mock.patch('niascape.usecase.postcount.basedata')
 	def test_daycount(self, moc):
 		def method(conn, site='', tag='', search_body=''):  # XXX 引数の定義を実装から動的にパクれないか inspectモジュール？
 			self.assertIsInstance(conn, Database)
@@ -64,7 +64,7 @@ class TestWsgiclient(TestCase):
 
 		moc._daycount = method
 
-		env = {'PATH_INFO': '', 'QUERY_STRING': 'daycount&tag=test'}
+		env = {'PATH_INFO': '', 'QUERY_STRING': 'postcount.day&tag=test'}
 		ret_stat = ''
 		ret_hed = ''
 		ret_content = b''

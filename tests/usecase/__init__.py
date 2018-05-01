@@ -24,7 +24,7 @@ class TestUsecase(TestCase):
 		ret = usecase.top({})
 		self.assertEqual('top', ret)
 
-	@mock.patch('niascape.usecase.basedata')
+	@mock.patch('niascape.usecase.postcount.basedata')
 	def test_daycount(self, moc):
 		self.assertTrue(hasattr(basedata, '_daycount'))  # モックだと関数名の修正についていけないのでチェック
 
@@ -34,10 +34,10 @@ class TestUsecase(TestCase):
 
 		moc._daycount = method
 
-		ref = usecase.daycount({})
+		ref = usecase.postcount.day({})
 		self.assertEqual('[{"dummy": "called mock daycount"}]', ref)
 
-		ref = usecase.daycount({'site': 'test', 'tag': '#test', 'search_body': 'test'})
+		ref = usecase.postcount.day({'site': 'test', 'tag': '#test', 'search_body': 'test'})
 		self.assertEqual('[{"dummy": "called mock daycount test #test test"}]', ref)
 
 	@mock.patch('niascape.usecase.basedata')

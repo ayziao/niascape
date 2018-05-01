@@ -10,7 +10,7 @@ $site = $_GET["site"] ? $_GET["site"] : $ini_array['default_site'];
 $tag = $_GET["tag"] ? $_GET["tag"] : '';
 $searchbody = $_GET["searchbody"] ? $_GET["searchbody"] : '';
 
-$command = "python3 /Volumes/data/niascape/niascape monthcount";
+$command = "python3 /Volumes/data/niascape/niascape postcount.month";
 $command .= $site ? ' --site='.$site : '';
 $command .= $tag ? ' --tag='.$tag : '';
 $command .= $searchbody ? ' --search_body='.$searchbody : '';

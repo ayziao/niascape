@@ -11,16 +11,6 @@ def top(option: dict) -> str:  # PENDING topという概念はWebでしか無い
 	return 'top'
 
 
-def daycount(option: dict) -> str:
-	with get_db(niascape.ini['database']) as db:  # type: ignore  # XXX セクションぶっこむとmypyさんにおこられ 辞書化すべきか
-		return json.dumps(basedata._daycount(db, **option), cls=AsdictSupportJSONEncoder)  # PENDING どこでJSON化すべきか
-
-
-def monthcount(option: dict) -> str:
-	with get_db(niascape.ini['database']) as db:  # type: ignore  # XXX セクションぶっこむとmypyさんにおこられ 辞書化すべきか
-		return json.dumps(basedata._monthcount(db, **option), cls=AsdictSupportJSONEncoder)  # PENDING どこでJSON化すべきか
-
-
 def sites(option: dict) -> str:
 	with get_db(niascape.ini['database']) as db:  # type: ignore  # XXX セクションぶっこむとmypyさんにおこられ 辞書化すべきか
 		return json.dumps(basedata._sites(db, **option), cls=AsdictSupportJSONEncoder)  # PENDING どこでJSON化すべきか
@@ -34,6 +24,5 @@ def tagcount(option: dict) -> str:
 def timeline(option: dict):
 	with get_db(niascape.ini['database']) as db:  # type: ignore  # XXX セクションぶっこむとmypyさんにおこられ 辞書化すべきか
 		return json.dumps(basedata.get_all(db, **option), cls=AsdictSupportJSONEncoder)  # PENDING どこでJSON化すべきか
-
 
 # TODO とりあえず試作を移植

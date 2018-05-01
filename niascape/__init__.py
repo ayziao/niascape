@@ -28,9 +28,9 @@ def main(action: str = 'top', option: dict = None) -> str:
 	logger.debug("アクション: %s", action)
 	logger.debug("オプション: %s", option)
 
-	actions = action.rsplit('.',1)
+	actions = action.rsplit('.', 1)
 	if len(actions) > 1:
-		usecase = _import_usecase('.'+actions[0])
+		usecase = _import_usecase('.' + actions[0])
 		action = actions[1]
 	else:
 		usecase = _import_usecase('')
