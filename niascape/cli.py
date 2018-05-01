@@ -26,14 +26,14 @@ def run(argv: List[str]) -> str:
 	arguments, option_dict, short_options = parse_argument_vector(argv)  # FUTURE ショートオプションの解析をどこでやるか検討
 
 	if len(arguments) > 0:
-		action_name = arguments[0]
+		action = arguments[0]
 	else:
 		# FUTURE -help しろよメッセージ出す
-		action_name = 'top'
+		action = 'top'
 	# FUTURE アクションなしだったら -help しろよメッセージ出しつつエラーコード終了
 
 	import niascape
-	return niascape.main(action_name, option_dict)  # PENDING オプション間違って unexpected keyword argument 出たらactionのhelp出す？
+	return niascape.main(action, option_dict)  # PENDING オプション間違って unexpected keyword argument 出たらactionのhelp出す？
 
 
 def parse_argument_vector(argv: List[str]) -> Tuple[List[str], Dict[str, Union[str, int, bool]], List[str]]:

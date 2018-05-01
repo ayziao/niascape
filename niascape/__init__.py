@@ -14,33 +14,33 @@ logger.debug("import ニアスケイプ")
 init_time = datetime.datetime.utcnow()  # type: datetime.datetime
 
 
-def main(action_name: str = 'top', option: dict = None) -> str:
+def main(action: str = 'top', option: dict = None) -> str:
 	"""
 	ニアスケイプ 主処理
 
-	:param action_name: アクション名
+	:param action: アクション名
 	:param option: オプションパラメータ辞書
 	:return: 結果文字列
 	"""
-	from niascape import action
+	from niascape import usecase
 
 	# TODO アクション名受け取りじゃなくて位置引数リスト受け取りにする 1件目YYYYMMDD形式なら日サマリとか振り分け
 
-	logger.debug("アクション: %s", action_name)
+	logger.debug("アクション: %s", action)
 	logger.debug("オプション: %s", option)
 
 	# FUTURE アクションのサブパッケージ化
 	try:
-		m = getattr(action, action_name)
+		m = getattr(usecase, action)
 	except AttributeError:
-		logger.debug("AttributeError: %s", action_name)
+		logger.debug("AttributeError: %s", action)
 		m = None
 
 	if callable(m):
 		return m(option)
 	else:
 		# PENDING 例外を投げる？警告を出す？ AttributeError SyntaxError ValueError SyntaxWarning ResourceWarning
-		logger.info("アクションなし: %s", action_name)  # PENDING インフォかワーニングか設定で変えられるようにすべきか
+		logger.info("アクションなし: %s", action)  # PENDING インフォかワーニングか設定で変えられるようにすべきか
 		return 'No Action'
 
 
