@@ -84,7 +84,7 @@ def _monthcount(db: Database, site: str = 'test', tag: str = '', search_body: st
 	return db.execute_fetchall(sql, param, namedtuple=monthcount)
 
 
-def _sites(db: Database, **optin):
+def _sites(db: Database, **option):
 
 	sql = """
 	SELECT site, COUNT(*) as "count"
