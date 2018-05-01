@@ -3,7 +3,7 @@ from datetime import datetime
 
 
 class Basedata:
-	# XXX pypyが3.6互換になったら
+	# FUTURE pypyが3.6互換になったら
 	# class Basedata(NamedTuple):
 	# identifier: str
 	# title: str
