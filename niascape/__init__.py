@@ -28,6 +28,7 @@ def main(action: str = 'top', option: dict = None) -> str:
 	logger.debug("アクション: %s", action)
 	logger.debug("オプション: %s", option)
 
+	# FIXME 雑コーディングなので直したい
 	actions = action.rsplit('.', 1)
 	if len(actions) > 1:
 		usecase = _import_usecase('.' + actions[0])

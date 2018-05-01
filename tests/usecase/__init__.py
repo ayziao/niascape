@@ -24,22 +24,6 @@ class TestUsecase(TestCase):
 		ret = usecase.top({})
 		self.assertEqual('top', ret)
 
-	@mock.patch('niascape.usecase.postcount.basedata')
-	def test_daycount(self, moc):
-		self.assertTrue(hasattr(basedata, '_daycount'))  # モックだと関数名の修正についていけないのでチェック
-
-		def method(conn, site='', tag='', search_body=''):  # XXX 引数の定義を実装から動的にパクれないか inspectモジュール？
-			self.assertIsInstance(conn, Database)
-			return [Dummy(f"called mock daycount {site} {tag} {search_body}".strip())]
-
-		moc._daycount = method
-
-		ref = usecase.postcount.day({})
-		self.assertEqual('[{"dummy": "called mock daycount"}]', ref)
-
-		ref = usecase.postcount.day({'site': 'test', 'tag': '#test', 'search_body': 'test'})
-		self.assertEqual('[{"dummy": "called mock daycount test #test test"}]', ref)
-
 	@mock.patch('niascape.usecase.basedata')
 	def test_tag_count(self, moc):
 		self.assertTrue(hasattr(basedata, '_tag_count'))  # モックだと関数名の修正についていけないのでチェック
@@ -57,6 +41,19 @@ class TestUsecase(TestCase):
 		self.assertEqual('[{"dummy": "called mock _tag_count test"}]', ref)
 
 	@mock.patch('niascape.usecase.basedata')
+	def test_sites(self, moc):
+		self.assertTrue(hasattr(basedata, '_sites'))  # モックだと関数名の修正についていけないのでチェック
+
+		def method(conn, site=''):  # XXX 引数の定義を実装から動的にパクれないか inspectモジュール？
+			self.assertIsInstance(conn, Database)
+			return [Dummy(f"called mock _sites {site}".strip())]
+
+		moc._sites = method
+
+		ref = usecase.sites({})
+		self.assertEqual('[{"dummy": "called mock _sites"}]', ref)
+
+	@mock.patch('niascape.usecase.basedata')
 	def test_timeline(self, moc):
 		self.assertTrue(hasattr(basedata, 'get_all'))  # モックだと関数名の修正についていけないのでチェック
 
@@ -68,10 +65,3 @@ class TestUsecase(TestCase):
 
 		ref = usecase.timeline({})
 		self.assertEqual('[{"dummy": "called mock get_all"}]', ref)
-
-	@skip("モックなし確認用")
-	def test_daycount_no_mock(self):
-		ini = niascape._read_ini('config.ini')
-		niascape.ini = ini
-		ref = usecase.daycount({'site': 'test', 'tag': '#test'})
-		self.assertEqual('[{"date": "2016-12-30", "count": 1}, {"date": "2016-10-26", "count": 1}, {"date": "2015-07-10", "count": 1}]', ref)
