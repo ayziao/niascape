@@ -13,7 +13,8 @@ import logging
 logger = logging.getLogger(__name__)
 
 
-def day(db: Database, site: str = 'test', tag_: str = '', search_body: str = '') -> List[Any]:
+# noinspection PyShadowingNames
+def day(db: Database, site: str = 'test', tag: str = '', search_body: str = '') -> List[Any]:
 	"""
 	戻り値 名前付きタプルのリスト # xxx List[DayCount] するにはclass DayCount(NamedTuple) 必要 pypy…
 	"""
@@ -21,9 +22,9 @@ def day(db: Database, site: str = 'test', tag_: str = '', search_body: str = '')
 	body_where = ''
 	param = [site]  # type: List[Union[str, int]]
 
-	if tag_ != '':
+	if tag != '':
 		tag_where = "AND (tags like ? or tags like ?)"
-		param.extend([f"% {tag_} %", f"% {tag_}:%"])
+		param.extend([f"% {tag} %", f"% {tag}:%"])
 	if search_body != '':
 		body_where = "AND body LIKE ?"
 		param.append(f"%{search_body}%")
@@ -47,21 +48,22 @@ def day(db: Database, site: str = 'test', tag_: str = '', search_body: str = '')
 	"""
 	limit = 1000  # PENDING ページングする？
 	param.append(limit)
-	daycount = NamedTuple('daycount', (('date', str), ('count', int)))
+	day_count = NamedTuple('day_count', (('date', str), ('count', int)))
 	logger.debug("日付投稿数SQL: %s", sql)
 	logger.debug("プレースホルダパラメータ: %s", param)
 
-	return db.execute_fetchall(sql, param, namedtuple=daycount)
+	return db.execute_fetchall(sql, param, namedtuple=day_count)
 
 
-def month(db: Database, site: str = 'test', tag_: str = '', search_body: str = ''):
+# noinspection PyShadowingNames
+def month(db: Database, site: str = 'test', tag: str = '', search_body: str = '') -> List[Any]:
 	tag_where = ''
 	body_where = ''
 	param = [site]  # type: List[Union[str, int]]
 
-	if tag_ != '':
+	if tag != '':
 		tag_where = "AND (tags like ? or tags like ?)"
-		param.extend([f"% {tag_} %", f"% {tag_}:%"])
+		param.extend([f"% {tag} %", f"% {tag}:%"])
 	if search_body != '':
 		body_where = "AND body LIKE ?"
 		param.append(f"%{search_body}%")
@@ -84,12 +86,13 @@ def month(db: Database, site: str = 'test', tag_: str = '', search_body: str = '
 	"""
 	limit = 1000  # PENDING ページングする？
 	param.append(limit)
-	monthcount = NamedTuple('monthcount', (('date', str), ('count', int)))
+	month_count = NamedTuple('month_count', (('date', str), ('count', int)))
 
-	return db.execute_fetchall(sql, param, namedtuple=monthcount)
+	return db.execute_fetchall(sql, param, namedtuple=month_count)
 
 
 def tag(db: Database, site: str = 'test') -> List[Dict[str, Union[str, int]]]:
+	# PENDING ShadowingNamesに対応すべきかどうか
 	if db.dbms == 'postgresql':
 		tags = "regexp_replace(tags , ':[0-9]+','')"
 	else:
@@ -104,9 +107,9 @@ def tag(db: Database, site: str = 'test') -> List[Dict[str, Union[str, int]]]:
 	GROUP BY {tags}
 	ORDER BY COUNT(*) DESC
 	"""
-	tagcount = NamedTuple('tagcount', (('tags', str), ('count', int)))
+	tag_count = NamedTuple('tag_count', (('tags', str), ('count', int)))
 
-	namedtuple_result = db.execute_fetchall(sql, (site,), namedtuple=tagcount)
+	namedtuple_result = db.execute_fetchall(sql, (site,), namedtuple=tag_count)
 
 	count_sum = {}  # type: Dict[str, int]
 	for row in namedtuple_result:

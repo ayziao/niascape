@@ -26,8 +26,8 @@ if __name__ == '__main__':  # pragma: no cover
 	logger.debug("実行中のスクリプトへの絶対パス: %s", os.path.abspath(__file__))
 
 	# sys.argv.extend("nothing_action".split())
-	# sys.argv.extend("daycount --site=test --tag=#test test".split())
-	# sys.argv.extend("tagcount --site=test".split())
+	# sys.argv.extend("postcount.day --site=test --tag=#test test".split())
+	# sys.argv.extend("postcount.tag --site=test".split())
 	# sys.argv.extend("timeline --site=test --page=2".split())
 
 	print(cli.run(sys.argv))

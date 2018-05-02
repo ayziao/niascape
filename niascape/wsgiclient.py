@@ -122,6 +122,6 @@ if __name__ == '__main__':  # pragma: no cover
 		pass
 
 
-	env = {'PATH_INFO': '/test/', 'QUERY_STRING': 'daycount&tag=%23test&search_body=test'}
+	env = {'PATH_INFO': '/test/', 'QUERY_STRING': 'postcount.day&tag=%23test&search_body=test'}
 	ret = application(env, wsgi_start_response).__next__()
 	print(ret)
