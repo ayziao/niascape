@@ -10,6 +10,7 @@ logger = logging.getLogger(__name__)
 class AsdictSupportJSONEncoder(encoder.JSONEncoder):  # xxx 標準モジュールからパクったところが警告いっぱい出る
 
 	def default(self, o):
+		# PENDING クラスに_asdictなくても__dict__してどうにかすべきか
 		if isinstance(o, datetime):
 			return o.strftime('%Y-%m-%d %H:%M:%S')
 			# return o.strftime('%Y-%m-%d %H:%M:%S.%f')
