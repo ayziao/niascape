@@ -1,3 +1,8 @@
+"""
+niascape.entity.basedata
+
+ベースデータ
+"""
 # from typing import NamedTuple
 from datetime import datetime
 

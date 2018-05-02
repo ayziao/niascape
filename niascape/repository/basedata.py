@@ -1,3 +1,9 @@
+"""
+niascape.repository.basedata
+
+ベースデータリポジトリ
+PENDING DBだとかファイル名にわかるようにつけたほうがよい？
+"""
 from typing import List, Dict, Union, Any, NamedTuple
 
 from niascape.utility.database import Database

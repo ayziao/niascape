@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 """
+niascape.cli
+
 コマンドラインインターフェース
 """
 import os
