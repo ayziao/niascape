@@ -17,7 +17,7 @@ class Basedata:
 	# datetime: datetime
 	# utctime: datetime
 
-	def __init__(self, identifier, title, tags, body, datetime_: datetime):
+	def __init__(self, identifier: str, title: str, tags: str, body: str, datetime_: datetime) -> None:
 		self.identifier = identifier
 		self.title = title
 		self.tags = tags
