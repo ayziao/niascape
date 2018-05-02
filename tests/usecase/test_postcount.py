@@ -26,13 +26,13 @@ class TestPostcount(TestCase):
 
 	@mock.patch('niascape.usecase.postcount.postcount')
 	def test_day(self, moc):
-		self.assertTrue(hasattr(postcount, '_daycount'))  # モックだと関数名の修正についていけないのでチェック
+		self.assertTrue(hasattr(postcount, 'day'))  # モックだと関数名の修正についていけないのでチェック
 
 		def method(conn, site='', tag='', search_body=''):  # XXX 引数の定義を実装から動的にパクれないか inspectモジュール？
 			self.assertIsInstance(conn, Database)
 			return [Dummy(f"called mock daycount {site} {tag} {search_body}".strip())]
 
-		moc._daycount = method
+		moc.day = method
 
 		ref = usecase.postcount.day({})
 		self.assertEqual('[{"dummy": "called mock daycount"}]', ref)
@@ -42,13 +42,13 @@ class TestPostcount(TestCase):
 
 	@mock.patch('niascape.usecase.postcount.postcount')
 	def test_month(self, moc):
-		self.assertTrue(hasattr(postcount, '_monthcount'))  # モックだと関数名の修正についていけないのでチェック
+		self.assertTrue(hasattr(postcount, 'month'))  # モックだと関数名の修正についていけないのでチェック
 
 		def method(conn, site='', tag='', search_body=''):  # XXX 引数の定義を実装から動的にパクれないか inspectモジュール？
 			self.assertIsInstance(conn, Database)
 			return [Dummy(f"called mock monthcount {site} {tag} {search_body}".strip())]
 
-		moc._monthcount = method
+		moc.month = method
 
 		ref = usecase.postcount.month({})
 		self.assertEqual('[{"dummy": "called mock monthcount"}]', ref)
@@ -65,13 +65,13 @@ class TestPostcount(TestCase):
 
 	@mock.patch('niascape.usecase.postcount.postcount')
 	def test_tag_count(self, moc):
-		self.assertTrue(hasattr(postcount, '_tag_count'))  # モックだと関数名の修正についていけないのでチェック
+		self.assertTrue(hasattr(postcount, 'tag'))  # モックだと関数名の修正についていけないのでチェック
 
 		def method(conn, site=''):  # XXX 引数の定義を実装から動的にパクれないか inspectモジュール？
 			self.assertIsInstance(conn, Database)
 			return [Dummy(f"called mock _tag_count {site}".strip())]
 
-		moc._tag_count = method
+		moc.tag = method
 
 		ref = usecase.postcount.tag({})
 		self.assertEqual('[{"dummy": "called mock _tag_count"}]', ref)

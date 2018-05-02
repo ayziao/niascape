@@ -62,7 +62,7 @@ class TestWsgiclient(TestCase):
 			self.assertIsInstance(conn, Database)
 			return [Dummy(f"called mock daycount {site} {tag} {search_body}".strip())]
 
-		moc._daycount = method
+		moc.day = method
 
 		env = {'PATH_INFO': '', 'QUERY_STRING': 'postcount.day&tag=test'}
 		ret_stat = ''
