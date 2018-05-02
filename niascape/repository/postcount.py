@@ -13,7 +13,7 @@ import logging
 logger = logging.getLogger(__name__)
 
 
-def _daycount(db: Database, site: str = 'test', tag: str = '', search_body: str = '') -> List[Any]:
+def day(db: Database, site: str = 'test', tag_: str = '', search_body: str = '') -> List[Any]:
 	"""
 	戻り値 名前付きタプルのリスト # xxx List[DayCount] するにはclass DayCount(NamedTuple) 必要 pypy…
 	"""
@@ -21,9 +21,9 @@ def _daycount(db: Database, site: str = 'test', tag: str = '', search_body: str 
 	body_where = ''
 	param = [site]  # type: List[Union[str, int]]
 
-	if tag != '':
+	if tag_ != '':
 		tag_where = "AND (tags like ? or tags like ?)"
-		param.extend([f"% {tag} %", f"% {tag}:%"])
+		param.extend([f"% {tag_} %", f"% {tag_}:%"])
 	if search_body != '':
 		body_where = "AND body LIKE ?"
 		param.append(f"%{search_body}%")
@@ -54,14 +54,14 @@ def _daycount(db: Database, site: str = 'test', tag: str = '', search_body: str 
 	return db.execute_fetchall(sql, param, namedtuple=daycount)
 
 
-def _monthcount(db: Database, site: str = 'test', tag: str = '', search_body: str = ''):
+def month(db: Database, site: str = 'test', tag_: str = '', search_body: str = ''):
 	tag_where = ''
 	body_where = ''
 	param = [site]  # type: List[Union[str, int]]
 
-	if tag != '':
+	if tag_ != '':
 		tag_where = "AND (tags like ? or tags like ?)"
-		param.extend([f"% {tag} %", f"% {tag}:%"])
+		param.extend([f"% {tag_} %", f"% {tag_}:%"])
 	if search_body != '':
 		body_where = "AND body LIKE ?"
 		param.append(f"%{search_body}%")
@@ -89,7 +89,7 @@ def _monthcount(db: Database, site: str = 'test', tag: str = '', search_body: st
 	return db.execute_fetchall(sql, param, namedtuple=monthcount)
 
 
-def _tag_count(db: Database, site: str = 'test') -> List[Dict[str, Union[str, int]]]:
+def tag(db: Database, site: str = 'test') -> List[Dict[str, Union[str, int]]]:
 	if db.dbms == 'postgresql':
 		tags = "regexp_replace(tags , ':[0-9]+','')"
 	else:
@@ -111,11 +111,11 @@ def _tag_count(db: Database, site: str = 'test') -> List[Dict[str, Union[str, in
 	count_sum = {}  # type: Dict[str, int]
 	for row in namedtuple_result:
 		tags = row.tags.strip().replace('\t', ' ').split(' ')
-		for tag in tags:
-			if tag not in count_sum.keys():
-				count_sum[tag] = row.count
+		for tag_ in tags:
+			if tag_ not in count_sum.keys():
+				count_sum[tag_] = row.count
 			else:
-				count_sum[tag] += row.count
+				count_sum[tag_] += row.count
 
 	result = []  # type:  List[Dict[str, Union[str, int]]]
 	for k, v in sorted(count_sum.items(), key=lambda x: -x[1]):

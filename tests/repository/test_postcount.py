@@ -52,24 +52,24 @@ class TestPostcount(TestCase):
 	def test_daycount(self):
 		db = self._db
 
-		ref = postcount._daycount(db)
+		ref = postcount.day(db)
 		logger.debug("日別投稿数\n%s", pformat(ref[:3]))
 		# self.assertEqual({'Date': '2018-02-18', 'count': 2}, ref[0])
 		self.assertEqual('2018-01-01', ref[0].date)
 		# self.assertEqual('2018-02-18', ref[0].date)
 		self.assertEqual(1, ref[0].count)
 
-		ref = postcount._daycount(db, 'test', '#tag')
+		ref = postcount.day(db, 'test', '#tag')
 		logger.debug("日別投稿数\n%s", pformat(ref[:3]))
 		self.assertEqual('2018-01-01', ref[0].date)
 		self.assertEqual(1, ref[0].count)
 
-		ref = postcount._daycount(db, 'test', '#tag', 'body')
+		ref = postcount.day(db, 'test', '#tag', 'body')
 		logger.debug("日別投稿数\n%s", pformat(ref[:3]))
 		self.assertEqual('2018-01-01', ref[0].date)
 		self.assertEqual(1, ref[0].count)
 
-		ref = postcount._daycount(db, 'test', search_body='body')
+		ref = postcount.day(db, 'test', search_body='body')
 		logger.debug("日別投稿数\n%s", pformat(ref[:3]))
 		self.assertEqual('2018-01-01', ref[0].date)
 		self.assertEqual(1, ref[0].count)
@@ -90,13 +90,13 @@ class TestPostcount(TestCase):
 
 	def test_monthcount(self):
 		db = self._db
-		ref = postcount._monthcount(db)
+		ref = postcount.month(db)
 		self.assertEqual('1970-01', ref[0].date)
 		self.assertEqual(1, ref[0].count)
 
 	def test_tag_count(self):
 		db = self._db
-		ref = postcount._tag_count(db)
+		ref = postcount.tag(db)
 
 		logger.debug("タグ件数\n%s", pformat(ref[:3]))
 		self.assertEqual({'count': 3, 'tag': '#tag'}, ref[0])
