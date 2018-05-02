@@ -22,7 +22,7 @@ foreach ($monthcount as $row){
 }
 
 //タグ利用頻度順リンク
-$command = "python3 /Volumes/data/niascape/niascape tagcount";
+$command = "python3 /Volumes/data/niascape/niascape postcount.tag";
 $command .= $site ? ' --site='.$site : '';
 exec($command, $out, $ret);
 $tagcount = json_decode(end($out), true);

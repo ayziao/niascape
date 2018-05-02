@@ -1,3 +1,9 @@
+"""
+niascape.usecase.postcount
+
+投稿件数ユースケース
+
+"""
 import json
 
 import niascape
@@ -14,3 +20,9 @@ def day(option: dict) -> str:
 def month(option: dict) -> str:
 	with get_db(niascape.ini['database']) as db:  # type: ignore  # XXX セクションぶっこむとmypyさんにおこられ 辞書化すべきか
 		return json.dumps(basedata._monthcount(db, **option), cls=AsdictSupportJSONEncoder)  # PENDING どこでJSON化すべきか
+
+
+def tag(option: dict) -> str:
+	with get_db(niascape.ini['database']) as db:  # type: ignore  # XXX セクションぶっこむとmypyさんにおこられ 辞書化すべきか
+		return json.dumps(basedata._tag_count(db, **option), cls=AsdictSupportJSONEncoder)  # PENDING どこでJSON化すべきか
+
