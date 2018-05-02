@@ -25,22 +25,6 @@ class TestUsecase(TestCase):
 		self.assertEqual('top', ret)
 
 	@mock.patch('niascape.usecase.basedata')
-	def test_tag_count(self, moc):
-		self.assertTrue(hasattr(basedata, '_tag_count'))  # モックだと関数名の修正についていけないのでチェック
-
-		def method(conn, site=''):  # XXX 引数の定義を実装から動的にパクれないか inspectモジュール？
-			self.assertIsInstance(conn, Database)
-			return [Dummy(f"called mock _tag_count {site}".strip())]
-
-		moc._tag_count = method
-
-		ref = usecase.tagcount({})
-		self.assertEqual('[{"dummy": "called mock _tag_count"}]', ref)
-
-		ref = usecase.tagcount({'site': 'test'})
-		self.assertEqual('[{"dummy": "called mock _tag_count test"}]', ref)
-
-	@mock.patch('niascape.usecase.basedata')
 	def test_sites(self, moc):
 		self.assertTrue(hasattr(basedata, '_sites'))  # モックだと関数名の修正についていけないのでチェック
 

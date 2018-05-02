@@ -49,61 +49,6 @@ class TestBasedata(TestCase):
 	def tearDownClass(cls):
 		cls._db.close()
 
-	def test_daycount(self):
-		db = self._db
-
-		ref = basedata._daycount(db)
-		logger.debug("日別投稿数\n%s", pformat(ref[:3]))
-		# self.assertEqual({'Date': '2018-02-18', 'count': 2}, ref[0])
-		self.assertEqual('2018-01-01', ref[0].date)
-		# self.assertEqual('2018-02-18', ref[0].date)
-		self.assertEqual(1, ref[0].count)
-
-		ref = basedata._daycount(db, 'test', '#tag')
-		logger.debug("日別投稿数\n%s", pformat(ref[:3]))
-		self.assertEqual('2018-01-01', ref[0].date)
-		self.assertEqual(1, ref[0].count)
-
-		ref = basedata._daycount(db, 'test', '#tag', 'body')
-		logger.debug("日別投稿数\n%s", pformat(ref[:3]))
-		self.assertEqual('2018-01-01', ref[0].date)
-		self.assertEqual(1, ref[0].count)
-
-		ref = basedata._daycount(db, 'test', search_body='body')
-		logger.debug("日別投稿数\n%s", pformat(ref[:3]))
-		self.assertEqual('2018-01-01', ref[0].date)
-		self.assertEqual(1, ref[0].count)
-
-		#
-		# ref = basedata._daycount(db, 'test', '#test', 'test')
-		# logger.debug("日別投稿数\n%s", pformat(ref[:3]))
-		# # self.assertEqual({'Date': '2018-02-18', 'count': 2}, ref[0])
-		# self.assertEqual('2016-12-30', ref[0].date)
-		# self.assertEqual(1, ref[0].count)
-		#
-		# ref = basedata._daycount(db, 'test', search_body='test')
-		# logger.debug("日別投稿数\n%s", pformat(ref[:3]))
-		# # self.assertEqual({'Date': '2018-02-18', 'count': 2}, ref[0])
-		# self.assertEqual('2017-04-18', ref[0].date)
-		# self.assertEqual(1, ref[0].count)
-		pass
-
-	def test_monthcount(self):
-		db = self._db
-		ref = basedata._monthcount(db)
-		self.assertEqual('1970-01', ref[0].date)
-		self.assertEqual(1, ref[0].count)
-
-	def test_tag_count(self):
-		db = self._db
-		ref = basedata._tag_count(db)
-
-		logger.debug("タグ件数\n%s", pformat(ref[:3]))
-		self.assertEqual({'count': 3, 'tag': '#tag'}, ref[0])
-
-		# self.assertEqual({'count': 353, 'tag': 'twitter_posted'}, ref[0])
-		pass
-
 	def test_get_all(self):
 		db = self._db
 

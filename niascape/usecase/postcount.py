@@ -7,22 +7,21 @@ niascape.usecase.postcount
 import json
 
 import niascape
-from niascape.repository import basedata
+from niascape.repository import postcount
 from niascape.utility.database import get_db
 from niascape.utility.json import AsdictSupportJSONEncoder
 
 
 def day(option: dict) -> str:
 	with get_db(niascape.ini['database']) as db:  # type: ignore  # XXX セクションぶっこむとmypyさんにおこられ 辞書化すべきか
-		return json.dumps(basedata._daycount(db, **option), cls=AsdictSupportJSONEncoder)  # PENDING どこでJSON化すべきか
+		return json.dumps(postcount._daycount(db, **option), cls=AsdictSupportJSONEncoder)  # PENDING どこでJSON化すべきか
 
 
 def month(option: dict) -> str:
 	with get_db(niascape.ini['database']) as db:  # type: ignore  # XXX セクションぶっこむとmypyさんにおこられ 辞書化すべきか
-		return json.dumps(basedata._monthcount(db, **option), cls=AsdictSupportJSONEncoder)  # PENDING どこでJSON化すべきか
+		return json.dumps(postcount._monthcount(db, **option), cls=AsdictSupportJSONEncoder)  # PENDING どこでJSON化すべきか
 
 
 def tag(option: dict) -> str:
 	with get_db(niascape.ini['database']) as db:  # type: ignore  # XXX セクションぶっこむとmypyさんにおこられ 辞書化すべきか
-		return json.dumps(basedata._tag_count(db, **option), cls=AsdictSupportJSONEncoder)  # PENDING どこでJSON化すべきか
-
+		return json.dumps(postcount._tag_count(db, **option), cls=AsdictSupportJSONEncoder)  # PENDING どこでJSON化すべきか
