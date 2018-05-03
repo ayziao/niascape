@@ -67,3 +67,10 @@ class TestBasedata(TestCase):
 		# print(ref[0].__dict__)
 
 
+	def test_sites(self):
+		db = self._db
+
+		ref = basedata._sites(db)
+		self.assertEqual([{'site': 'test', 'count': 4}, {'site': 'dummy', 'count': 1}],ref)
+
+

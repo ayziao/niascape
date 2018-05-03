@@ -59,7 +59,7 @@ class TestPostcount(TestCase):
 		# self.assertEqual('2018-02-18', ref[0].date)
 		self.assertEqual(1, ref[0].count)
 
-		ref = postcount.day(db, 'test', '#tag')
+		ref = postcount.day(db, 'test', tag='#tag')
 		logger.debug("日別投稿数\n%s", pformat(ref[:3]))
 		self.assertEqual('2018-01-01', ref[0].date)
 		self.assertEqual(1, ref[0].count)
@@ -94,6 +94,18 @@ class TestPostcount(TestCase):
 		self.assertEqual('1970-01', ref[0].date)
 		self.assertEqual(1, ref[0].count)
 
+		ref = postcount.month(db, 'dummy')
+		self.assertEqual('2018-01', ref[0].date)
+		self.assertEqual(1, ref[0].count)
+
+		ref = postcount.month(db, 'test', tag='#tag')
+		self.assertEqual('2017-01', ref[0].date)
+		self.assertEqual(2, ref[0].count)
+
+		ref = postcount.month(db, 'test', search_body='body')
+		self.assertEqual('2018-01', ref[0].date)
+		self.assertEqual(1, ref[0].count)
+
 	def test_tag_count(self):
 		db = self._db
 		ref = postcount.tag(db)
@@ -103,4 +115,3 @@ class TestPostcount(TestCase):
 
 		# self.assertEqual({'count': 353, 'tag': 'twitter_posted'}, ref[0])
 		pass
-
