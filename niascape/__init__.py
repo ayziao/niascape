@@ -28,35 +28,36 @@ def main(action: str = 'top', option: dict = None) -> str:
 	logger.debug("アクション: %s", action)
 	logger.debug("オプション: %s", option)
 
-	# FIXME 雑コーディングなので直したい
-	actions = action.rsplit('.', 1)
-	if len(actions) > 1:
-		usecase = _import_usecase('.' + actions[0])
-		action = actions[1]
-	else:
-		usecase = _import_usecase('')
+	m = _get_action(action)
 
-	try:
-		m = getattr(usecase, action)
-	except AttributeError:
-		logger.debug("AttributeError: %s", action)
-		m = None
-
-	if callable(m):
-		return m(option)
-	else:
+	if m == None:
 		# PENDING 例外を投げる？警告を出す？ AttributeError SyntaxError ValueError SyntaxWarning ResourceWarning
 		logger.info("アクションなし: %s", action)  # PENDING インフォかワーニングか設定で変えられるようにすべきか
 		return 'No Action'
 
+	return m(option)
 
-def _import_usecase(m):
-	logger.debug(m)
-	module_name = 'niascape.usecase' + m
+
+def _get_action(action: str):
+	# PENDING ユーティリティにでも移動したい
+	module_name = 'niascape.usecase'
+
+	actions = action.rsplit('.', 1)
+	if len(actions) > 1:
+		module_name += '.' + actions[0]
+		action = actions[1]
+
 	module = import_module(module_name)
-	logger.debug(module)
 
-	return module
+	try:
+		m = getattr(module, action)
+		if not callable(m):
+			m = None
+	except AttributeError:
+		logger.debug("AttributeError: %s", action)
+		m = None
+
+	return m
 
 
 def _read_ini(file_name: str = 'config.ini') -> configparser.ConfigParser:
