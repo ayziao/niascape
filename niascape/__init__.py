@@ -23,7 +23,7 @@ def main(action: str = 'top', option: dict = None) -> str:
 	:param option: オプションパラメータ辞書
 	:return: 結果文字列
 	"""
-	# TODO アクション名受け取りじゃなくて位置引数リスト受け取りにする 1件目YYYYMMDD形式なら日サマリとか振り分け
+	# PENDING アクション名受け取りじゃなくて位置引数リスト受け取りにする？ 1件目YYYYMMDD形式なら日サマリとか振り分け？
 
 	logger.debug("アクション: %s", action)
 	logger.debug("オプション: %s", option)

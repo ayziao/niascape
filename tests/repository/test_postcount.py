@@ -18,9 +18,8 @@ class TestPostcount(TestCase):
 	@classmethod
 	def setUpClass(cls):
 		db = get_db(niascape._read_ini('config.ini.sample')['database'])
-		logger.debug(db.dbms)
-		# db = get_db(niascape.ini)
 		# db = get_db()
+		logger.debug(db.dbms)
 
 		create_sql = """
 		CREATE TABLE "basedata" (
@@ -42,6 +41,7 @@ class TestPostcount(TestCase):
 		ret = db.execute(insert_sql, ('test', '20170101235959999000', '2017-01-01 23:59:59.999', '20170101235959999000', ' #tag system:1234 ', 'hoge'))
 		ret = db.execute(insert_sql, ('test', '20170101000000000000', '2017-01-01 00:00:00.000', '20170101000000000000', ' #tag system:1234 ', 'hoge2'))
 		ret = db.execute(insert_sql, ('dummy', '20180101123456789000', '2018-01-01 12:34:56.789', 'dummy', '', 'dummy'))
+		ret = db.execute(insert_sql, ('test', '20180505153456789000', '2018-05-05 15:34:56.789', 'dummy', '', 'dummy'))
 		logger.debug(ret)
 		cls._db = db
 
@@ -55,7 +55,7 @@ class TestPostcount(TestCase):
 		ref = postcount.day(db)
 		logger.debug("日別投稿数\n%s", pformat(ref[:3]))
 		# self.assertEqual({'Date': '2018-02-18', 'count': 2}, ref[0])
-		self.assertEqual('2018-01-01', ref[0].date)
+		self.assertEqual('2018-05-05', ref[0].date)
 		# self.assertEqual('2018-02-18', ref[0].date)
 		self.assertEqual(1, ref[0].count)
 
@@ -114,6 +114,26 @@ class TestPostcount(TestCase):
 		ref = postcount.month(db, **{'site': 'test', 'tag': '#tag', 'search_body': 'body'})
 		self.assertEqual('2018-01', ref[0].date)
 		self.assertEqual(1, ref[0].count)
+
+	def test_hourcount(self):
+		db = self._db
+		ref = postcount.hour(db)
+		self.assertEqual(ref[23].count, 1)
+
+		ref = postcount.hour(db, **{'site': 'test', 'tag': '#tag', 'search_body': 'body'})
+		self.assertEqual(ref[0].count, 1)
+
+		ref = postcount.hour(db, past='24H')  # PENDING 実行日時に依存するテストをどうするか
+		self.assertEqual(ref[0].count, 0)
+
+		ref = postcount.hour(db, past='7D')  # PENDING 実行日時に依存するテストをどうするか
+		self.assertEqual(ref[0].count, 0)
+
+		ref = postcount.hour(db, site='test', past='30D')  # PENDING 実行日時に依存するテストをどうするか
+		self.assertEqual(ref[0].count, 0)
+
+		ref = postcount.hour(db, past='365D')  # PENDING 実行日時に依存するテストをどうするか
+		self.assertEqual(ref[0].count, 1)
 
 	def test_tag_count(self):
 		db = self._db

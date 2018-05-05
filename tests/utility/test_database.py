@@ -21,7 +21,7 @@ class TestDatabase(TestCase):
 
 	@classmethod
 	def setUpClass(cls):
-		ini = niascape._read_ini('config.ini.sample')  # TODO configパーサーオブジェクトやめる
+		ini = niascape._read_ini('config.ini.sample')  # FUTURE configパーサーオブジェクトやめる
 		niascape.ini = ini
 		db = get_db(ini['database_sqlite'])
 		ret = db.execute("CREATE TABLE test (id serial PRIMARY KEY, num integer, data varchar);")
@@ -90,6 +90,9 @@ class TestDatabase(TestCase):
 		ret = self._db.execute_fetchall("select 'hoge' as name , COUNT(*) as count from test", namedtuple=count)
 		self.assertEqual(4, ret[0].count)
 
+		ret = db.execute_fetchall_namedtuple("select * from test where id = 'aaaa'")
+		self.assertEqual([], ret)
+
 
 @skipUnless(psycopg2, 'psycopg2無し')
 class TestPostgresql(TestCase):
@@ -97,7 +100,7 @@ class TestPostgresql(TestCase):
 
 	@classmethod
 	def setUpClass(cls):
-		ini = niascape._read_ini('config.ini.sample')  # TODO configパーサーオブジェクトやめる
+		ini = niascape._read_ini('config.ini.sample')  # FUTURE configパーサーオブジェクトやめる
 		niascape.ini = ini
 		cls._db = get_db(ini['database'])
 		ret = cls._db.execute_fetchall("select version()")

@@ -20,175 +20,89 @@ if ($searchbody) {
 
 $handle = new SQLite3($location);
 
-//今日
-$query = <<< EOM
-SELECT  `times`.`Date`,ifnull( `count`, 0) as 'count',`graf`
-FROM 
-	(SELECT strftime('%H',`datetime`) as `Date`  FROM basedata GROUP BY strftime('%H',`datetime`)) times
-LEFT JOIN
-(
-SELECT 
-	strftime('%H',`datetime`) as `Date` , 
-	COUNT(*) as 'count',
-	replace(substr(quote(zeroblob((count(*) + 1) / 2)), 3, count(*)), '0', '|') as 'graf' 
-FROM basedata 
-WHERE site = '$site' 
-$tagwhere 
-$bodywhere
-AND DATE(`datetime`) = DATE('now', "localtime")
-GROUP BY strftime('%H',`datetime`)
-) counts
-ON  `times`.`Date` = `counts`.`Date` 
-EOM;
-//var_dump($query);
-$results = $handle->query($query);
+//過去24時間
+$command = "python3 /Volumes/data/niascape/niascape postcount.hour --past=24H";
+$command .= $site ? ' --site='.$site : '';
+$command .= $tag ? ' --tag='.$tag : '';
+$command .= $searchbody ? ' --search_body='.$searchbody : '';
+exec($command, $out, $ret);
+$monthcount = json_decode(end($out), true);
 
-while ($row = $results->fetchArray()) {
-	$today .= '<tr>' . '<td nowrap>' . $row['Date'] . '</td>' . '<td align="right">' . $row['count'] . '</td>' . '<td><div style="background-color: blue;  width: ' . $row['count'] . 'px; font-size: 10px;">&nbsp;</div></td>' . '<td>' . $row['graf'] . '</td>' . '</tr>';
+foreach ($monthcount as $row){
+	$today .= '<tr>' . '<td nowrap>' . $row['date'] . '</td>' . '<td align="right">' . $row['count'] . '</td>' . '<td><div style="background-color: blue;  width: ' . $row['count'] . 'px; font-size: 10px;">&nbsp;</div></td>' . '</tr>';
 }
 
-//今週
-$query = <<< EOM
+//過去7日
+$command = "python3 /Volumes/data/niascape/niascape postcount.hour --past=7D";
+$command .= $site ? ' --site='.$site : '';
+$command .= $tag ? ' --tag='.$tag : '';
+$command .= $searchbody ? ' --search_body='.$searchbody : '';
+exec($command, $out, $ret);
+$monthcount = json_decode(end($out), true);
 
-SELECT t2.Date , count, graf
-FROM 
-(
-	SELECT strftime('%H',`datetime`) as `Date`  FROM basedata GROUP BY strftime('%H',`datetime`)
-) t2
-LEFT JOIN
-(
-SELECT 
-	strftime('%H',`datetime`) as `Date`,
-	COUNT(*) as 'count',
-	replace(substr(quote(zeroblob((count(*) + 1) / 2)), 3, count(*)), '0', '|') as 'graf' 
-FROM basedata 
-WHERE site = '$site' 
-$tagwhere 
-$bodywhere
-AND strftime('%Y%W',`datetime`) = strftime('%Y%W',DATE('now', "localtime"))
-GROUP BY strftime('%H',`datetime`)
-) t1
-ON  t1.`Date` = t2.`Date` 
-EOM;
-
-// print('<pre>');
-// var_dump($query);
-// print('</pre>');
-
-$results = $handle->query($query);
-while ($row = $results->fetchArray()) {
-	$konsyu .= '<tr>' . '<td nowrap>' . $row['Date'] . '</td>' . '<td align="right">' . $row['count'] . '</td>' . '<td><div style="background-color: blue;  width: ' . (int)$row['count'] . 'px; font-size: 10px;">&nbsp;</div></td>' . '<td>' . $row['graf'] . '</td>' . '</tr>';
+foreach ($monthcount as $row){
+	$konsyu .= '<tr>' . '<td nowrap>' . $row['date'] . '</td>' . '<td align="right">' . $row['count'] . '</td>' . '<td><div style="background-color: blue;  width: ' . $row['count'] . 'px; font-size: 10px;">&nbsp;</div></td>' . '</tr>';
 }
 
+//過去30日
+$command = "python3 /Volumes/data/niascape/niascape postcount.hour --past=30D";
+$command .= $site ? ' --site='.$site : '';
+$command .= $tag ? ' --tag='.$tag : '';
+$command .= $searchbody ? ' --search_body='.$searchbody : '';
+exec($command, $out, $ret);
+$monthcount = json_decode(end($out), true);
 
-//今月
-$query = <<< EOM
-SELECT 
-	strftime('%H',`datetime`) as `Date` , 
-	COUNT(*) as 'count',
-	replace(substr(quote(zeroblob((count(*) + 1) / 2)), 3, count(*)), '0', '|') as 'graf' 
-FROM basedata 
-WHERE site = '$site' 
-$tagwhere 
-$bodywhere
-AND strftime('%Y-%m',`datetime`) = strftime('%Y-%m',DATE('now', "localtime"))
-GROUP BY strftime('%H',`datetime`)
-EOM;
-//var_dump($query);
-$results = $handle->query($query);
-
-while ($row = $results->fetchArray()) {
-	$kongetu .= '<tr>' . '<td nowrap>' . $row['Date'] . '</td>' . '<td align="right">' . $row['count'] . '</td>' . '<td><div style="background-color: blue;  width: ' . $row['count'] . 'px; font-size: 10px;">&nbsp;</div></td>' . '<td>' . $row['graf'] . '</td>' . '</tr>';
+foreach ($monthcount as $row){
+	$kongetu .= '<tr>' . '<td nowrap>' . $row['date'] . '</td>' . '<td align="right">' . $row['count'] . '</td>' . '<td><div style="background-color: blue;  width: ' . $row['count'] . 'px; font-size: 10px;">&nbsp;</div></td>' . '</tr>';
 }
 
-//今年
-$query = <<< EOM
-SELECT 
-	strftime('%H',`datetime`) as `Date` , 
-	COUNT(*) as 'count',
-	replace(substr(quote(zeroblob((round(count(*) / 10) + 1) / 2)), 3, (round(count(*) / 10))), '0', '|') as 'graf' 
-FROM basedata 
-WHERE site = '$site' 
-$tagwhere 
-$bodywhere
-AND strftime('%Y',`datetime`) = strftime('%Y',DATE('now', "localtime"))
-GROUP BY strftime('%H',`datetime`)
-EOM;
-//var_dump($query);
-$results = $handle->query($query);
+//過去365日
+$command = "python3 /Volumes/data/niascape/niascape postcount.hour --past=365D";
+$command .= $site ? ' --site='.$site : '';
+$command .= $tag ? ' --tag='.$tag : '';
+$command .= $searchbody ? ' --search_body='.$searchbody : '';
+exec($command, $out, $ret);
+$monthcount = json_decode(end($out), true);
 
-while ($row = $results->fetchArray()) {
-	$kotosi .= '<tr>' . '<td nowrap>' . $row['Date'] . '</td>' . '<td align="right">' . $row['count'] . '</td>' . '<td><div style="background-color: blue;  width: ' . $row['count'] . 'px; font-size: 10px;">&nbsp;</div></td>' . '<td>' . $row['graf'] . '</td>' . '</tr>';
+foreach ($monthcount as $row){
+	$kotosi .= '<tr>' . '<td nowrap>' . $row['date'] . '</td>' . '<td align="right">' . $row['count'] . '</td>' . '<td><div style="background-color: blue;  width: ' . $row['count'] . 'px; font-size: 10px;">&nbsp;</div></td>' . '</tr>';
 }
 
 
 //全期間
-$query = <<< EOM
-SELECT 
-	strftime('%H',`datetime`) as `Date` , 
-	COUNT(*) as 'count',
-	replace(substr(quote(zeroblob((round(count(*) / 10) + 1) / 2)), 3, (round(count(*) / 10))), '0', '|') as 'graf' 
-FROM basedata 
-WHERE site = '$site' 
-$tagwhere 
-$bodywhere
-GROUP BY strftime('%H',`datetime`)
-EOM;
-$results = $handle->query($query);
+$command = "python3 /Volumes/data/niascape/niascape postcount.hour";
+$command .= $site ? ' --site=' . $site : '';
+$command .= $tag ? ' --tag=' . $tag : '';
+$command .= $searchbody ? ' --search_body=' . $searchbody : '';
+exec($command, $out, $ret);
+$monthcount = json_decode(end($out), true);
 
-while ($row = $results->fetchArray()) {
-	
-	$zenkikan .= '<tr>' . '<td nowrap>' . $row['Date'] . '</td>' . '<td align="right">' . $row['count'] . '</td>' . '<td><div style="background-color: blue;  width: ' . $row['count'] /10 . 'px; font-size: 10px;">&nbsp;</div></td>' . '<td>' . $row['graf'] . '</td>' . '</tr>';
+foreach ($monthcount as $row) {
+	$zenkikan .= '<tr>' . '<td nowrap>' . $row['date'] . '</td>' . '<td align="right">' . $row['count'] . '</td>';
+	if ($site == 'rog') {
+		$row['count'] = $row['count'] / 5;
+	}
+	$zenkikan .= '<td><div style="background-color: blue;  width: ' . $row['count'] . 'px; font-size: 10px;">&nbsp;</div></td>' . '</tr>';
 }
 
 //タグ利用頻度順リンク
-//タグ件数取得
-
-$query = <<< EOM
-SELECT 
-	replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(tags,'0',''),'1',''),'2',''),'3',''),'4',''),'5',''),'6',''),'7',''),'8',''),'9',''),':','') as 'tags' ,
-	COUNT(*) as 'count'
-FROM basedata 
-WHERE
-	site = '$site'
-GROUP BY replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(tags,'0',''),'1',''),'2',''),'3',''),'4',''),'5',''),'6',''),'7',''),'8',''),'9',''),':','')
-ORDER BY COUNT(*) DESC
-EOM;
-//, replace(substr(quote(zeroblob((count(*) + 1) / 2)), 3, count(*)), '0', '|') as 'graf' 
-
-$results = $handle->query($query);
-$array = [];
-while ($row = $results->fetchArray()) {
-	$tags = explode(" ", str_replace("\t", ' ', trim($row['tags'])));
-	foreach ($tags as $value) {
-		$aaa = mb_strstr($value, ':', ture) ? mb_strstr($value, ':', ture) : $value; //スペースで切り離し
-		$array[$aaa] += $row['count']; //件数足し足し
-	}
-	ksort($array);
-	arsort($array);
-}
+$command = "python3 /Volumes/data/niascape/niascape postcount.tag";
+$command .= $site ? ' --site=' . $site : '';
+exec($command, $out, $ret);
+$tagcount = json_decode(end($out), true);
 
 $link .= '<a href="?kanri=hourcount&site=' . $site . '">全て</a><br>';
-foreach ($array as $key => $value) {
-	$link .= '<a href="?kanri=hourcount&site=' . $site . '&tag=' . urlencode($key) . '">' . $key . '</a> ' . $value . '<br>';
+foreach ($tagcount as $row) {
+	$link .= '<a href="?kanri=hourcount&site=' . $site . '&tag=' . urlencode($row['tag']) . '">' . $row['tag'] . '</a> ' . $row['count'] . '<br>';
 }
 
-
-
 //siteリンク
+$command = "python3 /Volumes/data/niascape/niascape sites";
+exec($command, $out, $ret);
+$sites = json_decode(end($out), true);
 
-$query = <<< EOM
-SELECT 
-	site
-	, COUNT(*)
-FROM basedata 
-GROUP BY site
-ORDER BY COUNT(*) DESC
-EOM;
-
-$results = $handle->query($query);
-
-while ($row = $results->fetchArray()) {
+foreach ($sites as $row) {
+	
 	$sitelink .= '<a href="?kanri=hourcount&site=' . $row['site'] . '">' . $row['site'] . '</a> ';
 }
 ?>
@@ -222,19 +136,19 @@ while ($row = $results->fetchArray()) {
 				<?= $link ?>
 			</div>
 			<div class="cell" style="width: 100%;">
-				<h5>今日</h5>
+				<h5>過去24時間</h5>
 				<table>
 					<?= $today ?>
 				</table>
-				<h5>今週</h5>
+				<h5>過去7日</h5>
 				<table>
 					<?= $konsyu ?>
 				</table>
-				<h5>今月</h5>
+				<h5>過去30日</h5>
 				<table>
 					<?= $kongetu ?>
 				</table>
-				<h5>今年</h5>
+				<h5>過去365日</h5>
 				<table>
 					<?= $kotosi ?>
 				</table>
@@ -245,5 +159,5 @@ while ($row = $results->fetchArray()) {
 			</div>
 		</div>		
 		<a href='?kanri=monthcount&site=<?= $site ?>'>月別</a> <a href='?kanri=daycount&site=<?= $site ?>'>日別</a> <a href='?kanri=weekcount&site=<?= $site ?>'>曜日別</a> <a href='?kanri=hourcount&site=<?= $site ?>'>時別</a> <a href='?kanri=tagcount&site=<?= $site ?>'>タグ</a><br>
-	</body>
+  </body>
 </html>
