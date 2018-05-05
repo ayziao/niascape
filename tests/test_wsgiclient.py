@@ -64,7 +64,7 @@ class TestWsgiclient(TestCase):
 
 		moc.day = method
 
-		env = {'PATH_INFO': '', 'QUERY_STRING': 'postcount.day&tag=test'}
+		env = {'PATH_INFO': '/test/', 'QUERY_STRING': 'postcount.day&tag=test'}
 		ret_stat = ''
 		ret_hed = ''
 		ret_content = b''
@@ -78,7 +78,7 @@ class TestWsgiclient(TestCase):
 
 		self.assertEqual('200 OK', ret_stat)
 		self.assertEqual([('Content-Type', 'text/json; charset=utf-8')], ret_hed)
-		self.assertEqual(b'[{"dummy": "called mock daycount  test"}]', ret_content)
+		self.assertEqual(b'[{"dummy": "called mock daycount test test"}]', ret_content)
 
 
 class Dummy:

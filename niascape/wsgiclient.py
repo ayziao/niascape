@@ -102,7 +102,7 @@ def _parse(environ: dict) -> Tuple[List[str], dict]:
 		else:
 			option_dict[key] = value
 
-	path_list = environ['PATH_INFO'].split('/')
+	path_list = environ['PATH_INFO'].split('/')  # PENDING サブドメインモード？
 
 	logger.debug("path: %s", path_list)
 
