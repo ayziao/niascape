@@ -83,6 +83,7 @@ def month(db: Database, site: str = 'test', tag: str = '', search_body: str = ''
 		{tag_where}
 		{body_where}
 	GROUP BY {date}
+	ORDER BY {date}
 	LIMIT ?
 	"""
 	limit = 1000  # PENDING ページングする？
@@ -146,6 +147,7 @@ def hour(db: Database, site: str = 'test', tag: str = '', search_body: str = '',
 		{body_where}
 		{past_where}
 	GROUP BY {date}
+	ORDER BY {date}
 	"""
 	hour_count = NamedTuple('hour_count', (('date', str), ('count', int)))
 
