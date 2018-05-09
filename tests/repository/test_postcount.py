@@ -123,16 +123,16 @@ class TestPostcount(TestCase):
 		ref = postcount.hour(db, **{'site': 'test', 'tag': '#tag', 'search_body': 'body'})
 		self.assertEqual(ref[0].count, 1)
 
-		ref = postcount.hour(db, past='24H')  # PENDING 実行日時に依存するテストをどうするか
+		ref = postcount.hour(db, past_days=1)  # PENDING 実行日時に依存するテストをどうするか
 		self.assertEqual(ref[0].count, 0)
 
-		ref = postcount.hour(db, past='7D')  # PENDING 実行日時に依存するテストをどうするか
+		ref = postcount.hour(db, past_days=7)  # PENDING 実行日時に依存するテストをどうするか
 		self.assertEqual(ref[0].count, 0)
 
-		ref = postcount.hour(db, site='test', past='30D')  # PENDING 実行日時に依存するテストをどうするか
+		ref = postcount.hour(db, site='test', past_days=30)  # PENDING 実行日時に依存するテストをどうするか
 		self.assertEqual(ref[0].count, 0)
 
-		ref = postcount.hour(db, past='365D')  # PENDING 実行日時に依存するテストをどうするか
+		ref = postcount.hour(db, past_days=365)  # PENDING 実行日時に依存するテストをどうするか
 		self.assertEqual(ref[0].count, 1)
 
 	def test_tag_count(self):

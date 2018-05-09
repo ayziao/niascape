@@ -94,44 +94,22 @@ def month(db: Database, site: str = 'test', tag: str = '', search_body: str = ''
 
 
 # noinspection PyShadowingNames
-def hour(db: Database, site: str = 'test', tag: str = '', search_body: str = '', past='') -> List[Any]:
+def hour(db: Database, site: str = 'test', tag: str = '', search_body: str = '', past_days: int = 0) -> List[Any]:
 	tag_where = ''
 	body_where = ''
 	past_where = ''
 	dt = datetime.now()
 	param = [site]  # type: List[Union[str, int]]
 
-	# FIXME やっつけ
 	if tag != '':
 		tag_where = "AND (tags like ? or tags like ?)"
 		param.extend([f"% {tag} %", f"% {tag}:%"])
 	if search_body != '':
 		body_where = "AND body LIKE ?"
 		param.append(f"%{search_body}%")
-	if past == '24H':
-		if db.dbms == 'postgresql':
-			dt -= timedelta(days=1)
-			past_where = 'AND "datetime" > ' + "'" + dt.strftime("%Y-%m-%d %H:%M:%S") + "'"
-		else:
-			past_where = 'AND "datetime" > ' + "datetime('" + dt.strftime("%Y-%m-%d %H:%M:%S") + "', '-24 hours')"
-	if past == '7D':
-		if db.dbms == 'postgresql':
-			dt -= timedelta(days=7)
-			past_where = 'AND "datetime" > ' + "'" + dt.strftime("%Y-%m-%d %H:%M:%S") + "'"
-		else:
-			past_where = 'AND "datetime" > ' + "datetime('" + dt.strftime("%Y-%m-%d %H:%M:%S") + "', '-7 days')"
-	if past == '30D':
-		if db.dbms == 'postgresql':
-			dt -= timedelta(days=30)
-			past_where = 'AND "datetime" > ' + "'" + dt.strftime("%Y-%m-%d %H:%M:%S") + "'"
-		else:
-			past_where = 'AND "datetime" > ' + "datetime('" + dt.strftime("%Y-%m-%d %H:%M:%S") + "', '-30 days')"
-	if past == '365D':
-		if db.dbms == 'postgresql':
-			dt -= timedelta(days=365)
-			past_where = 'AND "datetime" > ' + "'" + dt.strftime("%Y-%m-%d %H:%M:%S") + "'"
-		else:
-			past_where = 'AND "datetime" > ' + "datetime('" + dt.strftime("%Y-%m-%d %H:%M:%S") + "', '-365 days')"
+	if isinstance(past_days, int) and past_days > 0:
+		dt -= timedelta(days=past_days)
+		past_where = 'AND "datetime" > ' + "'" + dt.strftime("%Y-%m-%d %H:%M:%S") + "'"
 
 	if db.dbms == 'postgresql':
 		date = 'to_char("datetime",\'HH24\')'
@@ -174,6 +152,7 @@ def hour(db: Database, site: str = 'test', tag: str = '', search_body: str = '',
 
 def tag(db: Database, site: str = 'test') -> List[Dict[str, Union[str, int]]]:
 	# PENDING ShadowingNamesに対応すべきかどうか
+	# FUTURE タグテーブル作ってそっち読むようにする
 	if db.dbms == 'postgresql':
 		tags = "regexp_replace(tags , ':[0-9]+','')"
 	else:

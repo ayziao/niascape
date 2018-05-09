@@ -21,7 +21,7 @@ if ($searchbody) {
 $handle = new SQLite3($location);
 
 //過去24時間
-$command = "python3 /Volumes/data/niascape/niascape postcount.hour --past=24H";
+$command = "python3 /Volumes/data/niascape/niascape postcount.hour --past_days=1";
 $command .= $site ? ' --site='.$site : '';
 $command .= $tag ? ' --tag='.$tag : '';
 $command .= $searchbody ? ' --search_body='.$searchbody : '';
@@ -33,7 +33,7 @@ foreach ($monthcount as $row){
 }
 
 //過去7日
-$command = "python3 /Volumes/data/niascape/niascape postcount.hour --past=7D";
+$command = "python3 /Volumes/data/niascape/niascape postcount.hour --past_days=7";
 $command .= $site ? ' --site='.$site : '';
 $command .= $tag ? ' --tag='.$tag : '';
 $command .= $searchbody ? ' --search_body='.$searchbody : '';
@@ -45,7 +45,7 @@ foreach ($monthcount as $row){
 }
 
 //過去30日
-$command = "python3 /Volumes/data/niascape/niascape postcount.hour --past=30D";
+$command = "python3 /Volumes/data/niascape/niascape postcount.hour --past_days=30";
 $command .= $site ? ' --site='.$site : '';
 $command .= $tag ? ' --tag='.$tag : '';
 $command .= $searchbody ? ' --search_body='.$searchbody : '';
@@ -57,7 +57,7 @@ foreach ($monthcount as $row){
 }
 
 //過去365日
-$command = "python3 /Volumes/data/niascape/niascape postcount.hour --past=365D";
+$command = "python3 /Volumes/data/niascape/niascape postcount.hour --past_days=365";
 $command .= $site ? ' --site='.$site : '';
 $command .= $tag ? ' --tag='.$tag : '';
 $command .= $searchbody ? ' --search_body='.$searchbody : '';
