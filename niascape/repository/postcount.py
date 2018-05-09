@@ -93,6 +93,7 @@ def month(db: Database, site: str = 'test', tag: str = '', search_body: str = ''
 	return db.execute_fetchall(sql, param, namedtuple=month_count)
 
 
+# noinspection PyShadowingNames
 def hour(db: Database, site: str = 'test', tag: str = '', search_body: str = '', past='') -> List[Any]:
 	tag_where = ''
 	body_where = ''
@@ -112,7 +113,7 @@ def hour(db: Database, site: str = 'test', tag: str = '', search_body: str = '',
 			dt -= timedelta(days=1)
 			past_where = 'AND "datetime" > ' + "'" + dt.strftime("%Y-%m-%d %H:%M:%S") + "'"
 		else:
-			past_where = 'AND "datetime" > ' + "datetime('" +dt.strftime("%Y-%m-%d %H:%M:%S") +  "', '-24 hours')"
+			past_where = 'AND "datetime" > ' + "datetime('" + dt.strftime("%Y-%m-%d %H:%M:%S") + "', '-24 hours')"
 	if past == '7D':
 		if db.dbms == 'postgresql':
 			dt -= timedelta(days=7)

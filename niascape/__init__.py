@@ -30,7 +30,7 @@ def main(action: str = 'top', option: dict = None) -> str:
 
 	m = _get_action(action)
 
-	if m == None:
+	if m is None:
 		# PENDING 例外を投げる？警告を出す？ AttributeError SyntaxError ValueError SyntaxWarning ResourceWarning
 		logger.info("アクションなし: %s", action)  # PENDING インフォかワーニングか設定で変えられるようにすべきか
 		return 'No Action'
