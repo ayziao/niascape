@@ -69,6 +69,19 @@ class TestPostcount(TestCase):
 		ref = usecase.postcount.hour({})
 		self.assertEqual('[{"dummy": "called mock hourcount"}]', ref)
 
+	@mock.patch('niascape.usecase.postcount.postcount')
+	def test_week(self, moc):
+		self.assertTrue(hasattr(postcount, 'week'))  # モックだと関数名の修正についていけないのでチェック
+
+		def method(conn, site='', tag='', search_body=''):  # XXX 引数の定義を実装から動的にパクれないか inspectモジュール？
+			self.assertIsInstance(conn, Database)
+			return [Dummy(f"called mock weekcount {site} {tag} {search_body}".strip())]
+
+		moc.week = method
+
+		ref = usecase.postcount.week({})
+		self.assertEqual('[{"dummy": "called mock weekcount"}]', ref)
+
 	@skip("モックなし確認用")
 	def test_day_no_mock(self):
 		ini = niascape._read_ini('config.ini')

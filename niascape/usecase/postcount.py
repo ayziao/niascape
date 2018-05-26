@@ -27,6 +27,11 @@ def hour(option: dict) -> str:
 		return json.dumps(postcount.hour(db, **option), cls=AsdictSupportJSONEncoder)  # PENDING どこでJSON化すべきか
 
 
+def week(option: dict) -> str:
+	with get_db(niascape.ini['database']) as db:  # type: ignore  # XXX セクションぶっこむとmypyさんにおこられ 辞書化すべきか
+		return json.dumps(postcount.week(db, **option), cls=AsdictSupportJSONEncoder)  # PENDING どこでJSON化すべきか
+
+
 def tag(option: dict) -> str:
 	with get_db(niascape.ini['database']) as db:  # type: ignore  # XXX セクションぶっこむとmypyさんにおこられ 辞書化すべきか
 		return json.dumps(postcount.tag(db, **option), cls=AsdictSupportJSONEncoder)  # PENDING どこでJSON化すべきか

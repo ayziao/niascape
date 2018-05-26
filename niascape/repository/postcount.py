@@ -150,6 +150,59 @@ def hour(db: Database, site: str = 'test', tag: str = '', search_body: str = '',
 	return ret24
 
 
+# noinspection PyShadowingNames
+def week(db: Database, site: str = 'test', tag: str = '', search_body: str = '', past_days: int = 0) -> List[Any]:
+	tag_where = ''
+	body_where = ''
+	past_where = ''
+	dt = datetime.now()
+	param = [site]  # type: List[Union[str, int]]
+
+	if tag != '':
+		tag_where = "AND (tags like ? or tags like ?)"
+		param.extend([f"% {tag} %", f"% {tag}:%"])
+	if search_body != '':
+		body_where = "AND body LIKE ?"
+		param.append(f"%{search_body}%")
+	if isinstance(past_days, int) and past_days > 0:
+		dt -= timedelta(days=past_days)
+		past_where = 'AND "datetime" > ' + "'" + dt.strftime("%Y-%m-%d %H:%M:%S") + "'"
+
+	if db.dbms == 'postgresql':
+		date = 'to_char("datetime",\'D\')'
+		week_fix = 1
+	else:
+		date = 'strftime(\'%w\',"datetime")'
+		week_fix = 0
+
+	sql = f"""
+	SELECT 
+		{date} as "date",
+		COUNT(*) as "count"
+	FROM basedata
+	WHERE site = ?
+		{tag_where}
+		{body_where}
+		{past_where}
+	GROUP BY {date}
+	ORDER BY {date}
+	"""
+	week_count = NamedTuple('week_count', (('date', str), ('count', int)))
+
+	ret = db.execute_fetchall(sql, param, namedtuple=week_count)
+
+	ret_week = []
+
+	for i in range(7):
+		if len(ret) > 0 and (int(ret[0].date) - week_fix) == i:
+			pop = ret.pop(0)
+			ret_week.append(week_count(str(i), pop.count))
+		else:
+			ret_week.append(week_count(str(i), 0))
+
+	return ret_week
+
+
 def tag(db: Database, site: str = 'test') -> List[Dict[str, Union[str, int]]]:
 	# PENDING ShadowingNamesに対応すべきかどうか
 	# FUTURE タグテーブル作ってそっち読むようにする

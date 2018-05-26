@@ -26,9 +26,9 @@ $command .= $site ? ' --site='.$site : '';
 $command .= $tag ? ' --tag='.$tag : '';
 $command .= $searchbody ? ' --search_body='.$searchbody : '';
 exec($command, $out, $ret);
-$monthcount = json_decode(end($out), true);
+$hourcount = json_decode(end($out), true);
 
-foreach ($monthcount as $row){
+foreach ($hourcount as $row){
 	$today .= '<tr>' . '<td nowrap>' . $row['date'] . '</td>' . '<td align="right">' . $row['count'] . '</td>' . '<td><div style="background-color: blue;  width: ' . $row['count'] . 'px; font-size: 10px;">&nbsp;</div></td>' . '</tr>';
 }
 
@@ -38,9 +38,9 @@ $command .= $site ? ' --site='.$site : '';
 $command .= $tag ? ' --tag='.$tag : '';
 $command .= $searchbody ? ' --search_body='.$searchbody : '';
 exec($command, $out, $ret);
-$monthcount = json_decode(end($out), true);
+$hourcount = json_decode(end($out), true);
 
-foreach ($monthcount as $row){
+foreach ($hourcount as $row){
 	$konsyu .= '<tr>' . '<td nowrap>' . $row['date'] . '</td>' . '<td align="right">' . $row['count'] . '</td>' . '<td><div style="background-color: blue;  width: ' . $row['count'] . 'px; font-size: 10px;">&nbsp;</div></td>' . '</tr>';
 }
 
@@ -50,9 +50,9 @@ $command .= $site ? ' --site='.$site : '';
 $command .= $tag ? ' --tag='.$tag : '';
 $command .= $searchbody ? ' --search_body='.$searchbody : '';
 exec($command, $out, $ret);
-$monthcount = json_decode(end($out), true);
+$hourcount = json_decode(end($out), true);
 
-foreach ($monthcount as $row){
+foreach ($hourcount as $row){
 	$kongetu .= '<tr>' . '<td nowrap>' . $row['date'] . '</td>' . '<td align="right">' . $row['count'] . '</td>' . '<td><div style="background-color: blue;  width: ' . $row['count'] . 'px; font-size: 10px;">&nbsp;</div></td>' . '</tr>';
 }
 
@@ -62,9 +62,9 @@ $command .= $site ? ' --site='.$site : '';
 $command .= $tag ? ' --tag='.$tag : '';
 $command .= $searchbody ? ' --search_body='.$searchbody : '';
 exec($command, $out, $ret);
-$monthcount = json_decode(end($out), true);
+$hourcount = json_decode(end($out), true);
 
-foreach ($monthcount as $row){
+foreach ($hourcount as $row){
 	$kotosi .= '<tr>' . '<td nowrap>' . $row['date'] . '</td>' . '<td align="right">' . $row['count'] . '</td>' . '<td><div style="background-color: blue;  width: ' . $row['count'] . 'px; font-size: 10px;">&nbsp;</div></td>' . '</tr>';
 }
 
@@ -75,9 +75,9 @@ $command .= $site ? ' --site=' . $site : '';
 $command .= $tag ? ' --tag=' . $tag : '';
 $command .= $searchbody ? ' --search_body=' . $searchbody : '';
 exec($command, $out, $ret);
-$monthcount = json_decode(end($out), true);
+$hourcount = json_decode(end($out), true);
 
-foreach ($monthcount as $row) {
+foreach ($hourcount as $row) {
 	$zenkikan .= '<tr>' . '<td nowrap>' . $row['date'] . '</td>' . '<td align="right">' . $row['count'] . '</td>';
 	if ($site == 'rog') {
 		$row['count'] = $row['count'] / 5;

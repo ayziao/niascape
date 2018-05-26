@@ -135,6 +135,20 @@ class TestPostcount(TestCase):
 		ref = postcount.hour(db, past_days=365)  # PENDING 実行日時に依存するテストをどうするか
 		self.assertEqual(ref[0].count, 1)
 
+	def test_weekcount(self):
+		db = self._db
+		ref = postcount.week(db)
+		self.assertEqual(ref[0].count, 2)
+		self.assertEqual(ref[1].count, 1)
+		self.assertEqual(ref[2].count, 0)
+		self.assertEqual(ref[6].count, 1)
+
+		ref = postcount.week(db, **{'site': 'test', 'tag': '#tag', 'search_body': 'body'})
+		self.assertEqual(ref[0].count, 0)
+
+		ref = postcount.week(db, past_days=365)  # PENDING 実行日時に依存するテストをどうするか
+		self.assertEqual(ref[6].count, 1)
+
 	def test_tag_count(self):
 		db = self._db
 		ref = postcount.tag(db)
