@@ -9,6 +9,7 @@ logger = logging.getLogger(__name__)
 
 import niascape
 from niascape.repository import basedata
+from niascape.repository import site
 from niascape.utility.database import get_db
 
 
@@ -63,13 +64,14 @@ class TestBasedata(TestCase):
 		logger.debug("basedata\n%s", pformat(ref[:5]))
 		self.assertEqual('20180101123456789000', ref[0].identifier)
 
-		# print(ref[0].__dict__)
+		dic = ref[0]._asdict()
+		self.assertEqual('20180101123456789000', dic["identifier"])
 
 
-	def test_sites(self):
+	# print(ref[0].__dict__)
+
+	def test_site_list(self): #FIXME ベースデータにサイトアレしてるのでやっつけ サイトテーブル作ったら移動
 		db = self._db
 
-		ref = basedata._sites(db)
-		self.assertEqual([{'site': 'test', 'count': 4}, {'site': 'dummy', 'count': 1}],ref)
-
-
+		ref = site.sites(db)
+		self.assertEqual([{'site': 'test', 'count': 4}, {'site': 'dummy', 'count': 1}], ref)

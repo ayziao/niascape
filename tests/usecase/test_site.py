@@ -2,7 +2,7 @@ from unittest import TestCase, mock, skip
 
 import niascape
 from niascape import usecase
-from niascape.repository import basedata
+from niascape.repository import site
 from niascape.utility.database import Database
 
 
@@ -24,16 +24,15 @@ class TestUsecase(TestCase):
 		ret = usecase.top({})
 		self.assertEqual('top', ret)
 
-	@mock.patch('niascape.usecase.site.basedata')
+	@mock.patch('niascape.usecase.site.site')
 	def test_list(self, moc):
-		self.assertTrue(hasattr(basedata, '_sites'))  # モックだと関数名の修正についていけないのでチェック
+		self.assertTrue(hasattr(site, 'sites'))  # モックだと関数名の修正についていけないのでチェック
 
 		def method(conn, site=''):  # XXX 引数の定義を実装から動的にパクれないか inspectモジュール？
 			self.assertIsInstance(conn, Database)
-			return [Dummy(f"called mock _sites {site}".strip())]
+			return [Dummy(f"called mock sites {site}".strip())]
 
-		moc._sites = method
+		moc.sites = method
 
 		ref = usecase.site.list({})
-		self.assertEqual('[{"dummy": "called mock _sites"}]', ref)
-
+		self.assertEqual('[{"dummy": "called mock sites"}]', ref)

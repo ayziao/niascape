@@ -14,17 +14,8 @@ import logging
 logger = logging.getLogger(__name__)
 
 
-def _sites(db: Database, **option: dict) -> List[Dict[str, int]]:
-	sql = """
-	SELECT site, COUNT(*) as "count"
-	FROM basedata
-	GROUP BY site
-	ORDER BY COUNT(*) DESC
-	"""
-	return db.execute_fetchall(sql)
-
-
 def get_all(db: Database, site: str = 'test', page: int = 1) -> List[Basedata]:
+	# FIXME site別DBにしてsiteカラム削除
 	sql = """
 	SELECT identifier, title, tags, body, datetime FROM basedata
 	WHERE
