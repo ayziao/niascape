@@ -106,10 +106,13 @@ def _parse(environ: dict) -> Tuple[List[str], dict]:
 
 	logger.debug("path: %s", path_list)
 
-	if len(path_list) > 1:
-		option_dict['site'] = path_list[1]
-	else:
-		option_dict['site'] = ''
+	option_dict['site'] = path_list[1]
+
+	# PENDING 変なPATH_INFOが入ることを考慮すべきかどうか
+	# if len(path_list) > 1:
+	# 	option_dict['site'] = path_list[1]
+	# else:
+	# 	option_dict['site'] = ''
 
 	return arguments, option_dict
 
