@@ -84,12 +84,11 @@ foreach ($tagcount as $row) {
 }
 
 //siteリンク
-$command = "python3 /Volumes/data/niascape/niascape sites";
+$command = "python3 /Volumes/data/niascape/niascape site.list";
 exec($command, $out, $ret);
 $sites = json_decode(end($out), true);
 
 foreach ($sites as $row) {
-	
 	$sitelink .= '<a href="?kanri=weekcount&site=' . $row['site'] . '">' . $row['site'] . '</a> ';
 }
 

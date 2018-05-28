@@ -33,7 +33,7 @@ foreach ($tagcount as $row) {
 }
 
 //siteリンク
-$command = "python3 /Volumes/data/niascape/niascape sites";
+$command = "python3 /Volumes/data/niascape/niascape site.list";
 exec($command, $out, $ret);
 $sites = json_decode(end($out), true);
 

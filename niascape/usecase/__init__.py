@@ -11,12 +11,6 @@ def top(option: dict) -> str:  # PENDING topという概念はWebでしか無い
 	return 'top'
 
 
-def sites(option: dict) -> str:
-	# PENDING サイトを取りまとめるパッケージ下に入れるか検討
-	with get_db(niascape.ini['database']) as db:  # type: ignore  # XXX セクションぶっこむとmypyさんにおこられ 辞書化すべきか
-		return json.dumps(basedata._sites(db, **option), cls=AsdictSupportJSONEncoder)  # PENDING どこでJSON化すべきか
-
-
 def timeline(option: dict):
 	with get_db(niascape.ini['database']) as db:  # type: ignore  # XXX セクションぶっこむとmypyさんにおこられ 辞書化すべきか
 		return json.dumps(basedata.get_all(db, **option), cls=AsdictSupportJSONEncoder)  # PENDING どこでJSON化すべきか

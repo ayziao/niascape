@@ -24,15 +24,16 @@ class TestUsecase(TestCase):
 		ret = usecase.top({})
 		self.assertEqual('top', ret)
 
-	@mock.patch('niascape.usecase.basedata')
-	def test_timeline(self, moc):
-		self.assertTrue(hasattr(basedata, 'get_all'))  # モックだと関数名の修正についていけないのでチェック
+	@mock.patch('niascape.usecase.site.basedata')
+	def test_list(self, moc):
+		self.assertTrue(hasattr(basedata, '_sites'))  # モックだと関数名の修正についていけないのでチェック
 
 		def method(conn, site=''):  # XXX 引数の定義を実装から動的にパクれないか inspectモジュール？
 			self.assertIsInstance(conn, Database)
-			return [Dummy(f"called mock get_all {site}".strip())]
+			return [Dummy(f"called mock _sites {site}".strip())]
 
-		moc.get_all = method
+		moc._sites = method
 
-		ref = usecase.timeline({})
-		self.assertEqual('[{"dummy": "called mock get_all"}]', ref)
+		ref = usecase.site.list({})
+		self.assertEqual('[{"dummy": "called mock _sites"}]', ref)
+
