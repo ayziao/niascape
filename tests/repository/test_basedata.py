@@ -64,6 +64,7 @@ class TestBasedata(TestCase):
 		logger.debug("basedata\n%s", pformat(ref[:5]))
 		self.assertEqual('20180101123456789000', ref[0].identifier)
 
+		# FIXME やっつけ エンティティのテスト書いたら移動
 		dic = ref[0]._asdict()
 		self.assertEqual('20180101123456789000', dic["identifier"])
 

@@ -2,9 +2,9 @@
 niascape.repository.basedata
 
 ベースデータリポジトリ
-PENDING DBだとかファイル名にわかるようにつけたほうがよい？
+PENDING DBだとかストレージがなにかファイル名にわかるようにつけたほうがよい？
 """
-from typing import List, Dict
+from typing import List
 
 from niascape.utility.database import Database
 from niascape.entity.basedata import Basedata

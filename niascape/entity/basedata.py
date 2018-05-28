@@ -1,7 +1,7 @@
 """
 niascape.entity.basedata
 
-ベースデータ
+ベースデータエンティティ
 """
 # from typing import NamedTuple
 from datetime import datetime
