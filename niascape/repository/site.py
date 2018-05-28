@@ -12,7 +12,7 @@ import logging
 logger = logging.getLogger(__name__)
 
 
-def sites(db: Database, **option: dict) -> List[Dict[str, int]]:
+def sites(db: Database) -> List[Dict[str, int]]:
 	sql = """
 	SELECT site, COUNT(*) as "count"
 	FROM basedata
