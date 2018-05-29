@@ -3,6 +3,9 @@
 niascape.cli
 
 コマンドラインインターフェース
+
+使い方
+$ niascape/cli.py action
 """
 import os
 import sys

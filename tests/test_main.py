@@ -36,13 +36,3 @@ class TestMyPackage(TestCase):
 		logger.debug(d['database'])
 		logger.debug(dict(d['database']))
 		self.assertEqual('database', ini.sections()[0])
-
-	def test_get_action(self):
-		ref = niascape._get_action('timeline')
-		self.assertTrue(callable(ref))
-
-		ref = niascape._get_action('postcount.day')
-		self.assertTrue(callable(ref))
-
-		ref = niascape._get_action('hoge')
-		self.assertEqual(None,ref)

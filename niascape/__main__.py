@@ -1,5 +1,9 @@
 """
 コマンドライン起動をディレクトリでやったときのためだけのところ
+
+使い方
+$ python3 niascape action
+$ pypy3 niascape action
 """
 if __name__ == '__main__':  # pragma: no cover
 	import datetime
