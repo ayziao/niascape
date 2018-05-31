@@ -67,7 +67,7 @@ def parse_query_string(query_string: str, keep_blank_values: bool = False) -> Di
 	urllib.parse.parse_qs が全部リストで値を返すので[]だけリストになるよう自作
 
 	:param query_string: environ['QUERY_STRING']
-	:param keep_blank_values: 値の入っていないフィールドを無視しないか
+	:param keep_blank_values: 値の入っていないフィールドを無視せず空白文字の入ったフィールドとして返すか
 	:return: 辞書へパースされたクエリ
 	"""
 	query_list = parse_qsl(query_string, keep_blank_values=keep_blank_values)
