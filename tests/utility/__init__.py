@@ -9,11 +9,11 @@ class TestUtility(TestCase):
 		method = utility.dynamic_get_method('niascape', 'main')
 		self.assertEqual('No Action', method('hoge'))
 
-		ref = utility.dynamic_get_method('niascape.usecase','timeline')
+		ref = utility.dynamic_get_method('niascape.usecase', 'timeline')
 		self.assertTrue(callable(ref))
 
-		ref = utility.dynamic_get_method('niascape.usecase','postcount.day')
+		ref = utility.dynamic_get_method('niascape.usecase', 'postcount.day')
 		self.assertTrue(callable(ref))
 
-		ref = utility.dynamic_get_method('niascape.usecase','hoge')
-		self.assertEqual(None,ref)
+		ref = utility.dynamic_get_method('niascape.usecase', 'hoge')
+		self.assertEqual(None, ref)

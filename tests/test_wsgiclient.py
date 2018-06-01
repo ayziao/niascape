@@ -60,6 +60,7 @@ class TestWsgiclient(TestCase):
 	@mock.patch('niascape.usecase.postcount.postcount')
 	def test_daycount(self, moc):
 		niascape.ini = niascape._read_ini('config.ini.sample')  # PENDING テスト用設定読むのどうにかしたい
+
 		def method(conn, site='', tag='', search_body=''):  # XXX 引数の定義を実装から動的にパクれないか inspectモジュール？
 			self.assertIsInstance(conn, Database)
 			return [Dummy(f"called mock daycount {site} {tag} {search_body}".strip())]
