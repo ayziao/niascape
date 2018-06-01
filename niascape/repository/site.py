@@ -20,5 +20,3 @@ def sites(db: Database) -> List[Dict[str, int]]:
 	ORDER BY COUNT(*) DESC
 	"""
 	return db.execute_fetchall(sql)
-
-

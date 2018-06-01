@@ -18,6 +18,7 @@ if __name__ == '__main__':  # pragma: no cover
 
 	import logging.config
 	import json
+
 	logging.config.dictConfig(json.load(open(path + '/tests/logger_config.json', 'r')))
 	logger = logging.getLogger(__name__)
 

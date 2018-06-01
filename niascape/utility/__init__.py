@@ -35,4 +35,4 @@ class Setting:
 	def get_setting(self):
 		pass
 
-# TODO コンフィグパーサの使いづらいところどうにかする
+# PENDING コンフィグパーサの使いづらいところどうにかする
