@@ -4,7 +4,7 @@ niascape.repository.basedata
 ベースデータリポジトリ
 PENDING DBだとかストレージがなにかファイル名にわかるようにつけたほうがよい？
 """
-from typing import List
+from typing import List, Union
 
 from niascape.utility.database import Database
 from niascape.entity.basedata import Basedata
@@ -30,4 +30,3 @@ def get_all(db: Database, site: str = 'test', page: int = 1) -> List[Basedata]:
 	param.append("% gyazo_posted %")
 	per_page = 200  # FUTURE 1ページあたりの表示数を変更できるようにする
 	return db.execute_fetch_page(sql, param, page, per_page, namedtuple=Basedata)
-

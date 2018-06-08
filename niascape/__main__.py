@@ -19,7 +19,7 @@ if __name__ == '__main__':  # pragma: no cover
 	import logging.config
 	import json
 
-	logging.config.dictConfig(json.load(open(path + '/tests/logger_config.json', 'r')))
+	logging.config.dictConfig(json.load(open(path + '/logger_config.json', 'r')))
 	logger = logging.getLogger(__name__)
 
 	from niascape import cli, init_time
@@ -27,8 +27,8 @@ if __name__ == '__main__':  # pragma: no cover
 	logger.debug("開始時刻(UTC): %s", time)
 	logger.debug("開始時刻(UTC): %s", init_time)
 
-	logger.debug("実行中のスクリプトへの相対パス: %s", __file__)
-	logger.debug("実行中のスクリプトへの絶対パス: %s", os.path.abspath(__file__))
+	# logger.debug("実行中のスクリプトへの相対パス: %s", __file__)
+	# logger.debug("実行中のスクリプトへの絶対パス: %s", os.path.abspath(__file__))
 
 	# sys.argv.extend("nothing_action".split())
 	# sys.argv.extend("postcount.day --site=test --tag=#test test".split())

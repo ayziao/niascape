@@ -95,7 +95,9 @@ if __name__ == '__main__':  # pragma: no cover
 	path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 	sys.path.append(path)  # PENDING 実行環境へパッケージとしてインストールすればsys.path.append必要なくなるくさいがどうするか
 
-	# import json ; logging.config.dictConfig(json.load(open(path + '/tests/logger_config.json', 'r'))) ; logger = logging.getLogger()
+	import json
+	logging.config.dictConfig(json.load(open(path + '/tests/logger_config.json', 'r')))
+	logger = logging.getLogger()
 
 	# sys.argv.extend("postcount.day --site test --tag=#test --search_body test".split())
 	# sys.argv.extend("timeline --site test".split())
