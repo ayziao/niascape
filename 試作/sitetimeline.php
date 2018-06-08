@@ -45,7 +45,7 @@ ORDER BY identifier DESC LIMIT 200
 
 EOM;
 
-$results = $handle->query($query);
+//$results = $handle->query($query);
 //$raw = $results->fetchArray();
 //print('<pre>');
 //var_dump($query);
@@ -54,7 +54,13 @@ $day = '';
 
 //TODO 時間区切りを入れる
 
-while ($row = $results->fetchArray()) {
+$command = "python3 /Volumes/data/niascape/niascape timeline";
+$command .= $site ? ' --site='.$site : '';
+exec($command, $out, $ret);
+$timeline = json_decode(end($out), true);
+
+foreach ($timeline as $row){
+//while ($row = $results->fetchArray()) {
 	$datetime = new DateTime($row['datetime']);
 	date_modify($datetime,'-9hour');
 	$time = sprintf('%02d',((int)$datetime->format('H')+9)).$datetime->format(':i:s');
