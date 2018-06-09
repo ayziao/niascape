@@ -21,7 +21,7 @@ def application(environ: dict, start_response: Callable[[str, List[Tuple[str, st
 	:param environ: webサーバ環境変数等
 	:param start_response: レスポンス コールバック関数  function(status: str, header: [(key: str,value: str), ...])
 	"""
-	logger.debug("environ: %s", pformat(environ))
+	logger.log(5, "environ: %s", pformat(environ))
 
 	if environ['PATH_INFO'] == '/favicon.ico':
 		# PENDING 拒否リスト作る？
@@ -32,8 +32,8 @@ def application(environ: dict, start_response: Callable[[str, List[Tuple[str, st
 	else:
 		arguments, option_dict = _parse(environ)
 
-		logger.debug("parsed: %s", pformat(arguments))
-		logger.debug("parsed: %s", pformat(option_dict))
+		logger.log(5, "parsed: %s", pformat(arguments))
+		logger.log(5, "parsed: %s", pformat(option_dict))
 
 		if len(arguments) > 0:
 			action = arguments[0]
@@ -83,9 +83,9 @@ def parse_query_string(query_string: str, keep_blank_values: bool = False) -> Di
 		else:
 			query_dict[key] = query
 
-	logger.debug("query_string: %s", pformat(query_string))
-	logger.debug("query_list  : %s", pformat(query_list))
-	logger.debug("query_dict  : %s", pformat(query_dict))
+	logger.log(5, "query_string: %s", pformat(query_string))
+	logger.log(5, "query_list  : %s", pformat(query_list))
+	logger.log(5, "query_dict  : %s", pformat(query_dict))
 
 	return query_dict
 
@@ -104,7 +104,7 @@ def _parse(environ: dict) -> Tuple[List[str], dict]:
 
 	path_list = environ['PATH_INFO'].split('/')  # PENDING サブドメインモード？
 
-	logger.debug("path: %s", path_list)
+	logger.log(5, "path: %s", path_list)
 
 	option_dict['site'] = path_list[1]
 

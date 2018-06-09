@@ -132,11 +132,11 @@ def hour(db: Database, site: str = 'test', tag: str = '', search_body: str = '',
 
 	ret = db.execute_fetchall(sql, param, namedtuple=hour_count)
 
-	# logger.debug("期間 :%s", past)
-	# logger.debug("開始日時 :%s", dt)
-	# logger.debug(ret)
-	# logger.debug(site)
-	# logger.debug(sql)
+	# logger.log(5, "期間 :%s", past)
+	# logger.log(5, "開始日時 :%s", dt)
+	# logger.log(5, ret)
+	# logger.log(5, site)
+	# logger.log(5, sql)
 
 	ret24 = []
 

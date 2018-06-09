@@ -31,9 +31,7 @@ def main(action: str = 'top', option: dict = None) -> str:
 
 	m = utility.dynamic_get_method('niascape.usecase', action)
 
-	if m is None:
-		# PENDING 例外を投げる？警告を出す？ AttributeError SyntaxError ValueError SyntaxWarning ResourceWarning
-
+	if m is None:  # PENDING 例外を投げる？警告を出す？ AttributeError SyntaxError ValueError SyntaxWarning ResourceWarning
 		_logger.info("アクションなし: %s", action)  # PENDING インフォかワーニングか設定で変えられるようにすべきか
 		return 'No Action'
 

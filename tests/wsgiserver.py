@@ -22,6 +22,7 @@ if __name__ == '__main__':
 	path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 	sys.path.append(path)  # PENDING 実行環境へパッケージとしてインストールすればsys.path.append必要なくなるくさいがどうするか
 
+	logging.addLevelName(5, 'TRACE')  # PENDING 独自拡張ロギングをユーティリティ辺りに作るか検討
 	with open(path + '/tests/logger_config.json', 'r') as fp:
 		logging.config.dictConfig(json.load(fp))
 	logger = logging.getLogger(__name__)
@@ -29,6 +30,6 @@ if __name__ == '__main__':
 	import niascape
 	from niascape import wsgiclient
 
-	logger.debug("開始時刻(UTC): %s", niascape.init_time)
+	logger.log(5, "開始時刻(UTC): %s", niascape.init_time)
 
 	make_server(wsgiclient.application)

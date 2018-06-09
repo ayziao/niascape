@@ -97,7 +97,7 @@ if __name__ == '__main__':  # pragma: no cover
 
 	import json
 
-	logging.addLevelName(5, 'TRACE')
+	logging.addLevelName(5, 'TRACE')  # PENDING 独自拡張ロギングをユーティリティ辺りに作るか検討
 	logging.config.dictConfig(json.load(open(path + '/tests/logger_config.json', 'r')))
 	logger = logging.getLogger()
 

@@ -19,7 +19,7 @@ if __name__ == '__main__':  # pragma: no cover
 	import logging.config
 	import json
 
-	logging.addLevelName(5, 'TRACE')
+	logging.addLevelName(5, 'TRACE')  # PENDING 独自拡張ロギングをユーティリティ辺りに作るか検討
 	logging.config.dictConfig(json.load(open(path + '/logger_config.json', 'r')))  # TODO デバッグ表示を運用用と実装用にどうにか
 	logger = logging.getLogger(__name__)
 
