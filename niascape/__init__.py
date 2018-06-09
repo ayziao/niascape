@@ -9,7 +9,7 @@ import configparser
 import logging
 
 _logger = logging.getLogger(__name__)
-_logger.debug("import ニアスケイプ")
+_logger.log(5, "import ニアスケイプ")
 
 init_time = datetime.datetime.utcnow()  # type: datetime.datetime
 
@@ -24,8 +24,8 @@ def main(action: str = 'top', option: dict = None) -> str:
 	"""
 	# PENDING アクション名受け取りじゃなくて位置引数リスト受け取りにする？ 1件目YYYYMMDD形式なら日サマリとか振り分け？
 
-	_logger.debug("アクション: %s", action)
-	_logger.debug("オプション: %s", option)
+	_logger.log(5, "アクション: %s", action)
+	_logger.log(5, "オプション: %s", option)
 
 	from niascape import utility
 

@@ -19,16 +19,17 @@ if __name__ == '__main__':  # pragma: no cover
 	import logging.config
 	import json
 
-	logging.config.dictConfig(json.load(open(path + '/logger_config.json', 'r')))
+	logging.addLevelName(5, 'TRACE')
+	logging.config.dictConfig(json.load(open(path + '/logger_config.json', 'r')))  # TODO デバッグ表示を運用用と実装用にどうにか
 	logger = logging.getLogger(__name__)
 
 	from niascape import cli, init_time
 
-	logger.debug("開始時刻(UTC): %s", time)
-	logger.debug("開始時刻(UTC): %s", init_time)
+	logger.log(5, "開始時刻(UTC): %s", time)
+	logger.log(5, "開始時刻(UTC): %s", init_time)
 
-	# logger.debug("実行中のスクリプトへの相対パス: %s", __file__)
-	# logger.debug("実行中のスクリプトへの絶対パス: %s", os.path.abspath(__file__))
+	logger.log(5, "実行中のスクリプトへの相対パス: %s", __file__)
+	logger.log(5, "実行中のスクリプトへの絶対パス: %s", os.path.abspath(__file__))
 
 	# sys.argv.extend("nothing_action".split())
 	# sys.argv.extend("postcount.day --site=test --tag=#test test".split())
@@ -41,4 +42,4 @@ if __name__ == '__main__':  # pragma: no cover
 	# print(len(ret))
 	# pprint(ret)
 
-	logger.debug("終了時刻(UTC): %s", datetime.datetime.utcnow())
+	logger.log(5, "終了時刻(UTC): %s", datetime.datetime.utcnow())

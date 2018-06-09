@@ -50,8 +50,8 @@ def day(db: Database, site: str = 'test', tag: str = '', search_body: str = '') 
 	limit = 1000  # PENDING ページングする？
 	param.append(limit)
 	day_count = NamedTuple('day_count', (('date', str), ('count', int)))
-	logger.debug("日付投稿数SQL: %s", sql)
-	logger.debug("プレースホルダパラメータ: %s", param)
+	logger.log(5, "日付投稿数SQL: %s", sql)
+	logger.log(5, "プレースホルダパラメータ: %s", param)
 
 	return db.execute_fetchall(sql, param, namedtuple=day_count)
 

@@ -26,7 +26,7 @@ def run(argv: List[str]) -> str:
 	:return: 結果文字列
 	"""
 	# PENDING 結果の出力をどのような形式にすべきか
-	logger.debug("コマンドライン引数: %s", argv)
+	logger.log(5, "コマンドライン引数: %s", argv)
 
 	arguments, option_dict, short_options = parse_argument_vector(argv)  # FUTURE ショートオプションの解析をどこでやるか検討
 
@@ -96,6 +96,8 @@ if __name__ == '__main__':  # pragma: no cover
 	sys.path.append(path)  # PENDING 実行環境へパッケージとしてインストールすればsys.path.append必要なくなるくさいがどうするか
 
 	import json
+
+	logging.addLevelName(5, 'TRACE')
 	logging.config.dictConfig(json.load(open(path + '/tests/logger_config.json', 'r')))
 	logger = logging.getLogger()
 

@@ -18,7 +18,7 @@ logger = logging.getLogger(__name__)
 
 class Database:
 	def __init__(self, setting: ConfigParser = None) -> None:
-		logger.debug('Databaseインスタンス 初期化')
+		logger.log(5, 'Databaseインスタンス 初期化')
 
 		self._setting = setting
 		self.dbms = ''  # type: str
@@ -31,7 +31,7 @@ class Database:
 			self._connection = sqlite3.connect(":memory:")
 		else:
 			self._connection = sqlite3.connect(self._setting['connect'])  # type: ignore  # XXX 設定をセクションで受け取ってるとmypyさんにおこられ 辞書化すべきか
-			logger.debug("sqlite3ファイル :%s", pformat(self._setting['connect']))
+			logger.log(5, "sqlite3ファイル :%s", pformat(self._setting['connect']))
 		logger.debug("sqlite3接続 :%s", pformat(self._connection))
 		self.dbms = 'sqlite'
 		self._connection.row_factory = sqlite3.Row
@@ -41,7 +41,7 @@ class Database:
 			cursor = self._connection.execute(sql)
 		else:
 			cursor = self._connection.execute(sql, param)
-		logger.debug("rowcount :%s", cursor.rowcount)
+		logger.log(5, "rowcount :%s", cursor.rowcount)
 		cursor.close()
 
 	def execute_fetchall(self, sql: str, param: Union[tuple, List[Union[str, int]]] = None, *, namedtuple=None, tuple_name: str = None):
@@ -66,7 +66,7 @@ class Database:
 			cursor = self._connection.execute(sql)
 		else:
 			cursor = self._connection.execute(sql, param)
-		logger.debug("rowcount :%s", cursor.rowcount)
+		logger.log(5, "rowcount :%s", cursor.rowcount)
 
 		result = []
 		for row in cursor:
@@ -96,22 +96,22 @@ class Database:
 		return result
 
 	def close(self) -> None:
-		logger.debug("接続クローズ :%s", pformat(self._connection))
+		logger.log(5, "接続クローズ :%s", pformat(self._connection))
 		self._connection.close()
 
 	def __enter__(self):
-		logger.debug("with 開始")
+		logger.log(5, "with 開始")
 		return self
 
 	def __exit__(self, exception_type, exception_value, traceback) -> None:
 		self.close()
-		logger.debug("with 終了")
+		logger.log(5, "with 終了")
 
 
 class Postgresql(Database):
 
 	def _connect(self) -> None:
-		logger.debug('Postgresqlインスタンス 初期化')
+		logger.log(5, 'Postgresqlインスタンス 初期化')
 		self.dbms = 'postgresql'
 		self._connection = psycopg2.connect(self._setting['connect'])
 		logger.debug("Postgresql接続 :%s", pformat(self._connection))
@@ -120,8 +120,8 @@ class Postgresql(Database):
 		with self._connection.cursor(cursor_factory=DictCursor) as cur:
 			cur.execute(sql.replace('?', '%s'), param)
 
-		logger.debug("sql :%s", sql)
-		logger.debug("query :%s", cur.query.decode('utf-8'))
+		logger.log(5, "sql :%s", sql)
+		logger.log(5, "query :%s", cur.query.decode('utf-8'))
 
 	def execute_fetchall_dict(self, sql: str, param: Union[tuple, List[Union[str, int]]] = None) -> List[Dict[str, Any]]:
 		result = []
@@ -130,9 +130,9 @@ class Postgresql(Database):
 			for row in cur:
 				result.append(dict(row))
 
-		logger.debug("description :%s", pformat(cur.description))
-		logger.debug("sql :%s", sql)
-		logger.debug("query :%s", cur.query.decode('utf-8'))
+		logger.log(5, "description :%s", pformat(cur.description))
+		logger.log(5, "sql :%s", sql)
+		logger.log(5, "query :%s", cur.query.decode('utf-8'))
 
 		return result
 
@@ -147,9 +147,9 @@ class Postgresql(Database):
 			for row in rows:
 				result.append(namedtuple(*row))  # type: ignore # XXX NamedTupleの型チェック無理
 
-		logger.debug("description :%s", pformat(cur.description))
-		logger.debug("sql :%s", sql)
-		logger.debug("query :%s", cur.query.decode('utf-8'))
+		logger.log(5, "description :%s", pformat(cur.description))
+		logger.log(5, "sql :%s", sql)
+		logger.log(5, "query :%s", cur.query.decode('utf-8'))
 
 		return result
 
