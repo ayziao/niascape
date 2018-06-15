@@ -24,6 +24,7 @@ if __name__ == "__main__":
 			pass
 	else:
 		path = os.path.dirname(os.path.abspath(__file__))
+		logging.addLevelName(5, 'TRACE')  # PENDING 独自拡張ロギングをユーティリティ辺りに作るか検討
 		with open(path + '/logger_config.json', 'r') as fp:
 			logging.config.dictConfig(json.load(fp))
 

@@ -2,7 +2,7 @@ from unittest import TestCase
 
 import logging.config
 
-# import json ; logging.config.dictConfig(json.load(open('logger_config.json', 'r')))
+# import json ; logging.addLevelName(5, 'TRACE') ; logging.config.dictConfig(json.load(open('logger_config.json', 'r')))
 logger = logging.getLogger(__name__)
 
 import niascape

@@ -6,7 +6,7 @@ from typing import NamedTuple
 
 import logging.config
 
-# logging.config.dictConfig(json.load(open('../logger_config.json', 'r')))
+# logging.addLevelName(5, 'TRACE') ; logging.config.dictConfig(json.load(open('../logger_config.json', 'r')))
 logger = logging.getLogger(__name__)
 
 from niascape.utility.json import AsdictSupportJSONEncoder
