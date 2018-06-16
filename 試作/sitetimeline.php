@@ -2,27 +2,9 @@
 /*
  * サイトタイムライン 
  */
-
-function getSitesetting($handle, $site) {
-
-	$query = <<< EOM
-
-SELECT * FROM keyvalue	
-WHERE key = 'sitesetting_$site'
-
-EOM;
-
-	$results = $handle->query($query);
-	$row = $results->fetchArray();
-
-	return json_decode($row['value'], ture);
-}
-
 header('Content-Type: text/html; charset=UTF-8');
 
 $ini_array = parse_ini_file(dirname(__FILE__) . "/setting.ini");
-$location = $ini_array['sqlite_file'];
-$handle = new SQLite3($location);
 
 
 if (strpos($_SERVER['HTTP_HOST'], $ini_array['host']) > 0) {
@@ -34,36 +16,24 @@ if ($_GET['tagiji']) {
 	$tagiji = 'checked="checked"';
 }
 
-$sitesetting = getSitesetting($handle, $site);
+$command = "python3 /Volumes/data/niascape/niascape site.formbottominsert";
+$command .= $site ? ' --site=' . escapeshellarg($site) : '';
+exec($command, $out, $ret);
+$sitesetting['siteinsert'] = $out[0];
 
-$query = <<< EOM
-
-SELECT * FROM basedata
-WHERE site = '$site'
-AND tags NOT LIKE '% gyazo_posted %'
-ORDER BY identifier DESC LIMIT 200
-
-EOM;
-
-//$results = $handle->query($query);
-//$raw = $results->fetchArray();
-//print('<pre>');
-//var_dump($query);
-
-$day = '';
-
-//TODO 時間区切りを入れる
+//$sitesetting = getSitesetting($handle, $site);
 
 $command = "python3 /Volumes/data/niascape/niascape timeline";
-$command .= $site ? ' --site='.$site : '';
+$command .= $site ? ' --site=' . escapeshellarg($site) : '';
 exec($command, $out, $ret);
 $timeline = json_decode(end($out), true);
 
-foreach ($timeline as $row){
-//while ($row = $results->fetchArray()) {
+$day = '';
+foreach ($timeline as $row) {
+//TODO 時間区切りを入れる
 	$datetime = new DateTime($row['datetime']);
-	date_modify($datetime,'-9hour');
-	$time = sprintf('%02d',((int)$datetime->format('H')+9)).$datetime->format(':i:s');
+	date_modify($datetime, '-9hour');
+	$time = sprintf('%02d', ((int) $datetime->format('H') + 9)) . $datetime->format(':i:s');
 
 //	$day2 = substr($row['datetime'], 0, 10);
 	$day2 = $datetime->format('Y-m-d');
@@ -137,39 +107,39 @@ $content .= "\n\t\t\t</div>";
 				submitButton.disabled = true;
 
 				textbox.addEventListener('keydown',
-						function (e) {
-							key = e.which;
-							if (sbmit === false && e.metaKey && e.which == 13) {
-								submitButton.click();
-								submit();
-							}
-						},
-						false
-						);
+								function (e) {
+									key = e.which;
+									if (sbmit === false && e.metaKey && e.which == 13) {
+										submitButton.click();
+										submit();
+									}
+								},
+								false
+								);
 
 				var charcount = function (str) {
-				  len = 0;
-				  str = escape(str);
-				  for (i=0;i<str.length;i++,len++) {
-					if (str.charAt(i) == "%") {
-					  if (str.charAt(++i) == "u") {
-						i += 3;
-						len++;
-					  }
-					  i++;
+					len = 0;
+					str = escape(str);
+					for (i = 0; i < str.length; i++, len++) {
+						if (str.charAt(i) == "%") {
+							if (str.charAt(++i) == "u") {
+								i += 3;
+								len++;
+							}
+							i++;
+						}
 					}
-				  }
-				  return len;
+					return len;
 				}
-				
-				var counter = function(str,seq){
+
+				var counter = function (str, seq) {
 					return str.split(seq).length - 1;
 				}
 
 				function showmojilen() {
 					var taglen = charcount(tag.value.trim());
 					if (taglen > 0) {
-						taglen += 2 + counter(tag.value.trim(),' ') * 2;
+						taglen += 2 + counter(tag.value.trim(), ' ') * 2;
 					}
 					var bodylen = charcount(textbox.value.trim());
 					var strlen = bodylen + taglen;

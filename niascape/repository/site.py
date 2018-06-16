@@ -3,7 +3,8 @@ niascape.repository.site
 
 サイトリポジトリ
 """
-from typing import List, Dict
+from typing import List, Dict, Any
+import json
 
 from niascape.utility.database import Database
 
@@ -20,3 +21,18 @@ def sites(db: Database) -> List[Dict[str, int]]:
 	ORDER BY COUNT(*) DESC
 	"""
 	return db.execute_fetchall(sql)
+
+
+def setting(db: Database, site: str = 'test') -> List[Any]:
+	sql = f"""
+	SELECT * FROM keyvalue
+	WHERE key = ?
+	"""
+	logger.log(5, site)
+
+	ret = db.execute_fetchall(sql, ('sitesetting_' + site,))
+
+	logger.log(5, ret)
+	logger.log(5, ret[0]['value'])
+
+	return json.loads(ret[0]['value'])

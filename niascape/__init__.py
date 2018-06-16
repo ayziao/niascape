@@ -24,7 +24,7 @@ def main(action: str = 'top', option: dict = None) -> str:
 	"""
 	# PENDING アクション名受け取りじゃなくて位置引数リスト受け取りにする？ 1件目YYYYMMDD形式なら日サマリとか振り分け？
 
-	_logger.log(5, "アクション: %s", action)
+	_logger.log(10, "アクション: %s", action)
 	_logger.log(5, "オプション: %s", option)
 
 	from niascape import utility

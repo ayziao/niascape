@@ -11,25 +11,25 @@ $tag = $_GET["tag"] ? $_GET["tag"] : '';
 $searchbody = $_GET["searchbody"] ? $_GET["searchbody"] : '';
 
 $command = "python3 /Volumes/data/niascape/niascape postcount.day";
-$command .= $site ? ' --site='.$site : '';
-$command .= $tag ? ' --tag='.$tag : '';
-$command .= $searchbody ? ' --search_body='.$searchbody : '';
+$command .= $site ? ' --site=' . escapeshellarg($site) : '';
+$command .= $tag ? ' --tag=' . escapeshellarg($tag) : '';
+$command .= $searchbody ? ' --search_body=' . escapeshellarg($searchbody) : '';
 exec($command, $out, $ret);
 $daycount = json_decode(end($out), true);
 
-foreach ($daycount as $row){
+foreach ($daycount as $row) {
 	$content .= '<tr>' . '<td nowrap>' . $row['date'] . '</td>' . '<td align="right">' . $row['count'] . '</td>' . '<td><div style="background-color: blue;  width: ' . $row['count'] . 'px; font-size: 10px;">&nbsp;</div></td>' . '</tr>';
 }
 
 //タグ利用頻度順リンク
 $command = "python3 /Volumes/data/niascape/niascape postcount.tag";
-$command .= $site ? ' --site='.$site : '';
+$command .= $site ? ' --site=' . escapeshellarg($site) : '';
 exec($command, $out, $ret);
 $tagcount = json_decode(end($out), true);
 
-$link .= '<a href="?kanri=daycount&site=' . $site . '">全て</a><br>';
+$link .= '<a href="?kanri=daycount&site=' . urlencode($site) . '">全て</a><br>';
 foreach ($tagcount as $row) {
-	$link .= '<a href="?kanri=daycount&site=' . $site . '&tag=' . urlencode($row['tag']) . '">' . $row['tag'] . '</a> ' . $row['count'] . '<br>';
+	$link .= '<a href="?kanri=daycount&site=' . urlencode($site) . '&tag=' . urlencode($row['tag']) . '">' . $row['tag'] . '</a> ' . $row['count'] . '<br>';
 }
 
 //siteリンク
@@ -40,7 +40,6 @@ $sites = json_decode(end($out), true);
 foreach ($sites as $row) {
 	$sitelink .= '<a href="?kanri=daycount&site=' . $row['site'] . '">' . $row['site'] . '</a> ';
 }
-
 ?>
 <html>
 	<head>

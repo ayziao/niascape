@@ -11,69 +11,60 @@ $site = $_GET["site"] ? $_GET["site"] : $ini_array['default_site'];
 $tag = $_GET["tag"] ? $_GET["tag"] : '';
 $searchbody = $_GET["searchbody"] ? $_GET["searchbody"] : '';
 
-if ($tag) {
-	$tagwhere = "	and (tags like '% $tag %' or tags like '% $tag:%')";
-}
-if ($searchbody) {
-	$bodywhere = "	AND body LIKE '%$searchbody%'";
-}
-
-$handle = new SQLite3($location);
-
 //過去24時間
 $command = "python3 /Volumes/data/niascape/niascape postcount.hour --past_days=1";
-$command .= $site ? ' --site='.$site : '';
-$command .= $tag ? ' --tag='.$tag : '';
-$command .= $searchbody ? ' --search_body='.$searchbody : '';
+$command .= $site ? ' --site=' . escapeshellarg($site) : '';
+$command .= $tag ? ' --tag=' . escapeshellarg($tag) : '';
+$command .= $searchbody ? ' --search_body=' . escapeshellarg($searchbody) : '';
 exec($command, $out, $ret);
 $hourcount = json_decode(end($out), true);
 
-foreach ($hourcount as $row){
+foreach ($hourcount as $row) {
 	$today .= '<tr>' . '<td nowrap>' . $row['date'] . '</td>' . '<td align="right">' . $row['count'] . '</td>' . '<td><div style="background-color: blue;  width: ' . $row['count'] . 'px; font-size: 10px;">&nbsp;</div></td>' . '</tr>';
 }
 
 //過去7日
 $command = "python3 /Volumes/data/niascape/niascape postcount.hour --past_days=7";
-$command .= $site ? ' --site='.$site : '';
-$command .= $tag ? ' --tag='.$tag : '';
-$command .= $searchbody ? ' --search_body='.$searchbody : '';
+$command .= $site ? ' --site=' . escapeshellarg($site) : '';
+$command .= $tag ? ' --tag=' . escapeshellarg($tag) : '';
+$command .= $searchbody ? ' --search_body=' . escapeshellarg($searchbody) : '';
 exec($command, $out, $ret);
 $hourcount = json_decode(end($out), true);
 
-foreach ($hourcount as $row){
+foreach ($hourcount as $row) {
 	$konsyu .= '<tr>' . '<td nowrap>' . $row['date'] . '</td>' . '<td align="right">' . $row['count'] . '</td>' . '<td><div style="background-color: blue;  width: ' . $row['count'] . 'px; font-size: 10px;">&nbsp;</div></td>' . '</tr>';
 }
 
 //過去30日
 $command = "python3 /Volumes/data/niascape/niascape postcount.hour --past_days=30";
-$command .= $site ? ' --site='.$site : '';
-$command .= $tag ? ' --tag='.$tag : '';
-$command .= $searchbody ? ' --search_body='.$searchbody : '';
+$command .= $site ? ' --site=' . escapeshellarg($site) : '';
+$command .= $tag ? ' --tag=' . escapeshellarg($tag) : '';
+$command .= $searchbody ? ' --search_body=' . escapeshellarg($searchbody) : '';
 exec($command, $out, $ret);
 $hourcount = json_decode(end($out), true);
 
-foreach ($hourcount as $row){
+foreach ($hourcount as $row) {
 	$kongetu .= '<tr>' . '<td nowrap>' . $row['date'] . '</td>' . '<td align="right">' . $row['count'] . '</td>' . '<td><div style="background-color: blue;  width: ' . $row['count'] . 'px; font-size: 10px;">&nbsp;</div></td>' . '</tr>';
 }
 
 //過去365日
 $command = "python3 /Volumes/data/niascape/niascape postcount.hour --past_days=365";
-$command .= $site ? ' --site='.$site : '';
-$command .= $tag ? ' --tag='.$tag : '';
-$command .= $searchbody ? ' --search_body='.$searchbody : '';
+$command .= $site ? ' --site=' . escapeshellarg($site) : '';
+$command .= $tag ? ' --tag=' . escapeshellarg($tag) : '';
+$command .= $searchbody ? ' --search_body=' . escapeshellarg($searchbody) : '';
 exec($command, $out, $ret);
 $hourcount = json_decode(end($out), true);
 
-foreach ($hourcount as $row){
+foreach ($hourcount as $row) {
 	$kotosi .= '<tr>' . '<td nowrap>' . $row['date'] . '</td>' . '<td align="right">' . $row['count'] . '</td>' . '<td><div style="background-color: blue;  width: ' . $row['count'] . 'px; font-size: 10px;">&nbsp;</div></td>' . '</tr>';
 }
 
 
 //全期間
 $command = "python3 /Volumes/data/niascape/niascape postcount.hour";
-$command .= $site ? ' --site=' . $site : '';
-$command .= $tag ? ' --tag=' . $tag : '';
-$command .= $searchbody ? ' --search_body=' . $searchbody : '';
+$command .= $site ? ' --site=' . escapeshellarg($site) : '';
+$command .= $tag ? ' --tag=' . escapeshellarg($tag) : '';
+$command .= $searchbody ? ' --search_body=' . escapeshellarg($searchbody) : '';
 exec($command, $out, $ret);
 $hourcount = json_decode(end($out), true);
 
@@ -87,7 +78,7 @@ foreach ($hourcount as $row) {
 
 //タグ利用頻度順リンク
 $command = "python3 /Volumes/data/niascape/niascape postcount.tag";
-$command .= $site ? ' --site=' . $site : '';
+$command .= $site ? ' --site=' . escapeshellarg($site) : '';
 exec($command, $out, $ret);
 $tagcount = json_decode(end($out), true);
 
@@ -102,7 +93,7 @@ exec($command, $out, $ret);
 $sites = json_decode(end($out), true);
 
 foreach ($sites as $row) {
-	
+
 	$sitelink .= '<a href="?kanri=hourcount&site=' . $row['site'] . '">' . $row['site'] . '</a> ';
 }
 ?>
