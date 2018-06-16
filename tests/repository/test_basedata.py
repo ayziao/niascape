@@ -69,3 +69,12 @@ class TestBasedata(TestCase):
 		self.assertEqual('20180101123456789000', dic["identifier"])
 
 	# print(ref[0].__dict__)
+
+	def test_tagtimeline(self):
+		db = self._db
+
+		ref = basedata.tagtimeline(db, site='test', tag='tag')
+		self.assertEqual('20170101235959999000', ref[0].identifier)
+
+		ref = basedata.tagtimeline(db, site='test', tag='tag', order='ASC')
+		self.assertEqual('20170101235959999000', ref[2].identifier)

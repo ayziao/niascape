@@ -2,53 +2,35 @@
 /*
  * タグタイムライン
  */
-
 header('Content-Type: text/html; charset=UTF-8');
 
 $ini_array = parse_ini_file(dirname(__FILE__) . "/setting.ini");
-$location = $ini_array['sqlite_file'];
-$handle = new SQLite3($location);
-
 if (strpos($_SERVER['HTTP_HOST'], $ini_array['host']) > 0) {
 	$site = explode('.' . $ini_array['host'], $_SERVER['HTTP_HOST'])[0];
 } else {
 	$site = explode("/", substr($_SERVER["SCRIPT_NAME"], 2))[0];
 }
-
-
 $tag = $_GET['tag'];
-
 $order = isset($_GET['order']) ? $_GET['order'] : 'DESC';
 
-$query = <<< EOM
-
-SELECT * FROM basedata
-WHERE site = '$site'
-AND tags LIKE '%#$tag %' 
-ORDER BY identifier $order LIMIT 1000
-
-EOM;
-//print('<pre>');
-//var_dump($query);
-
-$results = $handle->query($query);
-//$raw = $results->fetchArray();
+$command = "python3 /Volumes/data/niascape/niascape tagtimeline";
+$command .= $site ? ' --site=' . escapeshellarg($site) : '';
+$command .= $tag ? ' --tag=' . escapeshellarg($tag) : '';
+$command .= $order ? ' --order=' . escapeshellarg($order) : '';
+exec($command, $out, $ret);
+$timeline = json_decode(end($out), true);
 
 $day = '';
-
 $order = ($order == 'DESC') ? 'ASC' : 'DESC';
-//TODO 時間区切りを入れる
 
-while ($row = $results->fetchArray()) {
+foreach ($timeline as $row) {
+	//TODO 時間区切りを入れる
 	$day2 = substr($row['datetime'], 0, 10);
 	if ($day != $day2) {
-		if ($day != '') {
-			$content .= "\n\t\t\t</div>";
-		}
+		$content .= ($day != '') ? "\n\t\t\t</div>" : '';
 		$content .= "\n\t\t\t" . '<h5><a href="./' . str_replace('-', '', $day2) . '">' . $day2 . '</a></h5> ' . "\n\t\t\t" . '<div class="lines">';
 		$day = $day2;
 	}
-
 	$tagstr = '';
 	$tags = explode(' ', trim($row['tags']));
 	foreach ($tags as $value) {
@@ -57,7 +39,6 @@ while ($row = $results->fetchArray()) {
 			$tagstr .= ' <a href="./?tag=' . $taga . '">' . $taga . '</a>';
 		}
 	}
-
 	$content .= "\n\t\t\t\t" . '<div class="line"><span class="time"><a href="./' . $row['identifier'] . '">' . substr($row['datetime'], -8) . '</a></span>&thinsp;' . str_replace("\n", '<br>', $row['body']) . $tagstr . '</div>';
 }
 $content .= "\n\t\t\t</div>";

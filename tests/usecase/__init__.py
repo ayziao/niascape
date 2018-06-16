@@ -36,3 +36,16 @@ class TestUsecase(TestCase):
 
 		ref = usecase.timeline({})
 		self.assertEqual('[{"dummy": "called mock get_all"}]', ref)
+
+	@mock.patch('niascape.usecase.basedata')
+	def test_tagtimeline(self, moc):
+		self.assertTrue(hasattr(basedata, 'tagtimeline'))  # モックだと関数名の修正についていけないのでチェック
+
+		def method(conn, site=''):  # XXX 引数の定義を実装から動的にパクれないか inspectモジュール？
+			self.assertIsInstance(conn, Database)
+			return [Dummy(f"called mock get_all {site}".strip())]
+
+		moc.tagtimeline = method
+
+		ref = usecase.tagtimeline({})
+		self.assertEqual('[{"dummy": "called mock get_all"}]', ref)

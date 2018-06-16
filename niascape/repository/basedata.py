@@ -30,3 +30,21 @@ def get_all(db: Database, site: str = 'test', page: int = 1) -> List[Basedata]:
 	param.append("% gyazo_posted %")
 	per_page = 200  # FUTURE 1ページあたりの表示数を変更できるようにする
 	return db.execute_fetch_page(sql, param, page, per_page, namedtuple=Basedata)
+
+
+def tagtimeline(db: Database, site: str = 'test', tag: str = '', order: str = 'DESC', page: int = 1) -> List[Basedata]:
+	# FUTURE site別DBにしてsiteカラム削除
+	# FUTURE gyazo_posted どうにか
+
+	param = [site, f"%#{tag}%"]
+	order = 'ASC' if order == 'ASC' else 'DESC'
+
+	sql = f"""
+	SELECT identifier, title, tags, body, datetime FROM basedata
+	WHERE
+		site = ?
+		AND tags LIKE ?
+	ORDER BY "identifier" {order}
+	"""
+	per_page = 1000  # FUTURE 1ページあたりの表示数を変更できるようにする
+	return db.execute_fetch_page(sql, param, page, per_page, namedtuple=Basedata)
