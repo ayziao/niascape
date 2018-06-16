@@ -3,7 +3,7 @@ niascape.repository.site
 
 サイトリポジトリ
 """
-from typing import List, Dict, Any
+from typing import List, Dict
 import json
 
 from niascape.utility.database import Database
@@ -23,7 +23,7 @@ def sites(db: Database) -> List[Dict[str, int]]:
 	return db.execute_fetchall(sql)
 
 
-def setting(db: Database, site: str = 'test') -> List[Any]:
+def setting(db: Database, site: str = 'test') -> dict:
 	sql = f"""
 	SELECT * FROM keyvalue
 	WHERE key = ?
