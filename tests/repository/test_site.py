@@ -3,7 +3,9 @@ from unittest import TestCase, skip
 import logging.config
 from pprint import pformat
 
-# import json ; logging.addLevelName(5, 'TRACE') ; logging.config.dictConfig(json.load(open('../logger_config.json', 'r')))
+import json
+
+# logging.addLevelName(5, 'TRACE') ; logging.config.dictConfig(json.load(open('../logger_config.json', 'r')))
 
 logger = logging.getLogger(__name__)
 
@@ -44,6 +46,20 @@ class TestSite(TestCase):
 		ret = db.execute(insert_sql, ('dummy', '20180101123456789000', '2018-01-01 12:34:56.789', 'dummy', '', 'dummy'))
 		logger.debug(ret)
 
+		create_sql = """
+		CREATE TABLE "keyvalue" (
+			"key" TEXT NOT NULL,
+			"value" TEXT NOT NULL DEFAULT '',
+			PRIMARY KEY("key")
+		);
+		"""
+		ret = db.execute(create_sql)
+		logger.debug(ret)
+		insert_sql = 'INSERT INTO "keyvalue" VALUES(?, ?);'
+
+		ret = db.execute(insert_sql, ('key', 'val'))
+		ret = db.execute(insert_sql, ('sitesetting_test', json.dumps({"siteinsert": "Insert text"})))
+
 		cls._db = db
 
 	@classmethod
@@ -56,10 +72,8 @@ class TestSite(TestCase):
 		ref = site.sites(db)
 		self.assertEqual([{'site': 'test', 'count': 4}, {'site': 'dummy', 'count': 1}], ref)
 
-	@skip("テストデータ未作成")
 	def test_site_setting(self):
-		# TODO キーバリューテストデータ作る
 		db = self._db
 
-		ref = site.setting(db,'rog')
-		self.assertEqual('hogeaaaa', ref['siteinsert'])
+		ref = site.setting(db, 'test')
+		self.assertEqual('Insert text', ref['siteinsert'])
