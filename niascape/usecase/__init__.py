@@ -19,4 +19,9 @@ def tagtimeline(option: dict):
 	with get_db(niascape.ini['database']) as db:  # type: ignore  # XXX セクションぶっこむとmypyさんにおこられ 辞書化すべきか
 		return json.dumps(basedata.tagtimeline(db, **option), cls=AsdictSupportJSONEncoder)  # PENDING どこでJSON化すべきか
 
+
+def searchbody(option: dict):
+	with get_db(niascape.ini['database']) as db:  # type: ignore  # XXX セクションぶっこむとmypyさんにおこられ 辞書化すべきか
+		return json.dumps(basedata.search_body(db, **option), cls=AsdictSupportJSONEncoder)  # PENDING どこでJSON化すべきか
+
 # TODO とりあえず試作を移植

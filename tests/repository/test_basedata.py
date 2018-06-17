@@ -9,7 +9,6 @@ logger = logging.getLogger(__name__)
 
 import niascape
 from niascape.repository import basedata
-from niascape.repository import site
 from niascape.utility.database import get_db
 
 
@@ -68,8 +67,6 @@ class TestBasedata(TestCase):
 		dic = ref[0]._asdict()
 		self.assertEqual('20180101123456789000', dic["identifier"])
 
-	# print(ref[0].__dict__)
-
 	def test_tagtimeline(self):
 		db = self._db
 
@@ -78,3 +75,12 @@ class TestBasedata(TestCase):
 
 		ref = basedata.tagtimeline(db, site='test', tag='tag', order='ASC')
 		self.assertEqual('20170101235959999000', ref[2].identifier)
+
+	def test_search_body(self):
+		db = self._db
+
+		ref = basedata.search_body(db, site='test', searchbody='body')
+		self.assertEqual('12345678901234567890', ref[0].identifier)
+
+		ref = basedata.search_body(db, site='test', searchbody='hoge', order='ASC')
+		self.assertEqual('20170101000000000000', ref[0].identifier)

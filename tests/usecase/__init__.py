@@ -43,9 +43,22 @@ class TestUsecase(TestCase):
 
 		def method(conn, site=''):  # XXX 引数の定義を実装から動的にパクれないか inspectモジュール？
 			self.assertIsInstance(conn, Database)
-			return [Dummy(f"called mock get_all {site}".strip())]
+			return [Dummy(f"called mock tagtimeline {site}".strip())]
 
 		moc.tagtimeline = method
 
 		ref = usecase.tagtimeline({})
-		self.assertEqual('[{"dummy": "called mock get_all"}]', ref)
+		self.assertEqual('[{"dummy": "called mock tagtimeline"}]', ref)
+
+	@mock.patch('niascape.usecase.basedata')
+	def test_search_body(self, moc):
+		self.assertTrue(hasattr(basedata, 'search_body'))  # モックだと関数名の修正についていけないのでチェック
+
+		def method(conn, site=''):  # XXX 引数の定義を実装から動的にパクれないか inspectモジュール？
+			self.assertIsInstance(conn, Database)
+			return [Dummy(f"called mock search_body {site}".strip())]
+
+		moc.search_body = method
+
+		ref = usecase.searchbody({})
+		self.assertEqual('[{"dummy": "called mock search_body"}]', ref)
