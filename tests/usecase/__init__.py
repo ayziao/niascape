@@ -62,3 +62,16 @@ class TestUsecase(TestCase):
 
 		ref = usecase.searchbody({})
 		self.assertEqual('[{"dummy": "called mock search_body"}]', ref)
+
+	@mock.patch('niascape.usecase.basedata')
+	def test_day_summary(self, moc):
+		self.assertTrue(hasattr(basedata, 'day_summary'))  # モックだと関数名の修正についていけないのでチェック
+
+		def method(conn, site=''):  # XXX 引数の定義を実装から動的にパクれないか inspectモジュール？
+			self.assertIsInstance(conn, Database)
+			return [Dummy(f"called mock day_summary {site}".strip())]
+
+		moc.day_summary = method
+
+		ref = usecase.day_summary({})
+		self.assertEqual('[{"dummy": "called mock day_summary"}]', ref)

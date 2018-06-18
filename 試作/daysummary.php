@@ -2,7 +2,6 @@
 /*
  * 日サマリー
  */
-
 header('Content-Type: text/html; charset=UTF-8');
 
 $ini_array = parse_ini_file(dirname(__FILE__) . "/setting.ini");
@@ -17,7 +16,10 @@ if (strpos($_SERVER['HTTP_HOST'], $ini_array['host']) > 0) {
 
 $arr = explode('/', substr($_SERVER["SCRIPT_NAME"], 1));
 $path = array_pop($arr); //リクエスト末尾から/の直後までを取得 ルーティングで末尾数字8文字判定済み前提
-//$site = substr(array_pop($arr), 1); 
+
+$order = isset($_GET['order']) ? $_GET['order'] : 'ASC';
+
+
 //前日以前取得 
 $query = <<< EOM
 
@@ -28,21 +30,11 @@ AND identifier < '{$path}000000000000'
 ORDER BY identifier DESC LIMIT 1
 
 EOM;
-// print('<pre>');
-// var_dump($query);
-// var_dump($path);
-
 $results = $handle->query($query);
-
 $row = $results->fetchArray(SQLITE3_ASSOC);
-
-// var_dump($row);
-
 $maenohi = substr($row['identifier'], 0, 8);
 
-// var_dump($maenohi);
 //翌日以後取得
-
 $query = <<< EOM
 
 SELECT identifier FROM basedata
@@ -52,43 +44,23 @@ AND identifier > '{$path}999999999999'
 ORDER BY identifier ASC LIMIT 1
 
 EOM;
-// print('<pre>');
-// var_dump($query);
-// var_dump($path);
-
 $results = $handle->query($query);
-
 $row = $results->fetchArray(SQLITE3_ASSOC);
-
-// var_dump($row);
-
 $tuginohi = substr($row['identifier'], 0, 8);
 
-// var_dump($tuginohi);
 
-
-
-$query = <<< EOM
-
-SELECT * FROM basedata
-WHERE site = '$site'
-AND tags NOT LIKE '% gyazo_posted %'
-AND title LIKE '$path%' 
-ORDER BY identifier ASC LIMIT 1000
-
-EOM;
-//PENDING タイトル無しで投稿して自動で日時タイトルになったやつしかとってきてない	
-//print('<pre>');
-//var_dump($query);
-//var_dump($raw);
-$results = $handle->query($query);
-//$raw = $results->fetchArray();
+$command = "python3 /Volumes/data/niascape/niascape day_summary";
+$command .= $site ? ' --site=' . escapeshellarg($site) : '';
+$command .= $path ? ' --date=' . escapeshellarg($path) : '';
+$command .= $order ? ' --order=' . escapeshellarg($order) : '';
+exec($command, $out, $ret);
+$timeline = json_decode(end($out), true);
 
 $count = 0; //日件数
 $content = "";
 
 //TODO 時間区切りを入れる
-while ($row = $results->fetchArray(SQLITE3_ASSOC)) {
+foreach ($timeline as $row) {
 	$tagstr = '';
 	$tags = explode(' ', trim($row['tags']));
 	foreach ($tags as $value) {
@@ -128,7 +100,7 @@ $content .= "\n\t\t\t</div>";
 		</div>
 
 		<div>
-<?= $content ?>
+			<?= $content ?>
 		</div>
 
 		<div class="navi">

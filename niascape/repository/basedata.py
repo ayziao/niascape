@@ -64,3 +64,23 @@ def search_body(db: Database, site: str = 'test', searchbody: str = '', order: s
 	"""
 	per_page = 1000  # FUTURE 1ページあたりの表示数を変更できるようにする
 	return db.execute_fetch_page(sql, param, page, per_page, namedtuple=Basedata)
+
+
+def day_summary(db: Database, site: str = 'test', date: str = '', order: str = 'ASC', page: int = 1) -> List[Basedata]:
+	# FUTURE site別DBにしてsiteカラム削除
+	# PENDING identifierが YYYYMMDDHHmmSSmmmnnn 形式以外のときは？
+	# PENDING dateの妥当性チェック
+
+	param = [site, "% gyazo_posted %", f"{date}%"]
+	order = 'ASC' if order == 'ASC' else 'DESC'
+
+	sql = f"""
+	SELECT identifier, title, tags, body, datetime FROM basedata
+	WHERE
+		site = ?
+		AND tags NOT LIKE ?
+		AND identifier LIKE ?
+	ORDER BY "identifier" {order}
+	"""
+	per_page = 1000  # FUTURE 1ページあたりの表示数を変更できるようにする
+	return db.execute_fetch_page(sql, param, page, per_page, namedtuple=Basedata)

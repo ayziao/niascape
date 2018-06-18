@@ -84,3 +84,13 @@ class TestBasedata(TestCase):
 
 		ref = basedata.search_body(db, site='test', searchbody='hoge', order='ASC')
 		self.assertEqual('20170101000000000000', ref[0].identifier)
+
+	def test_day_summary(self):
+		db = self._db
+
+		ref = basedata.day_summary(db, site='test', date='2017')
+		self.assertEqual('20170101000000000000', ref[0].identifier)
+		self.assertEqual('20170101235959999000', ref[1].identifier)
+
+		ref = basedata.day_summary(db, site='test', date='2017', order='DESC')
+		self.assertEqual('20170101235959999000', ref[0].identifier)
