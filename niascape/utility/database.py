@@ -37,6 +37,7 @@ class Database:
 		self._connection.row_factory = sqlite3.Row
 
 	def execute(self, sql: str, param: Union[tuple, List[Union[str, int]]] = None) -> None:
+		# PENDING なんか返す？
 		if param is None:
 			cursor = self._connection.execute(sql)
 		else:
@@ -117,6 +118,7 @@ class Postgresql(Database):
 		logger.debug("Postgresql接続 :%s", pformat(self._connection))
 
 	def execute(self, sql: str, param: Union[tuple, List[Union[str, int]]] = None) -> None:
+		# PENDING なんか返す？
 		with self._connection.cursor(cursor_factory=DictCursor) as cur:
 			cur.execute(sql.replace('?', '%s'), param)
 
