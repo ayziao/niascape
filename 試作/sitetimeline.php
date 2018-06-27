@@ -5,8 +5,6 @@
 header('Content-Type: text/html; charset=UTF-8');
 
 $ini_array = parse_ini_file(dirname(__FILE__) . "/setting.ini");
-
-
 if (strpos($_SERVER['HTTP_HOST'], $ini_array['host']) > 0) {
 	$site = explode('.' . $ini_array['host'], $_SERVER['HTTP_HOST'])[0];
 } else {
@@ -20,7 +18,6 @@ $command = "python3 /Volumes/data/niascape/niascape site.formbottominsert";
 $command .= $site ? ' --site=' . escapeshellarg($site) : '';
 exec($command, $out, $ret);
 $sitesetting['siteinsert'] = $out[0];
-
 //$sitesetting = getSitesetting($handle, $site);
 
 $command = "python3 /Volumes/data/niascape/niascape timeline";
