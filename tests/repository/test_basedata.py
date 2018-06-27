@@ -94,3 +94,22 @@ class TestBasedata(TestCase):
 
 		ref = basedata.day_summary(db, site='test', date='2017', order='DESC')
 		self.assertEqual('20170101235959999000', ref[0].identifier)
+
+	def test_next_identifier(self):
+		db = self._db
+		ref = basedata.next_identifier(db, site='test', date='20160101')
+		self.assertEqual('20170101000000000000', ref)
+
+		ref = basedata.next_identifier(db, site='test', date='99999999')
+		self.assertEqual('', ref)
+
+	def test_prev_identifier(self):
+		db = self._db
+		ref = basedata.prev_identifier(db, site='test', date='20160101')
+		self.assertEqual('19700101123456789000', ref)
+
+		ref = basedata.prev_identifier(db, site='test', date='00000000')
+		self.assertEqual('', ref)
+
+
+

@@ -66,12 +66,20 @@ class TestUsecase(TestCase):
 	@mock.patch('niascape.usecase.basedata')
 	def test_day_summary(self, moc):
 		self.assertTrue(hasattr(basedata, 'day_summary'))  # モックだと関数名の修正についていけないのでチェック
+		self.assertTrue(hasattr(basedata, 'next_identifier'))  # モックだと関数名の修正についていけないのでチェック
+		self.assertTrue(hasattr(basedata, 'prev_identifier'))  # モックだと関数名の修正についていけないのでチェック
 
-		def method(conn, site=''):  # XXX 引数の定義を実装から動的にパクれないか inspectモジュール？
+		def method(conn, site='', date=''):  # XXX 引数の定義を実装から動的にパクれないか inspectモジュール？
 			self.assertIsInstance(conn, Database)
 			return [Dummy(f"called mock day_summary {site}".strip())]
 
-		moc.day_summary = method
+		def method2(conn, site='', date=''):  # XXX 引数の定義を実装から動的にパクれないか inspectモジュール？
+			self.assertIsInstance(conn, Database)
+			return f"called mock {site} {date}".strip()
 
-		ref = usecase.day_summary({})
-		self.assertEqual('[{"dummy": "called mock day_summary"}]', ref)
+		moc.day_summary = method
+		moc.next_identifier = method2
+		moc.prev_identifier = method2
+
+		ref = usecase.day_summary({'site': 'test', 'date': '19990701'})
+		self.assertEqual('{"content": [{"dummy": "called mock day_summary test"}], "next": "called m", "prev": "called m"}', ref)

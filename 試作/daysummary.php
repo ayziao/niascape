@@ -19,48 +19,20 @@ $path = array_pop($arr); //リクエスト末尾から/の直後までを取得 
 
 $order = isset($_GET['order']) ? $_GET['order'] : 'ASC';
 
-
-//前日以前取得 
-$query = <<< EOM
-
-SELECT identifier FROM basedata
-WHERE site = '$site'
-AND tags NOT LIKE '% gyazo_posted %'
-AND identifier < '{$path}000000000000' 
-ORDER BY identifier DESC LIMIT 1
-
-EOM;
-$results = $handle->query($query);
-$row = $results->fetchArray(SQLITE3_ASSOC);
-$maenohi = substr($row['identifier'], 0, 8);
-
-//翌日以後取得
-$query = <<< EOM
-
-SELECT identifier FROM basedata
-WHERE site = '$site'
-AND tags NOT LIKE '% gyazo_posted %'
-AND identifier > '{$path}999999999999' 
-ORDER BY identifier ASC LIMIT 1
-
-EOM;
-$results = $handle->query($query);
-$row = $results->fetchArray(SQLITE3_ASSOC);
-$tuginohi = substr($row['identifier'], 0, 8);
-
-
 $command = "python3 /Volumes/data/niascape/niascape day_summary";
 $command .= $site ? ' --site=' . escapeshellarg($site) : '';
 $command .= $path ? ' --date=' . escapeshellarg($path) : '';
 $command .= $order ? ' --order=' . escapeshellarg($order) : '';
 exec($command, $out, $ret);
-$timeline = json_decode(end($out), true);
+$day_summary = json_decode(end($out), true);
+$maenohi = $day_summary['prev'];
+$tuginohi = $day_summary['next'];
 
 $count = 0; //日件数
 $content = "";
 
 //TODO 時間区切りを入れる
-foreach ($timeline as $row) {
+foreach ($day_summary['content'] as $row) {
 	$tagstr = '';
 	$tags = explode(' ', trim($row['tags']));
 	foreach ($tags as $value) {
@@ -69,9 +41,7 @@ foreach ($timeline as $row) {
 			$tagstr .= ' <a href="./?tag=' . $tag . '">' . $tag . '</a>';
 		}
 	}
-
 	$content .= "\n\t\t\t\t" . '<div class="line"><span class="time"><a href="./' . $row['identifier'] . '">' . substr($row['datetime'], -8) . '</a></span>&thinsp;' . str_replace("\n", '<br>', $row['body']) . $tagstr . '</div>';
-
 	$count ++;
 }
 

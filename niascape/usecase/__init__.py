@@ -26,7 +26,12 @@ def searchbody(option: dict):
 
 
 def day_summary(option: dict):
+	site = option['site'] if 'site' in option else 'test'
 	with get_db(niascape.ini['database']) as db:  # type: ignore  # XXX セクションぶっこむとmypyさんにおこられ 辞書化すべきか
-		return json.dumps(basedata.day_summary(db, **option), cls=AsdictSupportJSONEncoder)  # PENDING どこでJSON化すべきか
+		ret = {'content': basedata.day_summary(db, **option),
+					 'next': basedata.next_identifier(db, site, option['date'])[0:8],
+					 'prev': basedata.prev_identifier(db, site, option['date'])[0:8]}
+
+		return json.dumps(ret, cls=AsdictSupportJSONEncoder)  # PENDING どこでJSON化すべきか
 
 # TODO とりあえず試作を移植
