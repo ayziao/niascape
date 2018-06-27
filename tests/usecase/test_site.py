@@ -43,15 +43,15 @@ class TestUsecase(TestCase):
 
 		def method(conn, site=''):  # XXX 引数の定義を実装から動的にパクれないか inspectモジュール？
 			self.assertIsInstance(conn, Database)
-			if site == 'test' :
-				return {'siteinsert':'dummy'}
-			else :
-				return {'hoge':'piyo'}
+			if site == 'test':
+				return {'siteinsert': 'dummy'}
+			else:
+				return {'hoge': 'piyo'}
 
 		moc.setting = method
 
 		ref = usecase.site.formbottominsert({})
 		self.assertEqual('', ref)
 
-		ref = usecase.site.formbottominsert({'site':'test'})
+		ref = usecase.site.formbottominsert({'site': 'test'})
 		self.assertEqual('dummy', ref)

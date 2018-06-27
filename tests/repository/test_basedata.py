@@ -110,6 +110,3 @@ class TestBasedata(TestCase):
 
 		ref = basedata.prev_identifier(db, site='test', date='00000000')
 		self.assertEqual('', ref)
-
-
-

@@ -13,8 +13,8 @@ class AsdictSupportJSONEncoder(encoder.JSONEncoder):  # xxx 標準モジュー�
 		# PENDING クラスに_asdictなくても__dict__してどうにかすべきか
 		if isinstance(o, datetime):
 			return o.strftime('%Y-%m-%d %H:%M:%S')
-			# return o.strftime('%Y-%m-%d %H:%M:%S.%f')
-			# return o.isoformat()
+		# return o.strftime('%Y-%m-%d %H:%M:%S.%f')
+		# return o.isoformat()
 		return super(AsdictSupportJSONEncoder, self).default(o)
 
 	def iterencode(self, o, _one_shot=False):
