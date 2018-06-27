@@ -45,6 +45,10 @@ class Database:
 		logger.log(5, "rowcount :%s", cursor.rowcount)
 		cursor.close()
 
+	def execute_fetchone(self, sql: str, param: Union[tuple, List[Union[str, int]]] = None, *, namedtuple=None, tuple_name: str = None):
+		# FIXME やっつけ
+		return self.execute_fetchall(sql,param,namedtuple=namedtuple,tuple_name=tuple_name)[0]
+
 	def execute_fetchall(self, sql: str, param: Union[tuple, List[Union[str, int]]] = None, *, namedtuple=None, tuple_name: str = None):
 		if namedtuple is None and tuple_name is None:
 			return self.execute_fetchall_dict(sql, param)
