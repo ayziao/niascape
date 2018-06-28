@@ -48,6 +48,14 @@ class TestBasedata(TestCase):
 	def tearDownClass(cls):
 		cls._db.close()
 
+	def test_get(self):
+		db = self._db
+		ref = basedata.get(db, '20170101235959999000', 'test')
+		self.assertEqual('20170101235959999000', ref.identifier)
+
+		ref = basedata.get(db, '20170101235959999001', 'test')
+		self.assertEqual(None, ref)
+
 	def test_get_all(self):
 		db = self._db
 

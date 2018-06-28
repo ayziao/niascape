@@ -47,7 +47,11 @@ class Database:
 
 	def execute_fetchone(self, sql: str, param: Union[tuple, List[Union[str, int]]] = None, *, namedtuple=None, tuple_name: str = None):
 		# FIXME やっつけ
-		return self.execute_fetchall(sql, param, namedtuple=namedtuple, tuple_name=tuple_name)[0]
+		ret = self.execute_fetchall(sql, param, namedtuple=namedtuple, tuple_name=tuple_name)
+		if len(ret):
+			return ret[0]
+		else:
+			return None
 
 	def execute_fetchall(self, sql: str, param: Union[tuple, List[Union[str, int]]] = None, *, namedtuple=None, tuple_name: str = None):
 		if namedtuple is None and tuple_name is None:

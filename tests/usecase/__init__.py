@@ -25,6 +25,19 @@ class TestUsecase(TestCase):
 		self.assertEqual('top', ret)
 
 	@mock.patch('niascape.usecase.basedata')
+	def test_getdata(self, moc):
+		self.assertTrue(hasattr(basedata, 'get'))  # モックだと関数名の修正についていけないのでチェック
+
+		def method(conn, identifier, site=''):  # XXX 引数の定義を実装から動的にパクれないか inspectモジュール？
+			self.assertIsInstance(conn, Database)
+			return [Dummy(f"called mock get {identifier} {site}".strip())]
+
+		moc.get = method
+
+		ref = usecase.getdata({'identifier': '', 'site': ''})
+		self.assertEqual('[{"dummy": "called mock get"}]', ref)
+
+	@mock.patch('niascape.usecase.basedata')
 	def test_timeline(self, moc):
 		self.assertTrue(hasattr(basedata, 'get_all'))  # モックだと関数名の修正についていけないのでチェック
 

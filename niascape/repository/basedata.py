@@ -14,6 +14,19 @@ import logging
 logger = logging.getLogger(__name__)
 
 
+def get(db: Database, identifier: str, site: str = 'test') -> List[Basedata]:
+	# FUTURE site別DBにしてsiteカラム削除
+	# FUTURE gyazo_posted どうにか
+	sql = """
+	SELECT identifier, title, tags, body, datetime FROM basedata
+	WHERE
+		site = ?
+		AND identifier = ?
+	"""
+	param = [site, identifier]  # type: List[Union[str, int]]
+	return db.execute_fetchone(sql, param, namedtuple=Basedata)
+
+
 def get_all(db: Database, site: str = 'test', page: int = 1) -> List[Basedata]:
 	# FUTURE site別DBにしてsiteカラム削除
 	# FUTURE gyazo_posted どうにか
