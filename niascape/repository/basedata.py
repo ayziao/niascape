@@ -16,7 +16,6 @@ logger = logging.getLogger(__name__)
 
 def get(db: Database, identifier: str, site: str = 'test') -> List[Basedata]:
 	# FUTURE site別DBにしてsiteカラム削除
-	# FUTURE gyazo_posted どうにか
 	sql = """
 	SELECT identifier, title, tags, body, datetime FROM basedata
 	WHERE
@@ -29,7 +28,7 @@ def get(db: Database, identifier: str, site: str = 'test') -> List[Basedata]:
 
 def timeline(db: Database, site: str = 'test', page: int = 1) -> List[Basedata]:
 	# FUTURE site別DBにしてsiteカラム削除
-	# FUTURE gyazo_posted どうにか
+	# PENDING gyazo_posted どうにか
 	sql = """
 	SELECT identifier, title, tags, body, datetime FROM basedata
 	WHERE
@@ -73,7 +72,6 @@ def search_body(db: Database, site: str = 'test', searchbody: str = '', order: s
 
 
 def day_timeline(db: Database, site: str = 'test', date: str = '', order: str = 'ASC', page: int = 1) -> List[Basedata]:
-	# FIXME メソッド名が実装にあってない
 	# FUTURE site別DBにしてsiteカラム削除
 	# PENDING identifierが YYYYMMDDHHmmSSmmmnnn 形式以外のときは？
 	# PENDING dateの妥当性チェック
