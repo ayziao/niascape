@@ -17,7 +17,7 @@ def getdata(option: dict):
 
 def timeline(option: dict):
 	with get_db(niascape.ini['database']) as db:  # type: ignore  # XXX セクションぶっこむとmypyさんにおこられ 辞書化すべきか
-		return json.dumps(basedata.get_all(db, **option), cls=AsdictSupportJSONEncoder)  # PENDING どこでJSON化すべきか
+		return json.dumps(basedata.timeline(db, **option), cls=AsdictSupportJSONEncoder)  # PENDING どこでJSON化すべきか
 
 
 def tagtimeline(option: dict):
@@ -33,7 +33,7 @@ def searchbody(option: dict):
 def day_summary(option: dict):
 	site = option['site'] if 'site' in option else 'test'
 	with get_db(niascape.ini['database']) as db:  # type: ignore  # XXX セクションぶっこむとmypyさんにおこられ 辞書化すべきか
-		ret = {'content': basedata.day_summary(db, **option),
+		ret = {'content': basedata.day_timeline(db, **option),
 					 'next': basedata.next_identifier(db, site, option['date'])[0:8],
 					 'prev': basedata.prev_identifier(db, site, option['date'])[0:8]}
 

@@ -27,7 +27,7 @@ def get(db: Database, identifier: str, site: str = 'test') -> List[Basedata]:
 	return db.execute_fetchone(sql, param, namedtuple=Basedata)
 
 
-def get_all(db: Database, site: str = 'test', page: int = 1) -> List[Basedata]:
+def timeline(db: Database, site: str = 'test', page: int = 1) -> List[Basedata]:
 	# FUTURE site別DBにしてsiteカラム削除
 	# FUTURE gyazo_posted どうにか
 	sql = """
@@ -72,7 +72,7 @@ def search_body(db: Database, site: str = 'test', searchbody: str = '', order: s
 	return db.execute_fetch_page(sql, param, page, per_page, namedtuple=Basedata)
 
 
-def day_summary(db: Database, site: str = 'test', date: str = '', order: str = 'ASC', page: int = 1) -> List[Basedata]:
+def day_timeline(db: Database, site: str = 'test', date: str = '', order: str = 'ASC', page: int = 1) -> List[Basedata]:
 	# FIXME メソッド名が実装にあってない
 	# FUTURE site別DBにしてsiteカラム削除
 	# PENDING identifierが YYYYMMDDHHmmSSmmmnnn 形式以外のときは？

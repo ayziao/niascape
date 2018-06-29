@@ -39,16 +39,16 @@ class TestUsecase(TestCase):
 
 	@mock.patch('niascape.usecase.basedata')
 	def test_timeline(self, moc):
-		self.assertTrue(hasattr(basedata, 'get_all'))  # モックだと関数名の修正についていけないのでチェック
+		self.assertTrue(hasattr(basedata, 'timeline'))  # モックだと関数名の修正についていけないのでチェック
 
 		def method(conn, site=''):  # XXX 引数の定義を実装から動的にパクれないか inspectモジュール？
 			self.assertIsInstance(conn, Database)
-			return [Dummy(f"called mock get_all {site}".strip())]
+			return [Dummy(f"called mock timeline {site}".strip())]
 
-		moc.get_all = method
+		moc.timeline = method
 
 		ref = usecase.timeline({})
-		self.assertEqual('[{"dummy": "called mock get_all"}]', ref)
+		self.assertEqual('[{"dummy": "called mock timeline"}]', ref)
 
 	@mock.patch('niascape.usecase.basedata')
 	def test_tagtimeline(self, moc):
@@ -78,21 +78,21 @@ class TestUsecase(TestCase):
 
 	@mock.patch('niascape.usecase.basedata')
 	def test_day_summary(self, moc):
-		self.assertTrue(hasattr(basedata, 'day_summary'))  # モックだと関数名の修正についていけないのでチェック
+		self.assertTrue(hasattr(basedata, 'day_timeline'))  # モックだと関数名の修正についていけないのでチェック
 		self.assertTrue(hasattr(basedata, 'next_identifier'))  # モックだと関数名の修正についていけないのでチェック
 		self.assertTrue(hasattr(basedata, 'prev_identifier'))  # モックだと関数名の修正についていけないのでチェック
 
 		def method(conn, site='', date=''):  # XXX 引数の定義を実装から動的にパクれないか inspectモジュール？
 			self.assertIsInstance(conn, Database)
-			return [Dummy(f"called mock day_summary {site}".strip())]
+			return [Dummy(f"called mock day_timeline {site}".strip())]
 
 		def method2(conn, site='', date=''):  # XXX 引数の定義を実装から動的にパクれないか inspectモジュール？
 			self.assertIsInstance(conn, Database)
 			return f"called mock {site} {date}".strip()
 
-		moc.day_summary = method
+		moc.day_timeline = method
 		moc.next_identifier = method2
 		moc.prev_identifier = method2
 
 		ref = usecase.day_summary({'site': 'test', 'date': '19990701'})
-		self.assertEqual('{"content": [{"dummy": "called mock day_summary test"}], "next": "called m", "prev": "called m"}', ref)
+		self.assertEqual('{"content": [{"dummy": "called mock day_timeline test"}], "next": "called m", "prev": "called m"}', ref)

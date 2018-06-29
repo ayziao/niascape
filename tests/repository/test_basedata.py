@@ -56,18 +56,18 @@ class TestBasedata(TestCase):
 		ref = basedata.get(db, '20170101235959999001', 'test')
 		self.assertEqual(None, ref)
 
-	def test_get_all(self):
+	def test_timeline(self):
 		db = self._db
 
-		ref = basedata.get_all(db)
+		ref = basedata.timeline(db)
 		logger.debug("basedata\n%s", pformat(ref[:5]))
 		self.assertEqual('20170101235959999000', ref[0].identifier)
 
-		ref = basedata.get_all(db, 'test', 2)
+		ref = basedata.timeline(db, 'test', 2)
 		logger.debug("basedata\n%s", pformat(ref[:5]))
 		self.assertEqual([], ref)
 
-		ref = basedata.get_all(db, 'dummy')
+		ref = basedata.timeline(db, 'dummy')
 		logger.debug("basedata\n%s", pformat(ref[:5]))
 		self.assertEqual('20180101123456789000', ref[0].identifier)
 
@@ -93,14 +93,14 @@ class TestBasedata(TestCase):
 		ref = basedata.search_body(db, site='test', searchbody='hoge', order='ASC')
 		self.assertEqual('20170101000000000000', ref[0].identifier)
 
-	def test_day_summary(self):
+	def test_day_timeline(self):
 		db = self._db
 
-		ref = basedata.day_summary(db, site='test', date='2017')
+		ref = basedata.day_timeline(db, site='test', date='2017')
 		self.assertEqual('20170101000000000000', ref[0].identifier)
 		self.assertEqual('20170101235959999000', ref[1].identifier)
 
-		ref = basedata.day_summary(db, site='test', date='2017', order='DESC')
+		ref = basedata.day_timeline(db, site='test', date='2017', order='DESC')
 		self.assertEqual('20170101235959999000', ref[0].identifier)
 
 	def test_next_identifier(self):
