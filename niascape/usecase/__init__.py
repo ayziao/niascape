@@ -25,11 +25,6 @@ def tagtimeline(option: dict):
 		return json.dumps(basedata.tagtimeline(db, **option), cls=AsdictSupportJSONEncoder)  # PENDING どこでJSON化すべきか
 
 
-def searchbody(option: dict):
-	with get_db(niascape.ini['database']) as db:  # type: ignore  # XXX セクションぶっこむとmypyさんにおこられ 辞書化すべきか
-		return json.dumps(basedata.search_body(db, **option), cls=AsdictSupportJSONEncoder)  # PENDING どこでJSON化すべきか
-
-
 def day_summary(option: dict):
 	site = option['site'] if 'site' in option else 'test'
 	with get_db(niascape.ini['database']) as db:  # type: ignore  # XXX セクションぶっこむとmypyさんにおこられ 辞書化すべきか
@@ -39,4 +34,11 @@ def day_summary(option: dict):
 
 		return json.dumps(ret, cls=AsdictSupportJSONEncoder)  # PENDING どこでJSON化すべきか
 
-# TODO とりあえず試作を移植
+
+def searchbody(option: dict):
+	with get_db(niascape.ini['database']) as db:  # type: ignore  # XXX セクションぶっこむとmypyさんにおこられ 辞書化すべきか
+		return json.dumps(basedata.search_body(db, **option), cls=AsdictSupportJSONEncoder)  # PENDING どこでJSON化すべきか
+
+#
+# FUTURE sarchtitle タイトルの部分検索 PENDING 部分検索は本文とタイトル分けないかオプションにするか
+# TODO とりあえず試作を移植 更新系
