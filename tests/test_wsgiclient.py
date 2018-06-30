@@ -27,7 +27,7 @@ class TestWsgiclient(TestCase):
 
 		self.assertEqual('200 OK', ret_stat)
 		self.assertEqual([('Content-Type', 'text/html; charset=utf-8')], ret_hed)
-		self.assertEqual(b'<html><head><meta content="text/html charset=UTF-8" http-equiv="Content-Type"/><title>top</title></head><body><p>top</p></body></html>', ret_content)
+		self.assertEqual(b'<html><head><meta content="text/html charset=UTF-8" http-equiv="Content-Type"/><title>top</title></head><body><p>"top"</p></body></html>', ret_content)
 
 	def test_application_favicon(self):
 		env = {'PATH_INFO': '/favicon.ico'}
@@ -48,6 +48,9 @@ class TestWsgiclient(TestCase):
 		self.assertEqual(b'Not Found', ret_content)
 
 	def test_parse_query_string(self):
+		ret = parse_query_string('blank_value&int=999&float=9.999')
+		self.assertEqual({'float': '9.999', 'int': '999'}, ret)
+
 		ret = parse_query_string('blank_value&key=value&sharp=%23hoge&list[]=1&list[]=2&list[]=3')
 		self.assertEqual({'key': 'value', 'list': ['1', '2', '3'], 'sharp': '#hoge'}, ret)
 

@@ -1,9 +1,7 @@
-from unittest import TestCase, skip
-
-import logging.config
-from pprint import pformat
+from unittest import TestCase
 
 import json
+import logging.config
 
 # logging.addLevelName(5, 'TRACE') ; logging.config.dictConfig(json.load(open('../logger_config.json', 'r')))
 

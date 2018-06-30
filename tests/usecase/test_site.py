@@ -6,14 +6,6 @@ from niascape.repository import site
 from niascape.utility.database import Database
 
 
-class Dummy:
-	def __init__(self, dummy):
-		self.dummy = dummy
-
-	def _asdict(self):
-		return {'dummy': self.dummy}
-
-
 class TestUsecase(TestCase):
 	@classmethod
 	def setUpClass(cls):
@@ -30,12 +22,12 @@ class TestUsecase(TestCase):
 
 		def method(conn, site=''):  # XXX 引数の定義を実装から動的にパクれないか inspectモジュール？
 			self.assertIsInstance(conn, Database)
-			return [Dummy(f"called mock sites {site}".strip())]
+			return f"called mock sites {site}".strip()
 
 		moc.sites = method
 
 		ref = usecase.site.list({})
-		self.assertEqual('[{"dummy": "called mock sites"}]', ref)
+		self.assertEqual('called mock sites', ref)
 
 	@mock.patch('niascape.usecase.site.site')
 	def test_formbottominsert(self, moc):
@@ -51,7 +43,10 @@ class TestUsecase(TestCase):
 		moc.setting = method
 
 		ref = usecase.site.formbottominsert({})
-		self.assertEqual('', ref)
+		self.assertEqual({'siteinsert': ''}, ref)
 
 		ref = usecase.site.formbottominsert({'site': 'test'})
-		self.assertEqual('dummy', ref)
+		self.assertEqual({'siteinsert': 'dummy'}, ref)
+
+		ref = usecase.site.formbottominsert({'site': 'aaa'})
+		self.assertEqual({'siteinsert': ''}, ref)

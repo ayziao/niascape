@@ -11,10 +11,10 @@ import niascape
 class TestMyPackage(TestCase):
 	def test_main(self):
 		ref = niascape.main()
-		self.assertEqual('top', ref)
+		self.assertEqual('"top"', ref)
 
 		ref = niascape.main('top')
-		self.assertEqual('top', ref)
+		self.assertEqual('"top"', ref)
 
 		# モジュール変数をうっかり呼ばないか
 		ref = niascape.main('basedata')

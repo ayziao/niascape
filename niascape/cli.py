@@ -61,7 +61,7 @@ def parse_argument_vector(argv: List[str]) -> Tuple[List[str], Dict[str, Union[s
 				option_name = ''
 			if '=' in argument:
 				key, val = argument[2:].split('=')
-				option_dict[key] = _cast(val)
+				option_dict[key] = val  # XXX ここでの型変換は不要？ _cast(val)
 			else:
 				option_name = argument[2:]
 		elif argument[0] == '-':
@@ -71,7 +71,7 @@ def parse_argument_vector(argv: List[str]) -> Tuple[List[str], Dict[str, Union[s
 			if option_name == '':
 				arguments.append(argument)
 			else:
-				option_dict[option_name] = _cast(argument)
+				option_dict[option_name] = argument  # XXX ここでの型変換は不要？ _cast(argument)
 				option_name = ''
 
 	if option_name != '':
@@ -80,7 +80,7 @@ def parse_argument_vector(argv: List[str]) -> Tuple[List[str], Dict[str, Union[s
 	return arguments[1:], option_dict, short_options  # argumentsの0を削ってwsgiと合わせる
 
 
-def _cast(string: str) -> Union[str, int]:
+def _cast(string: str) -> Union[str, int]:  # XXX いらないかも
 	if string.isdigit():
 		return int(string)
 	# FUTURE 符号付き整数

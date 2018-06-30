@@ -17,7 +17,8 @@ if ($_GET['tagiji']) {
 $command = "python3 /Volumes/data/niascape/niascape site.formbottominsert";
 $command .= $site ? ' --site=' . escapeshellarg($site) : '';
 exec($command, $out, $ret);
-$sitesetting['siteinsert'] = $out[0];
+$sitesetting = json_decode(end($out), true);
+//$sitesetting['siteinsert'] = $out[0];
 //$sitesetting = getSitesetting($handle, $site);
 
 $command = "python3 /Volumes/data/niascape/niascape timeline";

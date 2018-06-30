@@ -1,9 +1,12 @@
-import json
+"""
+niascape.usecase
 
+ニアスケイプ基幹ユースケース
+
+"""
 import niascape
 from niascape.repository import basedata
 from niascape.utility.database import get_db
-from niascape.utility.json import AsdictSupportJSONEncoder
 
 
 def top(option: dict) -> str:  # PENDING topという概念はWebでしか無いのでは であればwsgiclientで実装すべきでは
@@ -12,18 +15,16 @@ def top(option: dict) -> str:  # PENDING topという概念はWebでしか無い
 
 def getdata(option: dict):
 	with get_db(niascape.ini['database']) as db:  # type: ignore  # XXX セクションぶっこむとmypyさんにおこられ 辞書化すべきか
-		return json.dumps(basedata.get(db, str(option['identifier']), option['site']), cls=AsdictSupportJSONEncoder)  # PENDING どこでJSON化すべきか
-
+		return basedata.get(db, **option)
 
 def timeline(option: dict):
 	with get_db(niascape.ini['database']) as db:  # type: ignore  # XXX セクションぶっこむとmypyさんにおこられ 辞書化すべきか
-		return json.dumps(basedata.timeline(db, **option), cls=AsdictSupportJSONEncoder)  # PENDING どこでJSON化すべきか
+		return basedata.timeline(db, **option)
 
 
 def tagtimeline(option: dict):
 	with get_db(niascape.ini['database']) as db:  # type: ignore  # XXX セクションぶっこむとmypyさんにおこられ 辞書化すべきか
-		return json.dumps(basedata.tagtimeline(db, **option), cls=AsdictSupportJSONEncoder)  # PENDING どこでJSON化すべきか
-
+		return basedata.tagtimeline(db, **option)
 
 def day_summary(option: dict):
 	site = option['site'] if 'site' in option else 'test'
@@ -32,12 +33,12 @@ def day_summary(option: dict):
 					 'next': basedata.next_identifier(db, site, option['date'])[0:8],
 					 'prev': basedata.prev_identifier(db, site, option['date'])[0:8]}
 
-		return json.dumps(ret, cls=AsdictSupportJSONEncoder)  # PENDING どこでJSON化すべきか
+		return ret
 
 
 def searchbody(option: dict):
 	with get_db(niascape.ini['database']) as db:  # type: ignore  # XXX セクションぶっこむとmypyさんにおこられ 辞書化すべきか
-		return json.dumps(basedata.search_body(db, **option), cls=AsdictSupportJSONEncoder)  # PENDING どこでJSON化すべきか
+		return basedata.search_body(db, **option)
 
 #
 # FUTURE sarchtitle タイトルの部分検索 PENDING 部分検索は本文とタイトル分けないかオプションにするか

@@ -4,34 +4,31 @@ niascape.usecase.postcount
 投稿件数ユースケース
 
 """
-import json
-
 import niascape
 from niascape.repository import postcount
 from niascape.utility.database import get_db
-from niascape.utility.json import AsdictSupportJSONEncoder
 
 
 def day(option: dict) -> str:
 	with get_db(niascape.ini['database']) as db:  # type: ignore  # XXX セクションぶっこむとmypyさんにおこられ 辞書化すべきか
-		return json.dumps(postcount.day(db, **option), cls=AsdictSupportJSONEncoder)  # PENDING どこでJSON化すべきか
+		return postcount.day(db, **option)
 
 
 def month(option: dict) -> str:
 	with get_db(niascape.ini['database']) as db:  # type: ignore  # XXX セクションぶっこむとmypyさんにおこられ 辞書化すべきか
-		return json.dumps(postcount.month(db, **option), cls=AsdictSupportJSONEncoder)  # PENDING どこでJSON化すべきか
+		return postcount.month(db, **option)
 
 
 def hour(option: dict) -> str:
 	with get_db(niascape.ini['database']) as db:  # type: ignore  # XXX セクションぶっこむとmypyさんにおこられ 辞書化すべきか
-		return json.dumps(postcount.hour(db, **option), cls=AsdictSupportJSONEncoder)  # PENDING どこでJSON化すべきか
+		return postcount.hour(db, **option)
 
 
 def week(option: dict) -> str:
 	with get_db(niascape.ini['database']) as db:  # type: ignore  # XXX セクションぶっこむとmypyさんにおこられ 辞書化すべきか
-		return json.dumps(postcount.week(db, **option), cls=AsdictSupportJSONEncoder)  # PENDING どこでJSON化すべきか
+		return postcount.week(db, **option)
 
 
 def tag(option: dict) -> str:
 	with get_db(niascape.ini['database']) as db:  # type: ignore  # XXX セクションぶっこむとmypyさんにおこられ 辞書化すべきか
-		return json.dumps(postcount.tag(db, **option), cls=AsdictSupportJSONEncoder)  # PENDING どこでJSON化すべきか
+		return postcount.tag(db, **option)

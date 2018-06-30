@@ -6,14 +6,6 @@ from niascape.repository import postcount
 from niascape.utility.database import Database
 
 
-class Dummy:
-	def __init__(self, dummy):
-		self.dummy = dummy
-
-	def _asdict(self):
-		return {'dummy': self.dummy}
-
-
 class TestPostcount(TestCase):
 	@classmethod
 	def setUpClass(cls):
@@ -30,15 +22,15 @@ class TestPostcount(TestCase):
 
 		def method(conn, site='', tag='', search_body=''):  # XXX 引数の定義を実装から動的にパクれないか inspectモジュール？
 			self.assertIsInstance(conn, Database)
-			return [Dummy(f"called mock daycount {site} {tag} {search_body}".strip())]
+			return f"called mock daycount {site} {tag} {search_body}".strip()
 
 		moc.day = method
 
 		ref = usecase.postcount.day({})
-		self.assertEqual('[{"dummy": "called mock daycount"}]', ref)
+		self.assertEqual('called mock daycount', ref)
 
 		ref = usecase.postcount.day({'site': 'test', 'tag': '#test', 'search_body': 'test'})
-		self.assertEqual('[{"dummy": "called mock daycount test #test test"}]', ref)
+		self.assertEqual('called mock daycount test #test test', ref)
 
 	@mock.patch('niascape.usecase.postcount.postcount')
 	def test_month(self, moc):
@@ -46,15 +38,15 @@ class TestPostcount(TestCase):
 
 		def method(conn, site='', tag='', search_body=''):  # XXX 引数の定義を実装から動的にパクれないか inspectモジュール？
 			self.assertIsInstance(conn, Database)
-			return [Dummy(f"called mock monthcount {site} {tag} {search_body}".strip())]
+			return f"called mock monthcount {site} {tag} {search_body}".strip()
 
 		moc.month = method
 
 		ref = usecase.postcount.month({})
-		self.assertEqual('[{"dummy": "called mock monthcount"}]', ref)
+		self.assertEqual('called mock monthcount', ref)
 
 		ref = usecase.postcount.month({'site': 'test', 'tag': '#test', 'search_body': 'test'})
-		self.assertEqual('[{"dummy": "called mock monthcount test #test test"}]', ref)
+		self.assertEqual('called mock monthcount test #test test', ref)
 
 	@mock.patch('niascape.usecase.postcount.postcount')
 	def test_hour(self, moc):
@@ -62,12 +54,12 @@ class TestPostcount(TestCase):
 
 		def method(conn, site='', tag='', search_body=''):  # XXX 引数の定義を実装から動的にパクれないか inspectモジュール？
 			self.assertIsInstance(conn, Database)
-			return [Dummy(f"called mock hourcount {site} {tag} {search_body}".strip())]
+			return f"called mock hourcount {site} {tag} {search_body}".strip()
 
 		moc.hour = method
 
 		ref = usecase.postcount.hour({})
-		self.assertEqual('[{"dummy": "called mock hourcount"}]', ref)
+		self.assertEqual('called mock hourcount', ref)
 
 	@mock.patch('niascape.usecase.postcount.postcount')
 	def test_week(self, moc):
@@ -75,12 +67,12 @@ class TestPostcount(TestCase):
 
 		def method(conn, site='', tag='', search_body=''):  # XXX 引数の定義を実装から動的にパクれないか inspectモジュール？
 			self.assertIsInstance(conn, Database)
-			return [Dummy(f"called mock weekcount {site} {tag} {search_body}".strip())]
+			return f"called mock weekcount {site} {tag} {search_body}".strip()
 
 		moc.week = method
 
 		ref = usecase.postcount.week({})
-		self.assertEqual('[{"dummy": "called mock weekcount"}]', ref)
+		self.assertEqual('called mock weekcount', ref)
 
 	@skip("モックなし確認用")
 	def test_day_no_mock(self):
@@ -95,12 +87,12 @@ class TestPostcount(TestCase):
 
 		def method(conn, site=''):  # XXX 引数の定義を実装から動的にパクれないか inspectモジュール？
 			self.assertIsInstance(conn, Database)
-			return [Dummy(f"called mock _tag_count {site}".strip())]
+			return f"called mock _tag_count {site}".strip()
 
 		moc.tag = method
 
 		ref = usecase.postcount.tag({})
-		self.assertEqual('[{"dummy": "called mock _tag_count"}]', ref)
+		self.assertEqual('called mock _tag_count', ref)
 
 		ref = usecase.postcount.tag({'site': 'test'})
-		self.assertEqual('[{"dummy": "called mock _tag_count test"}]', ref)
+		self.assertEqual('called mock _tag_count test', ref)

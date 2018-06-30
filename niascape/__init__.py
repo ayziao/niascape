@@ -5,6 +5,8 @@ niascape パッケージ
 import os
 import datetime
 import configparser
+import json
+from niascape.utility.json import AsdictSupportJSONEncoder
 
 import logging
 
@@ -35,7 +37,9 @@ def main(action: str = 'top', option: dict = None) -> str:
 		_logger.info("アクションなし: %s", action)  # PENDING インフォかワーニングか設定で変えられるようにすべきか
 		return 'No Action'
 
-	return m(option)
+	# FUTURE 表示形式変換
+
+	return json.dumps(m(option), cls=AsdictSupportJSONEncoder)
 
 
 def _read_ini(file_name: str = 'config.ini') -> configparser.ConfigParser:
