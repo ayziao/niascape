@@ -32,7 +32,6 @@ def day_summary(option: dict):
 		ret = {'content': basedata.day_timeline(db, **option),
 					 'next': basedata.next_identifier(db, site, option['date'])[0:8],
 					 'prev': basedata.prev_identifier(db, site, option['date'])[0:8]}
-
 		return ret
 
 

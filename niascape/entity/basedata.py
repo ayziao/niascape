@@ -4,7 +4,11 @@ niascape.entity.basedata
 ベースデータエンティティ
 """
 # from typing import NamedTuple
-from datetime import datetime
+from datetime import datetime, timedelta
+
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 class Basedata:
@@ -22,9 +26,14 @@ class Basedata:
 		self.title = title
 		self.tags = tags
 		self.body = body
-		self.datetime = datetime_
-		# self.utctime = utctime
-		pass
+		if type(datetime_) is datetime:
+			self.datetime = datetime_
+			self.utctime = datetime_ - timedelta(hours=9)
+		else:
+			self.datetime = datetime.strptime(datetime_[0:19], '%Y-%m-%d %H:%M:%S')  # PENDING ミリ秒の塩梅をどうするか
+			self.utctime = self.datetime - timedelta(hours=9)
+
+		logger.debug(self.__dict__)
 
 	def _asdict(self):
 		return self.__dict__

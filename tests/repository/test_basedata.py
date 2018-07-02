@@ -56,6 +56,7 @@ class TestBasedata(TestCase):
 		ref = basedata.get(db, '20170101235959999001', 'test')
 		self.assertEqual(None, ref)
 
+
 	def test_timeline(self):
 		db = self._db
 
