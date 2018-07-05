@@ -31,7 +31,6 @@ def main(arguments: list, option: dict = None) -> str:
 	from niascape import utility
 	from niascape.utility.json import AsdictSupportJSONEncoder
 
-
 	if len(arguments) > 0:
 		action = arguments[0]
 	else:

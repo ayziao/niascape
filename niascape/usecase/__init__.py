@@ -17,6 +17,7 @@ def getdata(option: dict):
 	with get_db(niascape.ini['database']) as db:  # type: ignore  # XXX セクションぶっこむとmypyさんにおこられ 辞書化すべきか
 		return basedata.get(db, **option)
 
+
 def timeline(option: dict):
 	with get_db(niascape.ini['database']) as db:  # type: ignore  # XXX セクションぶっこむとmypyさんにおこられ 辞書化すべきか
 		return basedata.timeline(db, **option)
@@ -25,6 +26,7 @@ def timeline(option: dict):
 def tagtimeline(option: dict):
 	with get_db(niascape.ini['database']) as db:  # type: ignore  # XXX セクションぶっこむとmypyさんにおこられ 辞書化すべきか
 		return basedata.tagtimeline(db, **option)
+
 
 def day_summary(option: dict):
 	site = option['site'] if 'site' in option else 'test'
