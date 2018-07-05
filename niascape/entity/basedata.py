@@ -33,7 +33,7 @@ class Basedata:
 			self.datetime = datetime.strptime(datetime_[0:19], '%Y-%m-%d %H:%M:%S')  # PENDING ミリ秒の塩梅をどうするか
 			self.utctime = self.datetime - timedelta(hours=9)
 
-		logger.debug(self.__dict__)
+		logger.log(5, self.__dict__)
 
 	def _asdict(self):
 		return self.__dict__

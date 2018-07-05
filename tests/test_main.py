@@ -10,11 +10,11 @@ import niascape
 
 class TestMyPackage(TestCase):
 	def test_main(self):
-		ref = niascape.main()
+		ref = niascape.main([])
 		self.assertEqual('"top"', ref)
 
 		ref = niascape.main('top')
-		self.assertEqual('"top"', ref)
+		self.assertEqual('No Action', ref)
 
 		# モジュール変数をうっかり呼ばないか
 		ref = niascape.main('basedata')
@@ -24,7 +24,7 @@ class TestMyPackage(TestCase):
 
 	def test_main_no_action(self):
 		with self.assertLogs('niascape', level='INFO') as cm:
-			ref = niascape.main('hoge')
+			ref = niascape.main(['hoge'])
 			self.assertEqual('No Action', ref)
 		self.assertEqual(cm.output, ['INFO:niascape:アクションなし: hoge'])
 

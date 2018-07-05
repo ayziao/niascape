@@ -6,7 +6,6 @@ import os
 import datetime
 import configparser
 import json
-from niascape.utility.json import AsdictSupportJSONEncoder
 
 import logging
 
@@ -16,20 +15,29 @@ _logger.log(5, "import ニアスケイプ")
 init_time = datetime.datetime.utcnow()  # type: datetime.datetime
 
 
-def main(action: str = 'top', option: dict = None) -> str:
+def main(arguments: list, option: dict = None) -> str:
 	"""
 	ニアスケイプ 主処理
 
-	:param action: アクション名
+	:param arguments: アクション名
 	:param option: オプションパラメータ辞書
 	:return: 結果文字列
 	"""
 	# PENDING アクション名受け取りじゃなくて位置引数リスト受け取りにする？ 1件目YYYYMMDD形式なら日サマリとか振り分け？
 
-	_logger.log(10, "アクション: %s", action)
+	_logger.log(10, "arg: %s", arguments)
 	_logger.log(5, "オプション: %s", option)
 
 	from niascape import utility
+	from niascape.utility.json import AsdictSupportJSONEncoder
+
+
+	if len(arguments) > 0:
+		action = arguments[0]
+	else:
+		# FUTURE -help しろよメッセージ出す
+		action = 'top'
+	# FUTURE アクションなしだったら -help しろよメッセージ出しつつエラーコード終了
 
 	m = utility.dynamic_get_method('niascape.usecase', action)
 
