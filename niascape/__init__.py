@@ -34,9 +34,8 @@ def main(arguments: list, option: dict = None) -> str:
 	if len(arguments) > 0:
 		action = arguments[0]
 	else:
-		# FUTURE -help しろよメッセージ出す
+		# FUTURE アクションなし例外ありモード(CLIなど)でアクションなしだったら例外投げる
 		action = 'top'
-	# FUTURE アクションなしだったら -help しろよメッセージ出しつつエラーコード終了
 
 	m = utility.dynamic_get_method('niascape.usecase', action)
 
@@ -44,7 +43,12 @@ def main(arguments: list, option: dict = None) -> str:
 		_logger.info("アクションなし: %s", action)  # PENDING インフォかワーニングか設定で変えられるようにすべきか
 		return 'No Action'
 
-	# FUTURE 表示形式変換
+	if option is not None and 'media_type' in option:
+		if option['media_type'] != 'json':
+			return 'media err'
+		media_type = option.pop('media_type')
+
+	# FUTURE 表示形式変換 view的なもの作る
 
 	return json.dumps(m(option), cls=AsdictSupportJSONEncoder)
 

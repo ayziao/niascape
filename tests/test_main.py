@@ -36,3 +36,11 @@ class TestMyPackage(TestCase):
 		logger.debug(d['database'])
 		logger.debug(dict(d['database']))
 		self.assertEqual('database', ini.sections()[0])
+
+	def test_main_media(self):
+		ref = niascape.main([],{'media_type':'json'})
+		self.assertEqual('"top"', ref)
+
+		ref = niascape.main([],{'media_type':'xml'})
+		self.assertEqual('media err', ref)
+

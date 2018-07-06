@@ -60,6 +60,24 @@ class TestWsgiclient(TestCase):
 		ret = parse_query_string('blank_value&blank_value2&key=value&sharp=%23hoge&list[]=1&list[]=2&list[]=3', True)
 		self.assertEqual({'blank_value': '', 'blank_value2': '', 'key': 'value', 'list': ['1', '2', '3'], 'sharp': '#hoge'}, ret)
 
+	def test_media_type(self):
+		env = {'PATH_INFO': '/', 'QUERY_STRING': '&media_type=json'}
+		ret_stat = ''
+		ret_hed = ''
+		ret_content = b''
+
+		def wsgi(status: str, header: list):
+			nonlocal ret_stat, ret_hed
+			ret_stat = status
+			ret_hed = header
+
+		ret_content += application(env, wsgi).__next__()
+
+		self.assertEqual('200 OK', ret_stat)
+		self.assertEqual([('Content-Type', 'text/html; charset=utf-8')], ret_hed)
+		self.assertEqual(b'<html><head><meta content="text/html charset=UTF-8" http-equiv="Content-Type"/><title>top</title></head><body><p>"top"</p></body></html>', ret_content)
+
+
 	@mock.patch('niascape.usecase.postcount.postcount')
 	def test_daycount(self, moc):
 		niascape.ini = niascape._read_ini('config.ini.sample')  # PENDING テスト用設定読むのどうにかしたい

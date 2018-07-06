@@ -15,5 +15,12 @@ class TestUtility(TestCase):
 		ref = utility.dynamic_get_method('niascape.usecase', 'postcount.day')
 		self.assertTrue(callable(ref))
 
-		ref = utility.dynamic_get_method('niascape.usecase', 'hoge')
+		ref = utility.dynamic_get_method('niascape.usecase', 'hoge') # 存在しない
 		self.assertEqual(None, ref)
+
+		ref = utility.dynamic_get_method('niascape.usecase', 'basedata') # callableでない
+		self.assertEqual(None, ref)
+
+
+
+

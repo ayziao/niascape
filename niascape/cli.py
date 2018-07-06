@@ -32,7 +32,7 @@ def run(argv: List[str]) -> str:
 
 	import niascape
 	ret = niascape.main(arguments, option_dict)  # PENDING オプション間違って unexpected keyword argument 出たらactionのhelp出す？
-	# FUTURE アクションなしだったら -help しろよメッセージ出しつつエラーコード終了
+	# FUTURE アクションなし例外きたら -help しろよメッセージ出しつつエラーコード終了
 	return ret
 
 

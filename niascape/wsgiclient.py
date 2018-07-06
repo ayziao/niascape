@@ -36,13 +36,13 @@ def application(environ: dict, start_response: Callable[[str, List[Tuple[str, st
 		logger.log(5, "parsed: %s", pformat(option_dict))
 
 		if len(arguments) > 0:
-			action = arguments[0]
+			title = ' '.join(arguments)
 		else:
-			action = 'top'
+			title = 'top'
 
 		content = niascape.main(arguments, option_dict)
 
-		if action == 'top' or content == 'No Action':
+		if title == 'top' or content == 'No Action':
 			html = """
 			<html>
 				<head>
@@ -54,7 +54,7 @@ def application(environ: dict, start_response: Callable[[str, List[Tuple[str, st
 				</body>
 			</html>
 			"""
-			content = html.replace('\n', '').replace('\t', '').format(body=content, title=action)
+			content = html.replace('\n', '').replace('\t', '').format(body=content, title=title)
 			start_response('200 OK', [('Content-Type', 'text/html; charset=utf-8')])
 		else:
 			start_response('200 OK', [('Content-Type', 'text/json; charset=utf-8')])
@@ -113,6 +113,11 @@ def _parse(environ: dict) -> Tuple[List[str], dict]:
 	# 	option_dict['site'] = path_list[1]
 	# else:
 	# 	option_dict['site'] = ''
+
+	if 'media_type' not in option_dict:
+		# FUTURE 拡張子見てmedia_type設定
+		# PENDING media_typeクエリと拡張子どちらを優先するか
+		option_dict['media_type'] = 'json'
 
 	return arguments, option_dict
 
