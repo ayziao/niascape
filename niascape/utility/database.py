@@ -54,10 +54,10 @@ class Database:
 			return None
 
 	def execute_fetchall(self, sql: str, param: Union[tuple, List[Union[str, int]]] = None, *, namedtuple=None, tuple_name: str = None):
-		if namedtuple is None and tuple_name is None:
-			return self.execute_fetchall_dict(sql, param)
-		else:
+		if namedtuple is not None or tuple_name is not None:
 			return self.execute_fetchall_namedtuple(sql, param, namedtuple=namedtuple, tuple_name=tuple_name)
+		else:
+			return self.execute_fetchall_dict(sql, param)
 
 	def execute_fetch_page(self, sql: str, param: Union[tuple, List[Union[str, int]]] = None, page=1, per_page=100, *, namedtuple=None, tuple_name: str = None):
 		if not isinstance(page, int) or page < 1:
