@@ -23,7 +23,7 @@ def main(arguments: list, option: dict = None) -> str:
 	:param option: オプションパラメータ辞書
 	:return: 結果文字列
 	"""
-	# PENDING アクション名受け取りじゃなくて位置引数リスト受け取りにする？ 1件目YYYYMMDD形式なら日サマリとか振り分け？
+	# PENDING 1件目YYYYMMDD形式なら日サマリとか振り分け？
 
 	_logger.log(10, "arg: %s", arguments)
 	_logger.log(5, "オプション: %s", option)
