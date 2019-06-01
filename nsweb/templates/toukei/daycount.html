@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="jp">
+<head>
+	<meta charset="UTF-8">
+	<title>日別投稿件数</title>
+	<style type="text/css">
+		table {font-size: 70%;}
+		.table { display: table; width: 100%; }
+		.cell { display: table-cell; white-space: nowrap;}
+	</style>
+</head>
+<body>
+
+<nav>
+	<h1>日別投稿件数</h1>
+	{% for item in sites %}
+	{% if item['site'] %}
+	<a href="{{ url_for('toukei.daycount', site=item['site']) }}">{{ item['site'] }}</a>
+	{% endif %}
+	{% endfor %}
+</nav>
+
+
+</body>
+</html>

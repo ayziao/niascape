@@ -9,4 +9,5 @@ def test_index(client):
 
 def test_daycount(client):
 	response = client.get('/toukei/daycount')
-	assert b'site' in response.data
+	# TODO niascapeのテスト設定をtewtwebから突っ込めるようにする
+	assert '日別投稿件数'in response.data.decode('utf-8')

@@ -11,12 +11,12 @@ bp = Blueprint('toukei', __name__, url_prefix='/toukei')
 
 
 @bp.route('')
-def toukei_index():
+def index():
 	return 'toukei index'
 
 
 @bp.route('/daycount')
-def toukei_daycount():
+def daycount():
 	from niascape.usecase import site
 	sites = site.list({})
-	return json.dumps(sites)
+	return render_template('toukei/daycount.html', sites=sites)
