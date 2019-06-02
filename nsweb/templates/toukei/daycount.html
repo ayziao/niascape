@@ -12,7 +12,7 @@
 <body>
 
 <nav>
-	<h1>日別投稿件数</h1>
+	<h1>{{ search['site'] }} {{ search['tag'] }}日別投稿件数</h1>
 	{% for item in sites %}
 	{% if item['site'] %}
 	<a href="{{ url_for('toukei.daycount', site=item['site']) }}">{{ item['site'] }}</a>
@@ -20,6 +20,32 @@
 	{% endfor %}
 </nav>
 
+<div class="table">
+	<div class="cell">
+		<form action="./" method="GET">
+			<input type="hidden" name="kanri" value="daycount">
+			<input type="hidden" name="site" value="{{ search['site'] }}">
+			<input type="hidden" name="tag" value="{{ search['tag'] }}">
+			<input class="text" type="text" name="searchbody" value="{{ search['body'] }}">
+			<input id="btn" class="submitbutton" type="submit" name="submit" value="検索">
+		</form>
+		<a href="{{ url_for('toukei.daycount', site=search['site']) }}">全て</a><br>
+		{% for item in tags %}
+		<a href="{{ url_for('toukei.daycount', site=search['site'] ,tag=item['tag']) }}">{{ item['tag'] }}</a> {{ item['count'] }}<br>
+		{% endfor %}
+	</div>
+	<div class="cell" style="width: 100%;">
+		<table>
+			{% for item in counts %}
+			<tr>
+				<td nowrap>{{ item['date'] }}</td>
+				<td align="right">{{ item['count'] }}</td>
+				<td><div style="background-color: blue;  width: {{ item['count'] }}px; font-size: 10px;">&nbsp;</div></td>
+			</tr>
+			{% endfor %}
+		</table>
+	</div>
+</div>
 
 </body>
 </html>
