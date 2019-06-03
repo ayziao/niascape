@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="jp">
+<head>
+	<meta charset="UTF-8">
+	<title>タスク</title>
+</head>
+<body>
+
+<h1>タスク</h1>
+
+{% for task in tasks %}
+
+{{ task['連番'] }}
+{{ task['所有者'] }}
+{{ task['追加日時'] }}
+{{ task['タスク名'] }}
+{% if task['備考'] %}
+※
+{% endif %}
+
+{%endfor %}
+
+</body>
+</html>
