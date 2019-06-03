@@ -29,6 +29,9 @@ def create_app(test_config=None):
 	from . import toukei
 	app.register_blueprint(toukei.bp)
 
+	from . import task
+	app.register_blueprint(task.bp)
+
 	@app.route('/hello')
 	def hello_world():
 		return 'Hello, World!'
