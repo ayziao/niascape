@@ -260,6 +260,14 @@ webテストに試作とnodeを比較してやる
 TwitterストリームJSONそのまま保存したファイルを読む(URLデコード 改行2個化)
 tail -f tw_20161231.txt | perl -MEncode -ple 'BEGIN { my $X = qr/[[:xdigit:]]{4}/; $U = qr/\\u$X/; $UC = qr/\\u($X)/; } $_ = encode_utf8 join q{}, map { /^$U/ ? decode "utf-16-be", pack "n*", map { hex } m/$UC/g : $_ } split qr/($U*)/' | perl -pe 's/\n/\n\n/g' 
 
+●Flask
+cd nsweb
+export FLASK_APP=__init__.py
+export FLASK_ENV=development
+flask init-db
+python -m flask run
+
+
 ■タスク★☆☆ ■■■■■■■■■■■■■■■■■
 setup.pyの書き方調べる http://diveintopython3-ja.rdy.jp/packaging.html
 無限クッキーにログインしてない時の設定持たせる
