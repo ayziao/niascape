@@ -58,10 +58,9 @@ def get_task(id, check_author=True):
 		(id,)
 	).fetchone()
 
-	if task:
-		return task
+	if task is None:
+		abort(404, "task id {0} doesn't exist.".format(id))
 
-	abort(404, "task id {0} doesn't exist.".format(id))
 	return task
 
 

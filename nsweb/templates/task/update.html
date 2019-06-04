@@ -12,6 +12,12 @@
 </head>
 <body>
 
+<h1>タスク更新</h1>
+
+{% for message in get_flashed_messages() %}
+<div class="flash">{{ message }}</div>
+{% endfor %}
+
 <form method="post">
 	<label for="owner">所有者</label>
 	<input name="owner" id="owner" value="{{ request.form['owner'] or task['所有者'] }}" required>

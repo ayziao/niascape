@@ -1,10 +1,30 @@
+import pytest
 from nsweb.db import get_db
 
 
 def test_index(client):
 	response = client.get('/task')
 	assert 'タスク' in response.data.decode('utf-8')
-	assert '未' in response.data.decode('utf-8')
+	assert '担当者なし' in response.data.decode('utf-8')
+
+
+@pytest.mark.parametrize('path', (
+		'/task/create',
+		'/task/1/update',
+))
+def test_create_update_validate(client, path):
+	# auth.login()
+	response = client.post(path, data={'owner': '', 'title': '', 'tag': '', 'body': ''})
+	assert b'Title is required.' in response.data
+
+
+@pytest.mark.parametrize('path', (
+		'/task/2/update',
+		'/task/2/delete',
+))
+def test_exists_required(client, path):
+	# auth.login()
+	assert client.post(path).status_code == 404
 
 
 def test_create(client, app):
@@ -36,3 +56,4 @@ def test_delete(client, app):
 		db = get_db()
 		post = db.execute('SELECT * FROM post WHERE "連番" = 1').fetchone()
 		assert post is None
+
