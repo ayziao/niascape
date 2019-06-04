@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="jp">
+<head>
+	<meta charset="UTF-8">
+	<title>新規タスク</title>
+	<style type="text/css">
+		form { margin: 1em 0; display: flex; flex-direction: column; }
+		label { font-weight: bold; margin-bottom: 0.5em; }
+		input, textarea { margin-bottom: 1em; }
+		textarea { min-height: 12em; resize: vertical; }
+	</style>
+</head>
+<body>
+
+<h1>新規タスク</h1>
+
+<form method="post">
+	<label for="owner">所有者</label>
+	<input name="owner" id="owner" value="{{ request.form['owner'] or defaultowner }}" required>
+	<label for="title">Title</label>
+	<input name="title" id="title" value="{{ request.form['title'] }}" required>
+	<label for="tag">tag</label>
+	<input name="tag" id="tag" value="{{ request.form['tag'] or defaulttag }}">
+	<label for="body">Body</label>
+	<textarea name="body" id="body">{{ request.form['body'] }}</textarea>
+	<input type="submit" value="Save">
+</form>
+
+</body>
+</html>

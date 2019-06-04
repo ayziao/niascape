@@ -8,6 +8,10 @@
 
 <h1>タスク</h1>
 
+<a class="action" href="{{ url_for('task.create') }}">New</a>
+
+<hr>
+
 {% for task in tasks %}
 
 {{ task['連番'] }}
@@ -18,6 +22,7 @@
 {% if task['備考'] %}
 ※
 {% endif %}
+<br>
 
 {%endfor %}
 
