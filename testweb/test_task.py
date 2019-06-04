@@ -25,3 +25,14 @@ def test_update(client, app):
 		db = get_db()
 		post = db.execute('SELECT * FROM task WHERE "連番" = 1').fetchone()
 		assert post['タスク名'] == 'updated'
+
+
+def test_delete(client, app):
+	# auth.login()
+	response = client.post('/task/1/delete')
+	assert response.headers['Location'] == 'http://localhost/task'
+
+	with app.app_context():
+		db = get_db()
+		post = db.execute('SELECT * FROM post WHERE "連番" = 1').fetchone()
+		assert post is None

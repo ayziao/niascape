@@ -94,3 +94,14 @@ def update(id):
 			return redirect(url_for('task.index'))
 
 	return render_template('task/update.html', task=task)
+
+
+@bp.route('/<int:id>/delete', methods=('POST',))
+# @login_required
+def delete(id):
+	get_task(id)
+	db = get_db()
+	db.execute('DELETE FROM task WHERE "連番" = ?', (id,))
+	db.commit()
+	return redirect(url_for('task.index'))
+

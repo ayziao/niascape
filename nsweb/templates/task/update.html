@@ -24,6 +24,9 @@
 	<input type="submit" value="Save">
 </form>
 <hr>
+<form action="{{ url_for('task.delete', id=task['連番']) }}" method="post">
+	<input class="danger" type="submit" value="Delete" onclick="return confirm('Are you sure?');">
+</form>
 
 </body>
 </html>
