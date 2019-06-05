@@ -104,6 +104,10 @@ class Database:
 
 		return result
 
+	def executescript(self, sql):
+		self._connection.executescript(sql)
+
+
 	def close(self) -> None:
 		logger.log(5, "接続クローズ :%s", pformat(self._connection))
 		self._connection.close()
