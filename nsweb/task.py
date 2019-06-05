@@ -104,3 +104,46 @@ def delete(id):
 	db.commit()
 	return redirect(url_for('task.index'))
 
+
+@bp.route('/<int:id>/rateup', methods=('GET',))
+def rateup(id):
+	task = get_task(id)
+	if task['重要度'] < 5:
+		db = get_db()
+		db.execute(
+			'UPDATE task SET "重要度" = "重要度" + 1 '
+			' WHERE "連番" = ?', (id,))
+		db.commit()
+	return redirect(url_for('task.index'))
+
+
+@bp.route('/<int:id>/ratedown', methods=('GET',))
+def ratedown(id):
+	task = get_task(id)
+	if task['重要度'] > 0:
+		db = get_db()
+		db.execute(
+			'UPDATE task SET "重要度" = "重要度" - 1 '
+			' WHERE "連番" = ?', (id,))
+		db.commit()
+	return redirect(url_for('task.index'))
+
+
+@bp.route('/<int:id>/done', methods=('GET',))
+def done(id):
+	db = get_db()
+	db.execute(
+		'UPDATE task SET "状態" = "完" , "完了日時" = datetime("now", "utc") '
+		' WHERE "連番" = ?', (id,))
+	db.commit()
+	return redirect(url_for('task.index'))
+
+
+@bp.route('/<int:id>/restore', methods=('GET',))
+def restore(id):
+	db = get_db()
+	db.execute(
+		'UPDATE task SET "状態" = "未" , "完了日時" = datetime("now", "utc") '
+		' WHERE "連番" = ?', (id,))
+	db.commit()
+	return redirect(url_for('task.index'))

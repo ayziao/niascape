@@ -43,8 +43,8 @@ def test_update(client, app):
 
 	with app.app_context():
 		db = get_db()
-		post = db.execute('SELECT * FROM task WHERE "連番" = 1').fetchone()
-		assert post['タスク名'] == 'updated'
+		task = db.execute('SELECT * FROM task WHERE "連番" = 1').fetchone()
+		assert task['タスク名'] == 'updated'
 
 
 def test_delete(client, app):
@@ -57,3 +57,41 @@ def test_delete(client, app):
 		post = db.execute('SELECT * FROM post WHERE "連番" = 1').fetchone()
 		assert post is None
 
+
+def test_rateupdown(client, app):
+	# auth.login()
+	assert client.get('/task/1/rateup').status_code == 302
+
+	with app.app_context():
+		db = get_db()
+		task = db.execute('SELECT * FROM task WHERE "連番" = 1').fetchone()
+		assert task['重要度'] == 1
+
+	assert client.get('/task/1/rateup').status_code == 302
+	assert client.get('/task/1/rateup').status_code == 302
+	assert client.get('/task/1/ratedown').status_code == 302
+
+	with app.app_context():
+		db = get_db()
+		task = db.execute('SELECT * FROM task WHERE "連番" = 1').fetchone()
+		assert task['重要度'] == 2
+
+
+def test_done(client, app):
+	# auth.login()
+	assert client.get('/task/1/done').status_code == 302
+
+	with app.app_context():
+		db = get_db()
+		task = db.execute('SELECT * FROM task WHERE "連番" = 1').fetchone()
+		assert task['状態'] == '完'
+
+
+def test_restore(client, app):
+	# auth.login()
+	assert client.get('/task/1/restore').status_code == 302
+
+	with app.app_context():
+		db = get_db()
+		task = db.execute('SELECT * FROM task WHERE "連番" = 1').fetchone()
+		assert task['状態'] == '未'
