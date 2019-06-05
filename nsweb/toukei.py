@@ -22,7 +22,7 @@ def daycount():
 	sites = site.list({})
 
 	search = {}
-	search['site'] = request.args.get('site', sites[0]['site'])
+	search['site'] = request.args.get('site', sites[0]['site']) #FIXME データがないときコケる
 	search['tag'] = request.args.get('tag', '')
 	search['body'] = request.args.get('body', '')
 
