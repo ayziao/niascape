@@ -6,21 +6,54 @@ bp = Blueprint('task', __name__, url_prefix='/task')
 
 @bp.route('')
 def index():
-	db = get_db()
+	stars = ['☆☆☆☆☆', '★☆☆☆☆', '★★☆☆☆', '★★★☆☆', '★★★★☆', '★★★★★']
+	search = {}
+	tags = {}
 
-	tasks = db.execute(
+	search['owner'] = request.args.get('owner', '')
+	search['rate'] = request.args.get('rate', '')
+	search['tag'] = request.args.get('tag', '')
+
+	where = ''
+	if search['owner']:
+		where += ' "所有者" = "' + search['owner'] + '" '
+	if search['rate']:
+		if where:
+			where += ' AND '
+		where += ' "重要度" = "' + search['rate'] + '" '
+	if search['tag']:
+		if where:
+			where += ' AND '
+		where += ' "タグ" like "% ' + search['tag'] + ' %" '
+	if where:
+		where = ' WHERE ' + where
+
+	db = get_db()
+	rows = db.execute(
 		'SELECT *'
-		' FROM task'
-		' ORDER BY "連番" DESC'
+		' FROM task' + where +
+		' ORDER BY "状態" DESC, "完了日時" DESC, "連番" DESC'
 	).fetchall()
 
-	return render_template('task/index.html', tasks=tasks)
+	joutai = ''
+	tasks = {}
+
+	for item in rows:
+		tags[item['連番']] = item['タグ'].split()
+		if item["状態"] == joutai:
+			tasks[item['状態']].append(item)
+		else:
+			joutai = item['状態']
+			tasks[item['状態']] = []
+			tasks[item['状態']].append(item)
+
+	return render_template('task/index.html', tasks=tasks, tags=tags, stars=stars, search=search)
 
 
 @bp.route('/create', methods=('GET', 'POST'))
 # @login_required
 def create():
-	defaultowner = '未定'
+	defaultowner = request.args.get('owner', '未定')
 	defaulttag = request.args.get('tag', '')
 
 	if request.method == 'POST':
@@ -107,6 +140,11 @@ def delete(id):
 
 @bp.route('/<int:id>/rateup', methods=('GET',))
 def rateup(id):
+	search = {}
+	search['owner'] = request.args.get('owner', '')
+	search['rate'] = request.args.get('rate', '')
+	search['tag'] = request.args.get('tag', '')
+
 	task = get_task(id)
 	if task['重要度'] < 5:
 		db = get_db()
@@ -114,11 +152,20 @@ def rateup(id):
 			'UPDATE task SET "重要度" = "重要度" + 1 '
 			' WHERE "連番" = ?', (id,))
 		db.commit()
-	return redirect(url_for('task.index'))
+
+		if search['rate'].isnumeric():
+			search['rate'] = int(search['rate']) + 1
+
+	return redirect(url_for('task.index', **search))
 
 
 @bp.route('/<int:id>/ratedown', methods=('GET',))
 def ratedown(id):
+	search = {}
+	search['owner'] = request.args.get('owner', '')
+	search['rate'] = request.args.get('rate', '')
+	search['tag'] = request.args.get('tag', '')
+
 	task = get_task(id)
 	if task['重要度'] > 0:
 		db = get_db()
@@ -126,7 +173,11 @@ def ratedown(id):
 			'UPDATE task SET "重要度" = "重要度" - 1 '
 			' WHERE "連番" = ?', (id,))
 		db.commit()
-	return redirect(url_for('task.index'))
+
+		if search['rate'].isnumeric():
+			search['rate'] = int(search['rate']) - 1
+
+	return redirect(url_for('task.index', **search))
 
 
 @bp.route('/<int:id>/done', methods=('GET',))
@@ -143,7 +194,7 @@ def done(id):
 def restore(id):
 	db = get_db()
 	db.execute(
-		'UPDATE task SET "状態" = "未" , "完了日時" = datetime("now", "utc") '
+		'UPDATE task SET "状態" = "未" , "完了日時" = "" '
 		' WHERE "連番" = ?', (id,))
 	db.commit()
 	return redirect(url_for('task.index'))
