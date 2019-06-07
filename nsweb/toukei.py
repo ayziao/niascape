@@ -1,10 +1,6 @@
-import json
-
 from flask import (
-	Blueprint, flash, g, redirect, render_template, request, url_for
+	Blueprint, redirect, render_template, request, url_for
 )
-
-from nsweb.db import get_db
 
 bp = Blueprint('toukei', __name__, url_prefix='/toukei')
 
@@ -21,12 +17,13 @@ def daycount():
 
 	sites = site.list({})
 
-	search = {}
-	search['site'] = request.args.get('site', sites[0]['site']) #FIXME データがないときコケる
-	search['tag'] = request.args.get('tag', '')
-	search['body'] = request.args.get('body', '')
+	search = {
+		'site': request.args.get('site', sites[0]['site']),
+		'tag': request.args.get('tag', ''),
+		'body': request.args.get('body', '')
+	}
 
 	tags = postcount.tag({'site': search['site']})
 	daycounts = postcount.day({'site': search['site'], 'tag': search['tag'], 'search_body': search['body']})
 
-	return render_template('toukei/daycount.html', search=search, sites=sites, tags=tags ,counts=daycounts)
+	return render_template('toukei/daycount.html', search=search, sites=sites, tags=tags, counts=daycounts)

@@ -20,22 +20,22 @@
 {% for task in value %}
 
 {% if task['状態'] == '完' %}
-	<a href="{{ url_for('task.restore', id=task['連番']) }}">☑</a>
+	<a href="{{ url_for('task.restore', number=task['連番']) }}">☑</a>
 {% else %}
-	<a href="{{ url_for('task.done', id=task['連番']) }}">☐</a>
+	<a href="{{ url_for('task.done', number=task['連番']) }}">☐</a>
 {% endif %}
 
 
 <a href="{{ url_for('task.index', owner=task['所有者'], rate=search['rate'], tag=search['tag']) }}">{{ task['所有者'] }}</a>
-<a href="{{ url_for('task.ratedown', id=task['連番'], **search) }}">⊟</a>
+<a href="{{ url_for('task.ratedown', number=task['連番'], **search) }}">⊟</a>
 <a href="{{ url_for('task.index', owner=search['owner'], rate=task['重要度'], tag=search['tag']) }}">{{ stars[task['重要度']] }}</a>
-<a href="{{ url_for('task.rateup', id=task['連番'], **search) }}">⊞</a>
+<a href="{{ url_for('task.rateup', number=task['連番'], **search) }}">⊞</a>
 {% if task['完了日時'] %}
 {{ task['完了日時'] }}
 {% else%}
 {{ task['追加日時'] }}
 {% endif %}
-<a title="{{ task['備考'] }}" href="{{ url_for('task.update', id=task['連番']) }}">{{ task['タスク名'] }}</a>
+<a title="{{ task['備考'] }}" href="{{ url_for('task.update', number=task['連番']) }}">{{ task['タスク名'] }}</a>
 {% for tag in tags[task['連番']] %}
 <a href="{{ url_for('task.index', tag=tag, owner=search['owner'], rate=search['rate']) }}">#{{ tag }}</a>
 {% endfor %}

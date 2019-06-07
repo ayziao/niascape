@@ -81,26 +81,26 @@ def create():
 	return render_template('task/create.html', defaultowner=defaultowner, defaulttag=defaulttag)
 
 
-def get_task(id, check_author=True):
+def get_task(number, check_author=True):
 	db = get_db()
 
 	task = db.execute(
 		'SELECT *'
 		' FROM task'
 		' WHERE "連番" = ?',
-		(id,)
+		(number,)
 	).fetchone()
 
 	if task is None:
-		abort(404, "task id {0} doesn't exist.".format(id))
+		abort(404, "task id {0} doesn't exist.".format(number))
 
 	return task
 
 
-@bp.route('/<int:id>/update', methods=('GET', 'POST'))
+@bp.route('/<int:number>/update', methods=('GET', 'POST'))
 # @login_required
-def update(id):
-	task = get_task(id)
+def update(number):
+	task = get_task(number)
 
 	if request.method == 'POST':
 		owner = request.form['owner']
@@ -120,7 +120,7 @@ def update(id):
 			db.execute(
 				'UPDATE task SET "所有者" = ?, "タスク名" = ?, "タグ" = ?, "備考" = ?, "変更日時" = datetime("now", "utc")'
 				' WHERE "連番" = ?',
-				(owner, title, tag, body, id)
+				(owner, title, tag, body, number)
 			)
 			db.commit()
 			return redirect(url_for('task.index'))
@@ -128,29 +128,30 @@ def update(id):
 	return render_template('task/update.html', task=task)
 
 
-@bp.route('/<int:id>/delete', methods=('POST',))
+@bp.route('/<int:number>/delete', methods=('POST',))
 # @login_required
-def delete(id):
-	get_task(id)
+def delete(number):
+	get_task(number)
 	db = get_db()
-	db.execute('DELETE FROM task WHERE "連番" = ?', (id,))
+	db.execute('DELETE FROM task WHERE "連番" = ?', (number,))
 	db.commit()
 	return redirect(url_for('task.index'))
 
 
-@bp.route('/<int:id>/rateup', methods=('GET',))
-def rateup(id):
-	search = {}
-	search['owner'] = request.args.get('owner', '')
-	search['rate'] = request.args.get('rate', '')
-	search['tag'] = request.args.get('tag', '')
+@bp.route('/<int:number>/rateup', methods=('GET',))
+def rateup(number):
+	search = {
+		'owner': request.args.get('owner', ''),
+		'rate': request.args.get('rate', ''),
+		'tag': request.args.get('tag', '')
+	}
 
-	task = get_task(id)
+	task = get_task(number)
 	if task['重要度'] < 5:
 		db = get_db()
 		db.execute(
 			'UPDATE task SET "重要度" = "重要度" + 1 '
-			' WHERE "連番" = ?', (id,))
+			' WHERE "連番" = ?', (number,))
 		db.commit()
 
 		if search['rate'].isnumeric():
@@ -159,19 +160,20 @@ def rateup(id):
 	return redirect(url_for('task.index', **search))
 
 
-@bp.route('/<int:id>/ratedown', methods=('GET',))
-def ratedown(id):
-	search = {}
-	search['owner'] = request.args.get('owner', '')
-	search['rate'] = request.args.get('rate', '')
-	search['tag'] = request.args.get('tag', '')
+@bp.route('/<int:number>/ratedown', methods=('GET',))
+def ratedown(number):
+	search = {
+		'owner': request.args.get('owner', ''),
+		'rate': request.args.get('rate', ''),
+		'tag': request.args.get('tag', '')
+	}
 
-	task = get_task(id)
+	task = get_task(number)
 	if task['重要度'] > 0:
 		db = get_db()
 		db.execute(
 			'UPDATE task SET "重要度" = "重要度" - 1 '
-			' WHERE "連番" = ?', (id,))
+			' WHERE "連番" = ?', (number,))
 		db.commit()
 
 		if search['rate'].isnumeric():
@@ -180,21 +182,21 @@ def ratedown(id):
 	return redirect(url_for('task.index', **search))
 
 
-@bp.route('/<int:id>/done', methods=('GET',))
-def done(id):
+@bp.route('/<int:number>/done', methods=('GET',))
+def done(number):
 	db = get_db()
 	db.execute(
 		'UPDATE task SET "状態" = "完" , "完了日時" = datetime("now", "utc") '
-		' WHERE "連番" = ?', (id,))
+		' WHERE "連番" = ?', (number,))
 	db.commit()
 	return redirect(url_for('task.index'))
 
 
-@bp.route('/<int:id>/restore', methods=('GET',))
-def restore(id):
+@bp.route('/<int:number>/restore', methods=('GET',))
+def restore(number):
 	db = get_db()
 	db.execute(
 		'UPDATE task SET "状態" = "未" , "完了日時" = "" '
-		' WHERE "連番" = ?', (id,))
+		' WHERE "連番" = ?', (number,))
 	db.commit()
 	return redirect(url_for('task.index'))
