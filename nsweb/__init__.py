@@ -26,14 +26,22 @@ def create_app(test_config=None):
 	from . import db
 	db.init_app(app)
 
-	from . import toukei
-	app.register_blueprint(toukei.bp)
+	from . import auth
+	app.register_blueprint(auth.bp)
 
 	from . import task
 	app.register_blueprint(task.bp)
 
+	# niascape
+	from . import toukei
+	app.register_blueprint(toukei.bp)
+
 	@app.route('/hello')
 	def hello_world():
 		return 'Hello, World!'
+
+	@app.route('/')
+	def index():
+		return 'index'
 
 	return app

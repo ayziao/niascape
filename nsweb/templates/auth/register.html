@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>登録</title>
+	<style type="text/css">
+		form { margin: 1em 0; display: flex; flex-direction: column; }
+		label { font-weight: bold; margin-bottom: 0.5em; }
+		input, textarea { margin-bottom: 1em; }
+	</style>
+</head>
+<body>
+
+<h1>登録</h1>
+
+{% for message in get_flashed_messages() %}
+<div class="flash">{{ message }}</div>
+{% endfor %}
+
+<form method="post">
+	<label for="username">Username</label>
+	<input name="username" id="username" required>
+	<label for="password">Password</label>
+	<input type="password" name="password" id="password" required>
+	<input type="submit" value="Register">
+</form>
+
+</body>
+</html>
