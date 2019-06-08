@@ -57,7 +57,7 @@ def create():
 	defaulttag = request.args.get('tag', '')
 
 	if request.method == 'POST':
-		owner = request.form['owner']
+		owner = request.args.get('owner', '未定')
 		title = request.form['title']
 		tag = ' ' + request.form['tag'].strip() + ' '
 		body = request.form['body']

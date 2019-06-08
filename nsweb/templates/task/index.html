@@ -9,20 +9,32 @@
 <h1><a href="{{ url_for('task.index') }}">タスク</a></h1>
 
 <p>
-	{{ search['owner'] }} {% if search['rate'] %}{{ stars[search['rate']|int] }}{% endif %} {{ search['tag'] }}<br>
-	<a href="{{ url_for('task.create', owner=search['owner'], tag=search['tag']) }}">New</a>
+	{{ search['owner'] }} {% if search['rate'] %}{{ stars[search['rate']|int] }}{% endif %} {{ search['tag'] }}
 </p>
+<form method="post" action="{{ url_for('task.create') }}">
+	<a href="{{ url_for('task.create', owner=search['owner'], tag=search['tag']) }}">New</a>
+
+	<label for="title">Title</label>
+	<input name="title" id="title" style="width:100em;" value="{{ request.form['title'] }}" required>
+	<input type="submit" value="Save">
+
+	<input type="hidden" name="owner" id="owner" value="{{ search['owner'] }}">
+	<input type="hidden" name="tag" id="tag" value="{{ search['tag'] }}">
+	<input type="hidden" name="body" id="body" value="">
+</form>
+
 
 {% for key, value in tasks.items() %}
 
-<hr>{{ key }}<br>
+<hr>
+{{ key }}<br>
 
 {% for task in value %}
 
 {% if task['状態'] == '完' %}
-	<a href="{{ url_for('task.restore', number=task['連番']) }}">☑</a>
+<a href="{{ url_for('task.restore', number=task['連番']) }}">☑</a>
 {% else %}
-	<a href="{{ url_for('task.done', number=task['連番']) }}">☐</a>
+<a href="{{ url_for('task.done', number=task['連番']) }}">☐</a>
 {% endif %}
 
 
