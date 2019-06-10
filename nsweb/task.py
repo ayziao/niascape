@@ -55,11 +55,12 @@ def index():
 
 @bp.route('/create', methods=('GET', 'POST'))
 def create():
-	defaultowner = g.user['username'] if g.user else request.args.get('owner', '未定')
+	defaultowner = g.user['username'] if g.user else '未定'
+	defaultowner = request.args.get('owner', defaultowner)
 	defaulttag = request.args.get('tag', '')
 
 	if request.method == 'POST':
-		owner = request.args.get('owner', defaultowner)
+		owner = request.form['owner'] if request.form['owner'] else defaultowner
 		title = request.form['title']
 		tag = ' ' + request.form['tag'].strip() + ' '
 		body = request.form['body']
