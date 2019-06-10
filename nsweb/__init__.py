@@ -33,6 +33,9 @@ def create_app(test_config=None):
 	app.register_blueprint(task.bp)
 
 	# niascape
+	from . import site
+	app.register_blueprint(site.bp)
+
 	from . import toukei
 	app.register_blueprint(toukei.bp)
 

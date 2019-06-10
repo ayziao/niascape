@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>タイムライン</title>
+</head>
+<body>
+
+<h1>タイムライン</h1>
+
+{% for data in datalist %}
+
+<div class="line">
+	<span class="time">
+		<a href="">{{ data.datetime}}</a>
+	</span>
+	{{ data.body }}
+	{{ data.tags }}
+</div>
+
+{% endfor %}
+
+</body>
+</html>
