@@ -8,16 +8,19 @@
 
 <h1>タイムライン</h1>
 
+{% set day = {'current':''} %}
 {% for data in datalist %}
-
-<div class="line">
-	<span class="time">
-		<a href="">{{ data.datetime}}</a>
-	</span>
-	{{ data.body }}
-	{{ data.tags }}
-</div>
-
+	{% if day.current != data.datetime.date() %}
+		{% if day.update({'current': data.datetime.date()}) %} {% endif %}
+		{{ day.current }}
+	{% endif %}
+	<div class="line">
+		<span class="time">
+			<a href="">{{ data.datetime.time()}}</a>
+		</span>
+		{{ data.body | linebreaksbr }}
+		{{ data.tags }}
+	</div>
 {% endfor %}
 
 </body>
