@@ -9,6 +9,18 @@
 <h1><a href="{{ url_for('task.index') }}">タスク</a></h1>
 
 <p>
+	{% if g.user %}
+	<span>{{ g.user['username'] }}</span>
+	<a href="{{ url_for('auth.logout') }}">Log Out</a>
+	{% else %}
+	<a href="{{ url_for('auth.register') }}">Register</a>
+	<a href="{{ url_for('auth.login') }}">Log In</a>
+	{% endif %}
+	{% if sort %}
+	<a href="{{ url_for('task.index', sort='', **search) }}">最近</a>
+	{% else %}
+	<a href="{{ url_for('task.index', sort='rate', **search) }}">重要度順</a>
+	{% endif %}
 	{{ search['owner'] }} {% if search['rate'] %}{{ stars[search['rate']|int] }}{% endif %} {{ search['tag'] }}
 </p>
 <form method="post" action="{{ url_for('task.create') }}">
@@ -32,16 +44,16 @@
 {% for task in value %}
 
 {% if task['状態'] == '完' %}
-<a href="{{ url_for('task.restore', number=task['連番']) }}">☑</a>
+<a href="{{ url_for('task.restore', number=task['連番'], sort=sort, **search) }}">☑</a>
 {% else %}
-<a href="{{ url_for('task.done', number=task['連番']) }}">☐</a>
+<a href="{{ url_for('task.done', number=task['連番'], sort=sort, **search) }}">☐</a>
 {% endif %}
 
 
 <a href="{{ url_for('task.index', owner=task['所有者'], rate=search['rate'], tag=search['tag']) }}">{{ task['所有者'] }}</a>
-<a href="{{ url_for('task.ratedown', number=task['連番'], **search) }}">⊟</a>
+<a href="{{ url_for('task.ratedown', number=task['連番'], sort=sort, **search) }}">⊟</a>
 <a href="{{ url_for('task.index', owner=search['owner'], rate=task['重要度'], tag=search['tag']) }}">{{ stars[task['重要度']] }}</a>
-<a href="{{ url_for('task.rateup', number=task['連番'], **search) }}">⊞</a>
+<a href="{{ url_for('task.rateup', number=task['連番'], sort=sort, **search) }}">⊞</a>
 {% if task['完了日時'] %}
 {{ task['完了日時'] }}
 {% else%}
