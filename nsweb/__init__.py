@@ -1,5 +1,5 @@
 import os
-from flask import Flask
+from flask import Flask, Markup
 
 
 def create_app(test_config=None):
@@ -46,5 +46,9 @@ def create_app(test_config=None):
 	@app.route('/')
 	def index():
 		return 'index'
+
+	@app.template_filter('linebreaksbr')
+	def linebreaksbr(arg):
+		return Markup(arg.replace('\n', '<br>'))
 
 	return app
