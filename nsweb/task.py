@@ -1,5 +1,6 @@
-from flask import Blueprint, render_template, request, redirect, flash, url_for, abort
+from flask import Blueprint, render_template, request, redirect, flash, url_for, abort, g
 from nsweb.db import get_db
+from nsweb.auth import login_required
 
 bp = Blueprint('task', __name__, url_prefix='/task')
 
@@ -51,13 +52,12 @@ def index():
 
 
 @bp.route('/create', methods=('GET', 'POST'))
-# @login_required
 def create():
-	defaultowner = request.args.get('owner', '未定')
+	defaultowner = g.user['username'] if g.user else request.args.get('owner', '未定')
 	defaulttag = request.args.get('tag', '')
 
 	if request.method == 'POST':
-		owner = request.args.get('owner', '未定')
+		owner = request.args.get('owner', defaultowner)
 		title = request.form['title']
 		tag = ' ' + request.form['tag'].strip() + ' '
 		body = request.form['body']
@@ -129,7 +129,7 @@ def update(number):
 
 
 @bp.route('/<int:number>/delete', methods=('POST',))
-# @login_required
+@login_required
 def delete(number):
 	get_task(number)
 	db = get_db()

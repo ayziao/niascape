@@ -13,6 +13,16 @@
 
 <h1>ログイン</h1>
 
+<p>
+{% if g.user %}
+<span>{{ g.user['username'] }}</span>
+<a href="{{ url_for('auth.logout') }}">Log Out</a>
+{% else %}
+<a href="{{ url_for('auth.register') }}">Register</a>
+<a href="{{ url_for('auth.login') }}">Log In</a>
+{% endif %}
+</p>
+
 {% for message in get_flashed_messages() %}
 <div class="flash">{{ message }}</div>
 {% endfor %}

@@ -22,8 +22,8 @@ def test_create_update_validate(client, path):
 		'/task/2/update',
 		'/task/2/delete',
 ))
-def test_exists_required(client, path):
-	# auth.login()
+def test_exists_required(client, auth, path):
+	auth.login()
 	assert client.post(path).status_code == 404
 
 
@@ -47,8 +47,8 @@ def test_update(client, app):
 		assert task['タスク名'] == 'updated'
 
 
-def test_delete(client, app):
-	# auth.login()
+def test_delete(client, auth, app):
+	auth.login()
 	response = client.post('/task/1/delete')
 	assert response.headers['Location'] == 'http://localhost/task'
 
