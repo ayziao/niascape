@@ -19,7 +19,7 @@ class Basedata:
 	# tags: str
 	# body: str
 	# datetime: datetime
-	# utctime: datetime
+	# utcdatetime: datetime
 
 	def __init__(self, identifier: str, title: str, tags: str, body: str, datetime_: datetime) -> None:
 		self.identifier = identifier
@@ -28,10 +28,10 @@ class Basedata:
 		self.body = body
 		if type(datetime_) is datetime:
 			self.datetime = datetime_
-			self.utctime = datetime_ - timedelta(hours=9)
 		else:
 			self.datetime = datetime.strptime(datetime_[0:19], '%Y-%m-%d %H:%M:%S')  # PENDING ミリ秒の塩梅をどうするか
-			self.utctime = self.datetime - timedelta(hours=9)
+
+		self.utcdatetime = self.datetime - timedelta(hours=9)
 
 		logger.log(5, self.__dict__)
 
