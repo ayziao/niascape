@@ -22,7 +22,7 @@ def index():
 	if search['rate']:
 		if where:
 			where += ' AND '
-		where += ' "重要度" = "' + search['rate'] + '" '
+		where += ' "重要度" <= "' + search['rate'] + '" '
 	if search['tag']:
 		if where:
 			where += ' AND '
@@ -30,9 +30,9 @@ def index():
 	if where:
 		where = ' WHERE ' + where
 
-	order = ' ORDER BY "状態" DESC, "完了日時" DESC, "連番" DESC'
-	if sort == 'rate':
-		order = ' ORDER BY "状態" DESC, CASE "重要度" WHEN 0 THEN 9 ELSE "重要度" END DESC, "完了日時" DESC, "連番" DESC'
+	order = ' ORDER BY "状態" DESC, CASE "重要度" WHEN 0 THEN 9 ELSE "重要度" END DESC, "完了日時" DESC, "連番" DESC'
+	if sort == 'time':
+		order = ' ORDER BY "状態" DESC, "完了日時" DESC, "連番" DESC'
 
 	sql = 'SELECT * FROM task' + where + order
 	rows = get_db().execute(sql).fetchall()

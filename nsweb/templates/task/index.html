@@ -17,11 +17,14 @@
 	<a href="{{ url_for('auth.login') }}">Log In</a>
 	{% endif %}
 	{% if sort %}
-	<a href="{{ url_for('task.index', sort='', **search) }}">登録順完了順</a>
+	<a href="{{ url_for('task.index', sort='', **search) }}">重要度順</a>
 	{% else %}
-	<a href="{{ url_for('task.index', sort='rate', **search) }}">重要度順</a>
+	<a href="{{ url_for('task.index', sort='time', **search) }}">登録順完了順</a>
 	{% endif %}
-	{{ search['owner'] }} {% if search['rate'] %}{{ stars[search['rate']|int] }}{% endif %} {{ search['tag'] }}
+
+	<a href="{{ url_for('task.index', sort=sort, rate=search['rate'], tag=search['tag']) }}">{{ search['owner'] }}</a>
+	{% if search['rate'] %}{{ stars[search['rate']|int] }}{% endif %}
+	<a href="{{ url_for('task.index', sort=sort, rate=search['rate'], owner=search['owner']) }}">{{ search['tag'] }}</a>
 </p>
 <form method="post" action="{{ url_for('task.create') }}">
 	<a href="{{ url_for('task.create', owner=search['owner'], tag=search['tag']) }}">New</a>
