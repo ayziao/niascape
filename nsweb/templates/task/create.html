@@ -27,6 +27,7 @@
 	<input name="tag" id="tag" value="{{ request.form['tag'] or defaulttag }}">
 	<label for="body">Body</label>
 	<textarea name="body" id="body">{{ request.form['body'] }}</textarea>
+	<input type="hidden" name="ret" id="ret" value="off">
 	<input type="submit" value="Save">
 </form>
 

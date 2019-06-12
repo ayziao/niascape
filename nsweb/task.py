@@ -32,7 +32,7 @@ def index():
 
 	order = ' ORDER BY "状態" DESC, "完了日時" DESC, "連番" DESC'
 	if sort == 'rate':
-		order = ' ORDER BY "状態" DESC, "重要度" DESC, "完了日時" DESC, "連番" DESC'
+		order = ' ORDER BY "状態" DESC, CASE "重要度" WHEN 0 THEN 9 ELSE "重要度" END DESC, "完了日時" DESC, "連番" DESC'
 
 	sql = 'SELECT * FROM task' + where + order
 	rows = get_db().execute(sql).fetchall()
@@ -79,7 +79,10 @@ def create():
 				(owner, title, tag, body)
 			)
 			db.commit()
-			return redirect(url_for('task.index'))
+			if request.form['ret'] == 'on':
+				return redirect(url_for('task.index', owner=owner, tag=tag.strip()))
+			else:
+				return redirect(url_for('task.index'))
 
 	return render_template('task/create.html', defaultowner=defaultowner, defaulttag=defaulttag)
 

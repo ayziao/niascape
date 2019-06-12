@@ -17,7 +17,7 @@
 	<a href="{{ url_for('auth.login') }}">Log In</a>
 	{% endif %}
 	{% if sort %}
-	<a href="{{ url_for('task.index', sort='', **search) }}">最近</a>
+	<a href="{{ url_for('task.index', sort='', **search) }}">登録順完了順</a>
 	{% else %}
 	<a href="{{ url_for('task.index', sort='rate', **search) }}">重要度順</a>
 	{% endif %}
@@ -33,6 +33,8 @@
 	<input type="hidden" name="owner" id="owner" value="{{ search['owner'] }}">
 	<input type="hidden" name="tag" id="tag" value="{{ search['tag'] }}">
 	<input type="hidden" name="body" id="body" value="">
+	<input type="hidden" name="sort" id="sort" value="{{ sort }}">
+	<input type="hidden" name="ret" id="ret" value="on">
 </form>
 
 
