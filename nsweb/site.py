@@ -24,12 +24,14 @@ def command(site):
 	abort(404, "Not Found" + site)
 
 
+# /@site/?tag=tag
 def tagtimeline(site, tag):
 	from niascape.usecase import tagtimeline
 	datalist = tagtimeline({'site': site, 'tag': tag})
 	return render_template('site/timeline.html', datalist=datalist)
 
 
+# /@site/?searchbody=body
 def searchbody(site, body):
 	from niascape.usecase import searchbody
 	datalist = searchbody({'site': site, 'searchbody': body})
