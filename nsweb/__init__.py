@@ -1,4 +1,5 @@
 import os
+import datetime
 from flask import Flask, Markup
 
 
@@ -50,5 +51,11 @@ def create_app(test_config=None):
 	@app.template_filter('linebreaksbr')
 	def linebreaksbr(arg):
 		return Markup(arg.replace('\n', '<br>'))
+
+	@app.template_filter()
+	def jptime(dt, format='%Y-%m-%d %H:%M:%S'):
+		u"""utcの時間を日本時間で指定されたフォーマットで文字列化する."""
+		local = datetime.datetime.strptime(dt,'%Y-%m-%d %H:%M:%S') + datetime.timedelta(hours=9)
+		return local.strftime(format)
 
 	return app

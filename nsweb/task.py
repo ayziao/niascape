@@ -30,7 +30,7 @@ def index():
 	if where:
 		where = ' WHERE ' + where
 
-	order = ' ORDER BY "状態" DESC, CASE "重要度" WHEN 0 THEN 9 ELSE "重要度" END DESC, "完了日時" DESC, "連番" DESC'
+	order = ' ORDER BY "状態" DESC, CASE "重要度" WHEN 0 THEN 9 ELSE "重要度" END DESC, "完了日時" DESC, "連番" ASC'
 	if sort == 'time':
 		order = ' ORDER BY "状態" DESC, "完了日時" DESC, "連番" DESC'
 
@@ -133,7 +133,7 @@ def update(number):
 		else:
 			db = get_db()
 			db.execute(
-				'UPDATE task SET "所有者" = ?, "タスク名" = ?, "タグ" = ?, "備考" = ?, "変更日時" = datetime("now", "utc")'
+				'UPDATE task SET "所有者" = ?, "タスク名" = ?, "タグ" = ?, "備考" = ?, "変更日時" = datetime("now")'
 				' WHERE "連番" = ?',
 				(owner, title, tag, body, number)
 			)
@@ -189,13 +189,34 @@ def ratedown(number):
 	return redirect(url_for('task.index', **args))
 
 
+@bp.route('/<int:number>/rateto', methods=('GET',))
+def rateto(number):
+	args = get_args()
+	change = int(request.args.get('change', -1))
+	task = get_task(number)
+
+	if change >= 0 & task['重要度'] != change:
+		db = get_db()
+		db.execute(
+			'UPDATE task SET "重要度" = ?'
+			' WHERE "連番" = ?', (change, number))
+		db.commit()
+
+		if args['rate'].isnumeric():
+			args['rate'] = int(args['rate']) - 1
+
+	# del args['change']
+
+	return redirect(url_for('task.index', **args))
+
+
 @bp.route('/<int:number>/done', methods=('GET',))
 def done(number):
 	args = get_args()
 
 	db = get_db()
 	db.execute(
-		'UPDATE task SET "状態" = "完" , "完了日時" = datetime("now", "utc") '
+		'UPDATE task SET "状態" = "完" , "完了日時" = datetime("now") '
 		' WHERE "連番" = ?', (number,))
 	db.commit()
 	return redirect(url_for('task.index', **args))

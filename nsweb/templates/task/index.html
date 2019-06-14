@@ -29,8 +29,7 @@
 <form method="post" action="{{ url_for('task.create') }}">
 	<a href="{{ url_for('task.create', owner=search['owner'], tag=search['tag']) }}">New</a>
 
-	<label for="title">Title</label>
-	<input name="title" id="title" style="width:100em;" value="{{ request.form['title'] }}" required>
+	<input name="title" id="title" style="width:73em;" value="{{ request.form['title'] }}" required>
 	<input type="submit" value="Save">
 
 	<input type="hidden" name="owner" id="owner" value="{{ search['owner'] }}">
@@ -54,16 +53,9 @@
 <a href="{{ url_for('task.done', number=task['連番'], sort=sort, **search) }}">☐</a>
 {% endif %}
 
-
 <a href="{{ url_for('task.index', owner=task['所有者'], rate=search['rate'], tag=search['tag']) }}">{{ task['所有者'] }}</a>
-<a href="{{ url_for('task.ratedown', number=task['連番'], sort=sort, **search) }}">⊟</a>
-<a href="{{ url_for('task.index', owner=search['owner'], rate=task['重要度'], tag=search['tag']) }}">{{ stars[task['重要度']] }}</a>
-<a href="{{ url_for('task.rateup', number=task['連番'], sort=sort, **search) }}">⊞</a>
-{% if task['完了日時'] %}
-{{ task['完了日時'] }}
-{% else%}
-{{ task['追加日時'] }}
-{% endif %}
+<a href="{{ url_for('task.rateto', number=task['連番'], change=1, sort=sort, **search) }}">{% if task['重要度'] > 0 %}★{% else %}☆{% endif %}</a><a href="{{ url_for('task.rateto', number=task['連番'], change=2, sort=sort, **search) }}">{% if task['重要度'] > 1 %}★{% else %}☆{% endif %}</a><a href="{{ url_for('task.rateto', number=task['連番'], change=3, sort=sort, **search) }}">{% if task['重要度'] > 2 %}★{% else %}☆{% endif %}</a><a href="{{ url_for('task.rateto', number=task['連番'], change=4, sort=sort, **search) }}">{% if task['重要度'] > 3 %}★{% else %}☆{% endif %}</a><a href="{{ url_for('task.rateto', number=task['連番'], change=5, sort=sort, **search) }}">{% if task['重要度'] > 4 %}★{% else %}☆{% endif %}</a>
+{% if task['完了日時'] %} {{ task['完了日時'] | jptime }} {% endif %}
 <a title="{{ task['備考'] }}" href="{{ url_for('task.update', number=task['連番']) }}">{{ task['タスク名'] }}</a>
 {% for tag in tags[task['連番']] %}
 <a href="{{ url_for('task.index', tag=tag, owner=search['owner'], rate=search['rate']) }}">#{{ tag }}</a>
