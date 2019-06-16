@@ -2,7 +2,7 @@
 <html>
 <head>
 	<meta charset="UTF-8">
-	<title>タスク</title>
+	<title>{{ search['tag'] }} タスク</title>
 </head>
 <body>
 
@@ -19,11 +19,12 @@
 	{% if sort %}
 	<a href="{{ url_for('task.index', sort='', **search) }}">重要度順</a>
 	{% else %}
-	<a href="{{ url_for('task.index', sort='time', **search) }}">登録順完了順</a>
+	<a href="{{ url_for('task.index', sort='time', **search) }}">登録順</a>
 	{% endif %}
 
+	<a href="{{ url_for('task.index', sort=sort, rate=1, tag=search['tag'], owner=search['owner']) }}">{% if search['rate'] | int > 0 %}★{% else %}☆{% endif %}</a><a href="{{ url_for('task.index', sort=sort, rate=2, tag=search['tag'], owner=search['owner']) }}">{% if search['rate'] | int > 1 %}★{% else %}☆{% endif %}</a><a href="{{ url_for('task.index', sort=sort, rate=3, tag=search['tag'], owner=search['owner']) }}">{% if search['rate'] | int > 2 %}★{% else %}☆{% endif %}</a><a href="{{ url_for('task.index', sort=sort, rate=4, tag=search['tag'], owner=search['owner']) }}">{% if search['rate'] | int > 3 %}★{% else %}☆{% endif %}</a><a href="{{ url_for('task.index', sort=sort, tag=search['tag'], owner=search['owner']) }}">☆</a>
+
 	<a href="{{ url_for('task.index', sort=sort, rate=search['rate'], tag=search['tag']) }}">{{ search['owner'] }}</a>
-	{% if search['rate'] %}{{ stars[search['rate']|int] }}{% endif %}
 	<a href="{{ url_for('task.index', sort=sort, rate=search['rate'], owner=search['owner']) }}">{{ search['tag'] }}</a>
 </p>
 <form method="post" action="{{ url_for('task.create') }}">
@@ -54,8 +55,11 @@
 {% endif %}
 
 <a href="{{ url_for('task.index', owner=task['所有者'], rate=search['rate'], tag=search['tag']) }}">{{ task['所有者'] }}</a>
-<a href="{{ url_for('task.rateto', number=task['連番'], change=1, sort=sort, **search) }}">{% if task['重要度'] > 0 %}★{% else %}☆{% endif %}</a><a href="{{ url_for('task.rateto', number=task['連番'], change=2, sort=sort, **search) }}">{% if task['重要度'] > 1 %}★{% else %}☆{% endif %}</a><a href="{{ url_for('task.rateto', number=task['連番'], change=3, sort=sort, **search) }}">{% if task['重要度'] > 2 %}★{% else %}☆{% endif %}</a><a href="{{ url_for('task.rateto', number=task['連番'], change=4, sort=sort, **search) }}">{% if task['重要度'] > 3 %}★{% else %}☆{% endif %}</a><a href="{{ url_for('task.rateto', number=task['連番'], change=5, sort=sort, **search) }}">{% if task['重要度'] > 4 %}★{% else %}☆{% endif %}</a>
-{% if task['完了日時'] %} {{ task['完了日時'] | jptime }} {% endif %}
+{% if task['完了日時'] %}
+	{{ task['完了日時'] | jptime }}
+{% else %}
+	{% if task['重要度'] == 1 %}<a href="{{ url_for('task.rateto', number=task['連番'], change=0, sort=sort, **search) }}">★</a>{% else %}<a href="{{ url_for('task.rateto', number=task['連番'], change=1, sort=sort, **search) }}">{% if task['重要度'] > 0 %}★{% else %}☆{% endif %}</a>{% endif %}<a href="{{ url_for('task.rateto', number=task['連番'], change=2, sort=sort, **search) }}">{% if task['重要度'] > 1 %}★{% else %}☆{% endif %}</a><a href="{{ url_for('task.rateto', number=task['連番'], change=3, sort=sort, **search) }}">{% if task['重要度'] > 2 %}★{% else %}☆{% endif %}</a><a href="{{ url_for('task.rateto', number=task['連番'], change=4, sort=sort, **search) }}">{% if task['重要度'] > 3 %}★{% else %}☆{% endif %}</a><a href="{{ url_for('task.rateto', number=task['連番'], change=5, sort=sort, **search) }}">{% if task['重要度'] > 4 %}★{% else %}☆{% endif %}</a>
+{% endif %}
 <a title="{{ task['備考'] }}" href="{{ url_for('task.update', number=task['連番']) }}">{{ task['タスク名'] }}</a>
 {% for tag in tags[task['連番']] %}
 <a href="{{ url_for('task.index', tag=tag, owner=search['owner'], rate=search['rate']) }}">#{{ tag }}</a>

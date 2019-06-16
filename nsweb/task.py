@@ -30,7 +30,7 @@ def index():
 	if where:
 		where = ' WHERE ' + where
 
-	order = ' ORDER BY "状態" DESC, CASE "重要度" WHEN 0 THEN 9 ELSE "重要度" END DESC, "完了日時" DESC, "連番" ASC'
+	order = ' ORDER BY "状態" DESC, "完了日時" DESC, CASE "重要度" WHEN 0 THEN 9 ELSE "重要度" END DESC, "連番" ASC'
 	if sort == 'time':
 		order = ' ORDER BY "状態" DESC, "完了日時" DESC, "連番" DESC'
 
@@ -195,7 +195,9 @@ def rateto(number):
 	change = int(request.args.get('change', -1))
 	task = get_task(number)
 
-	if change >= 0 & task['重要度'] != change:
+	# current_app.logger.debug(task['重要度'])
+
+	if change >= 0 and task['重要度'] != change:
 		db = get_db()
 		db.execute(
 			'UPDATE task SET "重要度" = ?'
@@ -203,9 +205,7 @@ def rateto(number):
 		db.commit()
 
 		if args['rate'].isnumeric():
-			args['rate'] = int(args['rate']) - 1
-
-	# del args['change']
+			args['rate'] = change
 
 	return redirect(url_for('task.index', **args))
 
